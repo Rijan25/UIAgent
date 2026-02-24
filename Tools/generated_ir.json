@@ -1,0 +1,361 @@
+{
+  "page_ir": {
+    "page_goal": "Collect student details (name, age, class, GPA, location) and classify the student as primary, secondary, or high school when a button is clicked.",
+    "style": {
+      "tone": "clean",
+      "theme": "education_form",
+      "density": "comfortable",
+      "color_intent": "primary_green_secondary_red"
+    },
+    "accessibility": {
+      "required_labels": [
+        "Student Name",
+        "Age",
+        "Class",
+        "GPA",
+        "Location",
+        "Determine Student Level"
+      ]
+    },
+    "responsive": {
+      "breakpoints": {
+        "xs": 480,
+        "sm": 576,
+        "md": 768,
+        "lg": 992,
+        "xl": 1200
+      },
+      "collapse_rules": [],
+      "hidden_on_small": []
+    },
+    "constraints": [
+      "GPA must be between 0.0 and 4.0",
+      "Age must be a positive integer",
+      "Class must be a positive integer"
+    ]
+  },
+  "data_ir": {
+    "state": {
+      "studentName": {
+        "type": "string",
+        "initial": "",
+        "required": true,
+        "constraints": {
+          "minLength": 1
+        }
+      },
+      "studentAge": {
+        "type": "number",
+        "initial": null,
+        "required": true,
+        "constraints": {
+          "min": 1,
+          "integer": true
+        }
+      },
+      "studentClass": {
+        "type": "number",
+        "initial": null,
+        "required": true,
+        "constraints": {
+          "min": 1,
+          "integer": true
+        }
+      },
+      "studentGpa": {
+        "type": "number",
+        "initial": null,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 4
+        }
+      },
+      "studentLocation": {
+        "type": "string",
+        "initial": "",
+        "required": true,
+        "constraints": {
+          "minLength": 1
+        }
+      },
+      "studentLevel": {
+        "type": "enum",
+        "initial": null,
+        "required": false,
+        "constraints": {
+          "allowed": [
+            "Primary",
+            "Secondary",
+            "High School"
+          ]
+        }
+      }
+    },
+    "derived": {
+      "studentLevelDerived": {
+        "type": "enum",
+        "expr": "state.studentClass <= 5 ? 'Primary' : (state.studentClass <= 10 ? 'Secondary' : 'High School')"
+      }
+    }
+  },
+  "data_model_ir": {
+    "entities": {
+      "student": {
+        "name": "Student",
+        "fields": [
+          "name",
+          "age",
+          "class",
+          "gpa",
+          "location"
+        ],
+        "computed": [
+          "level"
+        ],
+        "display_fields": [
+          "name",
+          "age",
+          "class",
+          "gpa",
+          "location",
+          "level"
+        ],
+        "filters": []
+      }
+    }
+  },
+  "behaviour_ir": {
+    "events": {
+      "evt_setStudentLevel": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.studentLevel",
+            "expr": "state.studentClass <= 5 ? 'Primary' : (state.studentClass <= 10 ? 'Secondary' : 'High School')"
+          }
+        ]
+      }
+    },
+    "actions": {
+      "act_determineStudentLevel": {
+        "action_id": "act_determineStudentLevel",
+        "trigger": "button_click",
+        "target_component_id": "btn_determine_level",
+        "operation": "emit_event",
+        "payload": {
+          "event_id": "evt_setStudentLevel"
+        },
+        "validation_rules": [
+          "{\"fields\": [\"state.studentName\", \"state.studentAge\", \"state.studentClass\", \"state.studentGpa\", \"state.studentLocation\"], \"rule\": \"required\"}",
+          "{\"field\": \"state.studentGpa\", \"max\": 4, \"min\": 0, \"rule\": \"range\"}",
+          "{\"field\": \"state.studentAge\", \"min\": 1, \"rule\": \"min\"}",
+          "{\"field\": \"state.studentClass\", \"min\": 1, \"rule\": \"min\"}"
+        ],
+        "requires_confirmation": false,
+        "updates": [
+          {
+            "target": "state.studentLevel",
+            "expr": "state.studentClass <= 5 ? 'Primary' : (state.studentClass <= 10 ? 'Secondary' : 'High School')"
+          }
+        ]
+      }
+    },
+    "feedback": {
+      "act_determineStudentLevel": {
+        "action_id": "act_determineStudentLevel",
+        "loading_indicator": null,
+        "success_message": "Student level determined.",
+        "error_message": "Please complete all fields with valid values before determining the student level.",
+        "ui_updates": []
+      }
+    }
+  },
+  "component_ir": {
+    "library": "antd",
+    "theme": {
+      "primaryColor": "#22c55e",
+      "secondaryColor": "#ef4444",
+      "fontFamily": "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+      "borderRadius": 8
+    },
+    "components": {
+      "page_root": {
+        "type": "Container",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "padding": 24
+        },
+        "styles": {
+          "maxWidth": 720,
+          "margin": "0 auto"
+        }
+      },
+      "title": {
+        "type": "TypographyTitle",
+        "label": "Student Information",
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "level": 2
+        },
+        "styles": {}
+      },
+      "form_card": {
+        "type": "Card",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "title": "Enter details"
+        },
+        "styles": {}
+      },
+      "form_container": {
+        "type": "Form",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "layout": "vertical",
+          "requiredMark": true
+        },
+        "styles": {}
+      },
+      "inp_name": {
+        "type": "Input",
+        "label": "Student Name",
+        "bind": "state.studentName",
+        "onClick": null,
+        "props": {
+          "placeholder": "e.g., Alex Johnson"
+        },
+        "styles": {}
+      },
+      "inp_age": {
+        "type": "InputNumber",
+        "label": "Age",
+        "bind": "state.studentAge",
+        "onClick": null,
+        "props": {
+          "min": 1,
+          "precision": 0,
+          "style": {
+            "width": "100%"
+          }
+        },
+        "styles": {}
+      },
+      "inp_class": {
+        "type": "InputNumber",
+        "label": "Class",
+        "bind": "state.studentClass",
+        "onClick": null,
+        "props": {
+          "min": 1,
+          "precision": 0,
+          "style": {
+            "width": "100%"
+          }
+        },
+        "styles": {}
+      },
+      "inp_gpa": {
+        "type": "InputNumber",
+        "label": "GPA",
+        "bind": "state.studentGpa",
+        "onClick": null,
+        "props": {
+          "min": 0,
+          "max": 4,
+          "step": 0.1,
+          "precision": 2,
+          "style": {
+            "width": "100%"
+          }
+        },
+        "styles": {}
+      },
+      "inp_location": {
+        "type": "Input",
+        "label": "Location",
+        "bind": "state.studentLocation",
+        "onClick": null,
+        "props": {
+          "placeholder": "e.g., Nairobi"
+        },
+        "styles": {}
+      },
+      "btn_determine_level": {
+        "type": "Button",
+        "label": "Determine Student Level",
+        "bind": null,
+        "onClick": "act_determineStudentLevel",
+        "props": {
+          "type": "primary",
+          "block": true
+        },
+        "styles": {}
+      },
+      "result_alert": {
+        "type": "Alert",
+        "label": null,
+        "bind": "state.studentLevel",
+        "onClick": null,
+        "props": {
+          "message": "Student Level",
+          "type": "success",
+          "showIcon": true
+        },
+        "styles": {}
+      }
+    }
+  },
+  "layout_ir": {
+    "root": "page_root",
+    "children": {
+      "page_root": [
+        "title",
+        "form_card"
+      ],
+      "form_card": [
+        "form_container"
+      ],
+      "form_container": [
+        "inp_name",
+        "inp_age",
+        "inp_class",
+        "inp_gpa",
+        "inp_location",
+        "btn_determine_level",
+        "result_alert"
+      ]
+    },
+    "layout": {
+      "page_root": {
+        "type": "vertical",
+        "gap": 16
+      },
+      "form_card": {
+        "type": "vertical",
+        "gap": 12
+      },
+      "form_container": {
+        "type": "vertical",
+        "gap": 12
+      }
+    },
+    "layout_zones": [
+      {
+        "zone_id": "zone_main",
+        "component": "page_root",
+        "anchor": "center",
+        "size_hint": "40%",
+        "z_layer": "base",
+        "notes": "Centered form layout optimized for readability."
+      }
+    ]
+  }
+}
