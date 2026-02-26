@@ -1,523 +1,511 @@
-import React, { useCallback, useMemo, useState } from "react";
-import {
-  Alert,
-  Button,
-  Card,
-  ConfigProvider,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Col,
-  Space,
-  Typography,
-  message,
-} from "antd";
+import { useState, useMemo } from 'react';
+import { Card, Typography, Input, Select, Button, Modal, message, Tag, Statistic } from 'antd';
+import type { CSSProperties } from 'react';
 
-type DerivedMap = Record<string, unknown>;
-
-function safeEvalExpr(
-  expr: string,
-  ctx: { state: Record<string, unknown>; derived: DerivedMap }
-): unknown {
-  try {
-    // Minimal safety: disallow obvious dangerous tokens / statements.
-    const forbidden = [
-      "function",
-      "=>",
-      "while",
-      "for",
-      "class",
-      "new ",
-      "this",
-      "window",
-      "document",
-      "globalThis",
-      "eval",
-      "Function",
-      "constructor",
-      "import",
-      "export",
-      "require",
-      ";",
-      "{",
-      "}",
-    ];
-    const lowered = expr.toLowerCase();
-    for (const t of forbidden) {
-      if (lowered.includes(t.trim().toLowerCase())) {
-        return `{{${expr}}}`;
-      }
-    }
-
-    // Allow only references to state.* and derived.* plus literals/operators.
-    // If other identifiers exist, bail.
-    const stripped = expr
-      .replace(/'[^']*'/g, "''")
-      .replace(/"[^"]*"/g, '""')
-      .replace(/`[^`]*`/g, "``")
-      .replace(/\bstate\b/g, "")
-      .replace(/\bderived\b/g, "")
-      .replace(/[0-9]/g, "")
-      .replace(/[+\-*/%<>=!&|?:().,\s\[\]]/g, "")
-      .replace(/true|false|null|undefined/g, "");
-
-    // Remaining letters (if any) indicate unknown identifiers.
-    if (/[a-zA-Z_$]/.test(stripped)) {
-      return `{{${expr}}}`;
-    }
-
-    // eslint-disable-next-line no-new-func
-    const fn = new Function("state", "derived", `return (${expr});`);
-    return fn(ctx.state, ctx.derived);
-  } catch {
-    return `{{${expr}}}`;
-  }
+interface Truck {
+  id: string;
+  model: string;
+  color: string;
+  status: string;
+  driver: string | null;
+  lastMaintenance: string;
+  mileage: number;
 }
 
-function getTargetKey(target: string): string | null {
-  if (!target) return null;
-  if (target.startsWith("state.")) return target.slice("state.".length);
-  if (target.startsWith("derived.")) return null; // disallow writes to derived
-  // treat plain as state key
-  if (!target.includes(".")) return target;
-  return null;
-}
-
-function layoutTypeFor(id: string): { type: "vertical" | "horizontal" | "grid"; gap?: number } | null {
-  const map: Record<string, { type: "vertical" | "horizontal" | "grid"; gap?: number }> = {
-    page_root: { type: "vertical", gap: 16 },
-    form_card: { type: "vertical", gap: 12 },
-    form_container: { type: "vertical", gap: 12 },
-  };
-  return map[id] ?? null;
+interface Driver {
+  id: string;
+  name: string;
+  license: string;
+  status: string;
+  rating: number;
 }
 
 export default function GeneratedApp() {
-  // -------------------------
-  // State (from data_ir.state)
-  // -------------------------
-  const [studentName, setStudentName] = useState<string>("");
-  const [studentAge, setStudentAge] = useState<number | null>(null);
-  const [studentClass, setStudentClass] = useState<number | null>(null);
-  const [studentGpa, setStudentGpa] = useState<number | null>(null);
-  const [studentLocation, setStudentLocation] = useState<string>("");
-  const [studentLevel, setStudentLevel] = useState<"Primary" | "Secondary" | "High School" | null>(null);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const stateObj = useMemo(
-    () => ({
-      studentName,
-      studentAge,
-      studentClass,
-      studentGpa,
-      studentLocation,
-      studentLevel,
-    }),
-    [studentName, studentAge, studentClass, studentGpa, studentLocation, studentLevel]
-  );
-
-  // -------------------------
-  // Derived (from data_ir.derived)
-  // -------------------------
-  const studentLevelDerived = useMemo(() => {
-    return safeEvalExpr(
-      "state.studentClass <= 5 ? 'Primary' : (state.studentClass <= 10 ? 'Secondary' : 'High School')",
-      { state: stateObj, derived: {} }
-    );
-  }, [stateObj]);
-
-  const derivedObj: DerivedMap = useMemo(
-    () => ({
-      studentLevelDerived,
-    }),
-    [studentLevelDerived]
-  );
-
-  const setters: Record<string, (v: any) => void> = useMemo(
-    () => ({
-      studentName: setStudentName,
-      studentAge: setStudentAge,
-      studentClass: setStudentClass,
-      studentGpa: setStudentGpa,
-      studentLocation: setStudentLocation,
-      studentLevel: setStudentLevel,
-    }),
-    []
-  );
-
-  const applyUpdates = useCallback(
-    (updates: Array<{ target: string; expr: string }>) => {
-      if (!Array.isArray(updates)) return;
-      for (const upd of updates) {
-        const key = getTargetKey(upd?.target);
-        if (!key) continue;
-        const setter = setters[key];
-        if (!setter) continue;
-        const value = safeEvalExpr(String(upd?.expr ?? ""), { state: stateObj, derived: derivedObj });
-        setter(value as any);
-      }
+  const [trucks, setTrucks] = useState<Truck[]>([
+    {
+      id: "T001",
+      model: "Volvo FH16",
+      color: "White",
+      status: "available",
+      driver: null,
+      lastMaintenance: "2024-01-15",
+      mileage: 45000
     },
-    [setters, stateObj, derivedObj]
-  );
-
-  // -------------------------
-  // Events (from behaviour_ir.events)
-  // -------------------------
-  const evt_setStudentLevel = useCallback(() => {
-    applyUpdates([
-      {
-        target: "state.studentLevel",
-        expr: "state.studentClass <= 5 ? 'Primary' : (state.studentClass <= 10 ? 'Secondary' : 'High School')",
-      },
-    ]);
-  }, [applyUpdates]);
-
-  // -------------------------
-  // Actions (from behaviour_ir.actions)
-  // -------------------------
-  const act_determineStudentLevel = useCallback(() => {
-    // Validation based on rules
-    const errors: string[] = [];
-
-    const requiredFields: Array<{ key: string; label: string; value: unknown }> = [
-      { key: "studentName", label: "Student Name", value: studentName },
-      { key: "studentAge", label: "Age", value: studentAge },
-      { key: "studentClass", label: "Class", value: studentClass },
-      { key: "studentGpa", label: "GPA", value: studentGpa },
-      { key: "studentLocation", label: "Location", value: studentLocation },
-    ];
-
-    for (const f of requiredFields) {
-      if (f.value === null || f.value === undefined || (typeof f.value === "string" && f.value.trim() === "")) {
-        errors.push(`${f.label} is required.`);
-      }
+    {
+      id: "T002",
+      model: "Scania R500",
+      color: "Black",
+      status: "occupied",
+      driver: "John Smith",
+      lastMaintenance: "2024-01-10",
+      mileage: 52000
+    },
+    {
+      id: "T003",
+      model: "Mercedes Actros",
+      color: "Silver",
+      status: "available",
+      driver: null,
+      lastMaintenance: "2024-01-20",
+      mileage: 38000
+    },
+    {
+      id: "T004",
+      model: "MAN TGX",
+      color: "White",
+      status: "unassigned",
+      driver: null,
+      lastMaintenance: "2024-01-05",
+      mileage: 61000
+    },
+    {
+      id: "T005",
+      model: "DAF XF",
+      color: "Gray",
+      status: "occupied",
+      driver: "Sarah Johnson",
+      lastMaintenance: "2024-01-18",
+      mileage: 47000
+    },
+    {
+      id: "T006",
+      model: "Iveco Stralis",
+      color: "Black",
+      status: "available",
+      driver: null,
+      lastMaintenance: "2024-01-22",
+      mileage: 33000
+    },
+    {
+      id: "T007",
+      model: "Volvo FH16",
+      color: "Silver",
+      status: "unassigned",
+      driver: null,
+      lastMaintenance: "2024-01-12",
+      mileage: 55000
+    },
+    {
+      id: "T008",
+      model: "Scania R500",
+      color: "White",
+      status: "available",
+      driver: null,
+      lastMaintenance: "2024-01-25",
+      mileage: 29000
     }
+  ]);
 
-    const gpa = studentGpa;
-    if (typeof gpa === "number") {
-      if (gpa < 0 || gpa > 4) errors.push("GPA must be between 0.0 and 4.0.");
+  const [drivers] = useState<Driver[]>([
+    {
+      id: "D001",
+      name: "Michael Brown",
+      license: "CDL-A",
+      status: "available",
+      rating: 4.8
+    },
+    {
+      id: "D002",
+      name: "Emily Davis",
+      license: "CDL-A",
+      status: "available",
+      rating: 4.9
+    },
+    {
+      id: "D003",
+      name: "Robert Wilson",
+      license: "CDL-B",
+      status: "available",
+      rating: 4.6
+    },
+    {
+      id: "D004",
+      name: "Jennifer Martinez",
+      license: "CDL-A",
+      status: "available",
+      rating: 4.7
+    },
+    {
+      id: "D005",
+      name: "David Anderson",
+      license: "CDL-A",
+      status: "available",
+      rating: 4.5
     }
+  ]);
 
-    const age = studentAge;
-    if (typeof age === "number") {
-      if (age < 1) errors.push("Age must be at least 1.");
-      if (!Number.isInteger(age)) errors.push("Age must be an integer.");
-    }
+  const [selectedTruck, setSelectedTruck] = useState<Truck | null>(null);
+  const [selectedDriver, setSelectedDriver] = useState<string | null>(null);
+  const [filterColor, setFilterColor] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [assignmentModalVisible, setAssignmentModalVisible] = useState<boolean>(false);
 
-    const cls = studentClass;
-    if (typeof cls === "number") {
-      if (cls < 1) errors.push("Class must be at least 1.");
-      if (!Number.isInteger(cls)) errors.push("Class must be an integer.");
-    }
+  const filteredTrucks = useMemo(() => {
+    return trucks.filter(t => 
+      (filterColor === 'all' || t.color === filterColor) && 
+      (filterStatus === 'all' || t.status === filterStatus) && 
+      (searchQuery === '' || t.id.includes(searchQuery) || t.model.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+  }, [trucks, filterColor, filterStatus, searchQuery]);
 
-    if (errors.length > 0) {
-      message.error("Please complete all fields with valid values before determining the student level.");
+  const availableTrucksCount = useMemo(() => {
+    return trucks.filter(t => t.status === 'available').length;
+  }, [trucks]);
+
+  const occupiedTrucksCount = useMemo(() => {
+    return trucks.filter(t => t.status === 'occupied').length;
+  }, [trucks]);
+
+  const unassignedTrucksCount = useMemo(() => {
+    return trucks.filter(t => t.status === 'unassigned').length;
+  }, [trucks]);
+
+  const availableDrivers = useMemo(() => {
+    return drivers.filter(d => d.status === 'available');
+  }, [drivers]);
+
+  const onColorFilterChange = (color: string) => {
+    setFilterColor(color);
+  };
+
+  const onStatusFilterChange = (status: string) => {
+    setFilterStatus(status);
+  };
+
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const onDriverSelect = (driverId: string) => {
+    setSelectedDriver(driverId);
+  };
+
+  const onOpenAssignmentModal = (truck: Truck) => {
+    setAssignmentModalVisible(true);
+    setSelectedTruck(truck);
+  };
+
+  const onCloseAssignmentModal = () => {
+    setAssignmentModalVisible(false);
+    setSelectedTruck(null);
+    setSelectedDriver(null);
+  };
+
+  const onAssignDriver = () => {
+    if (!selectedTruck || !selectedDriver) {
+      messageApi.error('Please select a driver');
       return;
     }
 
-    // operation == emit_event (payload.event_id = evt_setStudentLevel)
-    // plus provided updates
-    evt_setStudentLevel();
-    applyUpdates([
-      {
-        target: "state.studentLevel",
-        expr: "state.studentClass <= 5 ? 'Primary' : (state.studentClass <= 10 ? 'Secondary' : 'High School')",
-      },
-    ]);
+    const driver = drivers.find(d => d.id === selectedDriver);
+    if (!driver) {
+      messageApi.error('Driver not found');
+      return;
+    }
 
-    message.success("Student level determined.");
-  }, [studentName, studentAge, studentClass, studentGpa, studentLocation, evt_setStudentLevel, applyUpdates]);
+    setTrucks(trucks.map(t => 
+      t.id === selectedTruck.id 
+        ? {...t, driver: driver.name, status: 'occupied'} 
+        : t
+    ));
+    
+    messageApi.success('Driver assigned successfully');
+    setAssignmentModalVisible(false);
+    setSelectedTruck(null);
+    setSelectedDriver(null);
+  };
 
-  const handlers: Record<string, (() => void) | undefined> = useMemo(
-    () => ({
-      evt_setStudentLevel,
-      act_determineStudentLevel,
-    }),
-    [evt_setStudentLevel, act_determineStudentLevel]
-  );
+  const onUnassignDriver = (truckId: string) => {
+    setTrucks(trucks.map(t => 
+      t.id === truckId 
+        ? {...t, driver: null, status: 'available'} 
+        : t
+    ));
+    messageApi.success('Driver unassigned successfully');
+  };
 
-  // -------------------------
-  // Render helpers (component_ir + layout_ir)
-  // -------------------------
-  const childrenMap: Record<string, string[]> = useMemo(
-    () => ({
-      page_root: ["title", "form_card"],
-      form_card: ["form_container"],
-      form_container: [
-        "inp_name",
-        "inp_age",
-        "inp_class",
-        "inp_gpa",
-        "inp_location",
-        "btn_determine_level",
-        "result_alert",
-      ],
-    }),
-    []
-  );
+  const getStatusColor = (status: string): string => {
+    switch (status) {
+      case 'available':
+        return 'green';
+      case 'occupied':
+        return 'blue';
+      case 'unassigned':
+        return 'orange';
+      default:
+        return 'default';
+    }
+  };
 
-  const renderNode = useCallback(
-    (id: string): React.ReactNode => {
-      const components: any = {
-        page_root: {
-          type: "Container",
-          label: null,
-          bind: null,
-          onClick: null,
-          props: { padding: 24 },
-          styles: { maxWidth: 720, margin: "0 auto" },
-        },
-        title: {
-          type: "TypographyTitle",
-          label: "Student Information",
-          bind: null,
-          onClick: null,
-          props: { level: 2 },
-          styles: {},
-        },
-        form_card: {
-          type: "Card",
-          label: null,
-          bind: null,
-          onClick: null,
-          props: { title: "Enter details" },
-          styles: {},
-        },
-        form_container: {
-          type: "Form",
-          label: null,
-          bind: null,
-          onClick: null,
-          props: { layout: "vertical", requiredMark: true },
-          styles: {},
-        },
-        inp_name: {
-          type: "Input",
-          label: "Student Name",
-          bind: "state.studentName",
-          onClick: null,
-          props: { placeholder: "e.g., Alex Johnson" },
-          styles: {},
-        },
-        inp_age: {
-          type: "InputNumber",
-          label: "Age",
-          bind: "state.studentAge",
-          onClick: null,
-          props: { min: 1, precision: 0, style: { width: "100%" } },
-          styles: {},
-        },
-        inp_class: {
-          type: "InputNumber",
-          label: "Class",
-          bind: "state.studentClass",
-          onClick: null,
-          props: { min: 1, precision: 0, style: { width: "100%" } },
-          styles: {},
-        },
-        inp_gpa: {
-          type: "InputNumber",
-          label: "GPA",
-          bind: "state.studentGpa",
-          onClick: null,
-          props: { min: 0, max: 4, step: 0.1, precision: 2, style: { width: "100%" } },
-          styles: {},
-        },
-        inp_location: {
-          type: "Input",
-          label: "Location",
-          bind: "state.studentLocation",
-          onClick: null,
-          props: { placeholder: "e.g., Nairobi" },
-          styles: {},
-        },
-        btn_determine_level: {
-          type: "Button",
-          label: "Determine Student Level",
-          bind: null,
-          onClick: "act_determineStudentLevel",
-          props: { type: "primary", block: true },
-          styles: {},
-        },
-        result_alert: {
-          type: "Alert",
-          label: null,
-          bind: "state.studentLevel",
-          onClick: null,
-          props: { message: "Student Level", type: "success", showIcon: true },
-          styles: {},
-        },
-      };
+  const rootContainerStyle: CSSProperties = {
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "#f5f5f5",
+    overflow: "hidden",
+    display: "flex",
+    flexDirection: "column"
+  };
 
-      const node = components[id];
-      if (!node) {
-        return <div key={id}>Missing component: {id}</div>;
-      }
+  const headerSectionStyle: CSSProperties = {
+    backgroundColor: "#2c2c2c",
+    padding: "24px 32px",
+    borderBottom: "1px solid #1a1a1a"
+  };
 
-      const layout = layoutTypeFor(id);
-      const kids = childrenMap[id] || [];
-      const renderedChildren = kids.map((cid) => <React.Fragment key={cid}>{renderNode(cid)}</React.Fragment>);
+  const pageTitleStyle: CSSProperties = {
+    color: "#ffffff",
+    margin: 0,
+    fontWeight: 300,
+    letterSpacing: "0.5px"
+  };
 
-      const commonStyle: React.CSSProperties | undefined = node.styles || undefined;
+  const statsContainerStyle: CSSProperties = {
+    display: "flex",
+    gap: "16px",
+    marginTop: "16px"
+  };
 
-      const wrapChildren = (content: React.ReactNode) => {
-        if (!layout) return content;
-        if (layout.type === "vertical") {
-          return (
-            <Space direction="vertical" size={layout.gap ?? 8} style={{ width: "100%" }}>
-              {content}
-            </Space>
-          );
-        }
-        if (layout.type === "horizontal") {
-          return (
-            <Space direction="horizontal" size={layout.gap ?? 8} style={{ width: "100%" }}>
-              {content}
-            </Space>
-          );
-        }
-        if (layout.type === "grid") {
-          const gutter = layout.gap ?? 12;
-          return (
-            <Row gutter={[gutter, gutter]} style={{ width: "100%" }}>
-              {React.Children.map(content as any, (child, idx) => (
-                <Col key={idx} span={24}>
-                  {child}
-                </Col>
-              ))}
-            </Row>
-          );
-        }
-        return content;
-      };
+  const statCardStyle: CSSProperties = {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    border: "1px solid #e0e0e0"
+  };
 
-      const handleClickId: string | null = node.onClick ?? null;
-      const onClick = handleClickId ? handlers[handleClickId] : undefined;
+  const mainContentStyle: CSSProperties = {
+    flex: 1,
+    padding: "32px",
+    overflow: "auto"
+  };
 
-      switch (node.type) {
-        case "Container": {
-          const padding = node.props?.padding;
-          const style: React.CSSProperties = {
-            ...(typeof padding === "number" ? { padding } : {}),
-            ...(commonStyle || {}),
-          };
-          return <div style={style}>{wrapChildren(renderedChildren)}</div>;
-        }
-        case "TypographyTitle": {
-          const { level, ...restProps } = node.props || {};
-          return (
-            <Typography.Title level={level ?? 2} style={commonStyle} {...restProps}>
-              {node.label ?? ""}
-            </Typography.Title>
-          );
-        }
-        case "Card": {
-          const { title, ...restProps } = node.props || {};
-          return (
-            <Card title={title ?? node.label ?? undefined} style={commonStyle} {...restProps}>
-              {wrapChildren(renderedChildren)}
+  const filtersSectionStyle: CSSProperties = {
+    display: "flex",
+    gap: "16px",
+    marginBottom: "24px",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    padding: "20px",
+    border: "1px solid #e0e0e0"
+  };
+
+  const trucksGridStyle: CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+    gap: "20px"
+  };
+
+  const truckCardStyle: CSSProperties = {
+    backgroundColor: "#ffffff",
+    border: "1px solid #e0e0e0",
+    transition: "all 0.3s"
+  };
+
+  const modalContentStyle: CSSProperties = {
+    padding: "20px 0"
+  };
+
+  const truckInfoSectionStyle: CSSProperties = {
+    marginBottom: "24px",
+    padding: "16px",
+    backgroundColor: "#fafafa",
+    border: "1px solid #e0e0e0"
+  };
+
+  const assignButtonStyle: CSSProperties = {
+    backgroundColor: "#2c2c2c",
+    borderColor: "#2c2c2c"
+  };
+
+  return (
+    <>
+      {contextHolder}
+      <div style={rootContainerStyle}>
+        <div style={headerSectionStyle}>
+          <Typography.Title level={2} style={pageTitleStyle}>
+            Truck and Driver Assignment
+          </Typography.Title>
+          <div style={statsContainerStyle}>
+            <Card size="small" style={statCardStyle}>
+              <Statistic 
+                title="Available" 
+                value={availableTrucksCount} 
+                valueStyle={{ color: '#52c41a' }}
+              />
             </Card>
-          );
-        }
-        case "Form": {
-          const restProps = node.props || {};
-          return (
-            <Form style={commonStyle} {...restProps}>
-              {wrapChildren(renderedChildren)}
-            </Form>
-          );
-        }
-        case "Input": {
-          const bind: string | null = node.bind ?? null;
-          const key = bind?.startsWith("state.") ? bind.slice("state.".length) : bind;
-          const value = key && key in stateObj ? (stateObj as any)[key] : undefined;
-          const setter = key ? setters[key] : undefined;
+            <Card size="small" style={statCardStyle}>
+              <Statistic 
+                title="Occupied" 
+                value={occupiedTrucksCount} 
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Card>
+            <Card size="small" style={statCardStyle}>
+              <Statistic 
+                title="Unassigned" 
+                value={unassignedTrucksCount} 
+                valueStyle={{ color: '#fa8c16' }}
+              />
+            </Card>
+          </div>
+        </div>
 
-          const inputEl = (
-            <Input
-              value={typeof value === "string" ? value : value ?? ""}
-              onChange={(e) => setter?.(e.target.value)}
-              style={commonStyle}
-              {...(node.props || {})}
+        <div style={mainContentStyle}>
+          <div style={filtersSectionStyle}>
+            <Input.Search
+              placeholder="Search by truck ID or model"
+              allowClear
+              value={searchQuery}
+              onChange={onSearchChange}
+              style={{ width: "300px" }}
             />
-          );
-
-          return node.label ? <Form.Item label={node.label}>{inputEl}</Form.Item> : inputEl;
-        }
-        case "InputNumber": {
-          const bind: string | null = node.bind ?? null;
-          const key = bind?.startsWith("state.") ? bind.slice("state.".length) : bind;
-          const value = key && key in stateObj ? (stateObj as any)[key] : undefined;
-          const setter = key ? setters[key] : undefined;
-
-          const { style: innerStyle, ...restProps } = node.props || {};
-          const mergedStyle = { ...(innerStyle || {}), ...(commonStyle || {}) };
-
-          const inputEl = (
-            <InputNumber
-              value={typeof value === "number" ? value : value ?? null}
-              onChange={(v) => setter?.(v === null ? null : v)}
-              style={mergedStyle}
-              {...restProps}
+            <Select
+              placeholder="Filter by color"
+              value={filterColor}
+              onChange={onColorFilterChange}
+              style={{ width: "180px" }}
+              options={[
+                { label: "All Colors", value: "all" },
+                { label: "White", value: "White" },
+                { label: "Black", value: "Black" },
+                { label: "Silver", value: "Silver" },
+                { label: "Gray", value: "Gray" }
+              ]}
             />
-          );
-
-          return node.label ? <Form.Item label={node.label}>{inputEl}</Form.Item> : inputEl;
-        }
-        case "Button": {
-          return (
-            <Button onClick={onClick} style={commonStyle} {...(node.props || {})}>
-              {node.label ?? ""}
-            </Button>
-          );
-        }
-        case "Alert": {
-          const bind: string | null = node.bind ?? null;
-          const key = bind?.startsWith("state.") ? bind.slice("state.".length) : bind;
-          const value = key && key in stateObj ? (stateObj as any)[key] : undefined;
-
-          const description =
-            value === null || value === undefined || value === ""
-              ? "No level determined yet."
-              : typeof value === "string"
-              ? value
-              : String(value);
-
-          // Hide alert if nothing set
-          if (value === null || value === undefined || value === "") {
-            return null;
-          }
-
-          return (
-            <Alert
-              onClick={onClick}
-              style={commonStyle}
-              description={description}
-              {...(node.props || {})}
+            <Select
+              placeholder="Filter by status"
+              value={filterStatus}
+              onChange={onStatusFilterChange}
+              style={{ width: "180px" }}
+              options={[
+                { label: "All Status", value: "all" },
+                { label: "Available", value: "available" },
+                { label: "Occupied", value: "occupied" },
+                { label: "Unassigned", value: "unassigned" }
+              ]}
             />
-          );
-        }
-        default: {
-          return (
-            <div style={commonStyle}>
-              Unsupported component: {String(node.type)}
-              {kids.length > 0 ? <div style={{ marginTop: 8 }}>{wrapChildren(renderedChildren)}</div> : null}
-            </div>
-          );
-        }
-      }
-    },
-    [childrenMap, derivedObj, handlers, renderNode, setters, stateObj]
+          </div>
+
+          <div style={trucksGridStyle}>
+            {filteredTrucks.map((truck) => (
+              <Card
+                key={truck.id}
+                hoverable
+                style={truckCardStyle}
+                title={
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{truck.id}</span>
+                    <Tag color={getStatusColor(truck.status)}>{truck.status.toUpperCase()}</Tag>
+                  </div>
+                }
+              >
+                <div style={{ marginBottom: '12px' }}>
+                  <Typography.Text strong>Model: </Typography.Text>
+                  <Typography.Text>{truck.model}</Typography.Text>
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  <Typography.Text strong>Color: </Typography.Text>
+                  <Typography.Text>{truck.color}</Typography.Text>
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  <Typography.Text strong>Mileage: </Typography.Text>
+                  <Typography.Text>{truck.mileage.toLocaleString()} km</Typography.Text>
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  <Typography.Text strong>Last Maintenance: </Typography.Text>
+                  <Typography.Text>{truck.lastMaintenance}</Typography.Text>
+                </div>
+                {truck.driver && (
+                  <div style={{ marginBottom: '12px' }}>
+                    <Typography.Text strong>Driver: </Typography.Text>
+                    <Typography.Text>{truck.driver}</Typography.Text>
+                  </div>
+                )}
+                <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
+                  {truck.status === 'available' && (
+                    <Button
+                      type="primary"
+                      size="small"
+                      block
+                      style={assignButtonStyle}
+                      onClick={() => onOpenAssignmentModal(truck)}
+                    >
+                      Assign Driver
+                    </Button>
+                  )}
+                  {truck.status === 'occupied' && (
+                    <Button
+                      danger
+                      size="small"
+                      block
+                      onClick={() => onUnassignDriver(truck.id)}
+                    >
+                      Unassign
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <Modal
+          title="Assign Driver to Truck"
+          open={assignmentModalVisible}
+          onCancel={onCloseAssignmentModal}
+          footer={null}
+          width={600}
+        >
+          <div style={modalContentStyle}>
+            {selectedTruck && (
+              <>
+                <div style={truckInfoSectionStyle}>
+                  <Typography.Title level={5}>Truck Information</Typography.Title>
+                  <div style={{ marginBottom: '8px' }}>
+                    <Typography.Text strong>ID: </Typography.Text>
+                    <Typography.Text>{selectedTruck.id}</Typography.Text>
+                  </div>
+                  <div style={{ marginBottom: '8px' }}>
+                    <Typography.Text strong>Model: </Typography.Text>
+                    <Typography.Text>{selectedTruck.model}</Typography.Text>
+                  </div>
+                  <div style={{ marginBottom: '8px' }}>
+                    <Typography.Text strong>Color: </Typography.Text>
+                    <Typography.Text>{selectedTruck.color}</Typography.Text>
+                  </div>
+                  <div>
+                    <Typography.Text strong>Mileage: </Typography.Text>
+                    <Typography.Text>{selectedTruck.mileage.toLocaleString()} km</Typography.Text>
+                  </div>
+                </div>
+
+                <Select
+                  placeholder="Select an available driver"
+                  value={selectedDriver}
+                  onChange={onDriverSelect}
+                  style={{ width: "100%", marginBottom: "20px" }}
+                  options={availableDrivers.map(driver => ({
+                    label: `${driver.name} - ${driver.license} (Rating: ${driver.rating})`,
+                    value: driver.id
+                  }))}
+                />
+
+                <Button
+                  type="primary"
+                  block
+                  size="large"
+                  style={assignButtonStyle}
+                  onClick={onAssignDriver}
+                  disabled={!selectedDriver}
+                >
+                  Assign Driver
+                </Button>
+              </>
+            )}
+          </div>
+        </Modal>
+      </div>
+    </>
   );
-
-  const theme = {
-    token: {
-      colorPrimary: "#22c55e",
-      colorInfo: "#ef4444",
-      fontFamily: "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
-      borderRadius: 8,
-    },
-  } as const;
-
-  return <ConfigProvider theme={theme}>{renderNode("page_root")}</ConfigProvider>;
 }
