@@ -1,511 +1,298 @@
-import { useState, useMemo } from 'react';
-import { Card, Typography, Input, Select, Button, Modal, message, Tag, Statistic } from 'antd';
+import { useEffect, useState, useMemo } from 'react';
+import { Table, Button, Modal, Typography, Descriptions, Alert, message } from 'antd';
+import { CalculatorOutlined } from '@ant-design/icons';
+import type { TablePaginationConfig } from 'antd';
+import initSqlJs from 'sql.js';
+import type { Database } from 'sql.js';
 import type { CSSProperties } from 'react';
 
-interface Truck {
-  id: string;
-  model: string;
-  color: string;
-  status: string;
-  driver: string | null;
-  lastMaintenance: string;
-  mileage: number;
-}
-
-interface Driver {
-  id: string;
+interface Student {
+  id: number;
   name: string;
-  license: string;
-  status: string;
-  rating: number;
+  height: number;
+  weight: number;
+  bmi?: string;
+  category?: string;
 }
 
 export default function GeneratedApp() {
   const [messageApi, contextHolder] = message.useMessage();
+  const [rows, setRows] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
+  const [total, setTotal] = useState(0);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [bmiCalculated, setBmiCalculated] = useState(false);
+  const [db, setDb] = useState<Database | null>(null);
 
-  const [trucks, setTrucks] = useState<Truck[]>([
-    {
-      id: "T001",
-      model: "Volvo FH16",
-      color: "White",
-      status: "available",
-      driver: null,
-      lastMaintenance: "2024-01-15",
-      mileage: 45000
-    },
-    {
-      id: "T002",
-      model: "Scania R500",
-      color: "Black",
-      status: "occupied",
-      driver: "John Smith",
-      lastMaintenance: "2024-01-10",
-      mileage: 52000
-    },
-    {
-      id: "T003",
-      model: "Mercedes Actros",
-      color: "Silver",
-      status: "available",
-      driver: null,
-      lastMaintenance: "2024-01-20",
-      mileage: 38000
-    },
-    {
-      id: "T004",
-      model: "MAN TGX",
-      color: "White",
-      status: "unassigned",
-      driver: null,
-      lastMaintenance: "2024-01-05",
-      mileage: 61000
-    },
-    {
-      id: "T005",
-      model: "DAF XF",
-      color: "Gray",
-      status: "occupied",
-      driver: "Sarah Johnson",
-      lastMaintenance: "2024-01-18",
-      mileage: 47000
-    },
-    {
-      id: "T006",
-      model: "Iveco Stralis",
-      color: "Black",
-      status: "available",
-      driver: null,
-      lastMaintenance: "2024-01-22",
-      mileage: 33000
-    },
-    {
-      id: "T007",
-      model: "Volvo FH16",
-      color: "Silver",
-      status: "unassigned",
-      driver: null,
-      lastMaintenance: "2024-01-12",
-      mileage: 55000
-    },
-    {
-      id: "T008",
-      model: "Scania R500",
-      color: "White",
-      status: "available",
-      driver: null,
-      lastMaintenance: "2024-01-25",
-      mileage: 29000
+  useEffect(() => {
+    const initDb = async () => {
+      try {
+        const SQL = await initSqlJs({ locateFile: () => '/db/sql-wasm.wasm' });
+        const response = await fetch('/db/student_data.db');
+        const buffer = await response.arrayBuffer();
+        const database = new SQL.Database(new Uint8Array(buffer));
+        setDb(database);
+      } catch (err) {
+        setError(`Failed to initialize database: ${err}`);
+      }
+    };
+    initDb();
+  }, []);
+
+  useEffect(() => {
+    if (!db) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const currentPage = Number(page);
+        const currentPageSize = Number(pageSize);
+        
+        const safePage = Number.isInteger(currentPage) && currentPage > 0 ? currentPage : 1;
+        const safePageSize = Number.isInteger(currentPageSize) && currentPageSize > 0 ? currentPageSize : 50;
+        
+        const offset = (safePage - 1) * safePageSize;
+        const limit = safePageSize;
+
+        const countQuery = "SELECT COUNT(*) as count FROM student_data WHERE ('' = '' OR name LIKE '%' || '' || '%')";
+        const countResult = db.exec(countQuery);
+        const totalCount = countResult.length > 0 ? (countResult[0].values[0][0] as number) : 0;
+        setTotal(totalCount);
+
+        const dataQuery = `SELECT id, name, height, weight FROM student_data WHERE ('' = '' OR name LIKE '%' || '' || '%') ORDER BY name LIMIT ${limit} OFFSET ${offset}`;
+        const result = db.exec(dataQuery);
+
+        if (result.length > 0) {
+          const students: Student[] = result[0].values.map((row) => ({
+            id: row[0] as number,
+            name: row[1] as string,
+            height: row[2] as number,
+            weight: row[3] as number,
+          }));
+          setRows(students);
+        } else {
+          setRows([]);
+        }
+      } catch (err) {
+        setError(`Query failed: ${err}`);
+        setRows([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [db, page, pageSize]);
+
+  const studentsWithBMI = useMemo(() => {
+    if (bmiCalculated) {
+      return rows.map((s) => {
+        const bmiValue = s.weight / ((s.height / 100) * (s.height / 100));
+        const bmi = bmiValue.toFixed(2);
+        const category = bmiValue < 18.5 ? 'Underweight' : bmiValue > 25 ? 'Overweight' : 'Normal';
+        return { ...s, bmi, category };
+      });
     }
-  ]);
+    return rows;
+  }, [bmiCalculated, rows]);
 
-  const [drivers] = useState<Driver[]>([
+  const calculateBMI = () => {
+    setBmiCalculated(true);
+    messageApi.success('BMI calculated successfully');
+  };
+
+  const openStudentModal = (student: Student) => {
+    setSelectedStudent(student);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedStudent(null);
+  };
+
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    const newPage = pagination.current ?? 1;
+    const newPageSize = pagination.pageSize ?? 50;
+    setPage(newPage);
+    setPageSize(newPageSize);
+  };
+
+  const columns = [
     {
-      id: "D001",
-      name: "Michael Brown",
-      license: "CDL-A",
-      status: "available",
-      rating: 4.8
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: '30%',
     },
     {
-      id: "D002",
-      name: "Emily Davis",
-      license: "CDL-A",
-      status: "available",
-      rating: 4.9
+      title: 'Height (cm)',
+      dataIndex: 'height',
+      key: 'height',
+      width: '20%',
     },
     {
-      id: "D003",
-      name: "Robert Wilson",
-      license: "CDL-B",
-      status: "available",
-      rating: 4.6
+      title: 'Weight (kg)',
+      dataIndex: 'weight',
+      key: 'weight',
+      width: '20%',
     },
     {
-      id: "D004",
-      name: "Jennifer Martinez",
-      license: "CDL-A",
-      status: "available",
-      rating: 4.7
+      title: 'BMI',
+      dataIndex: 'bmi',
+      key: 'bmi',
+      width: '15%',
+      render: (text: string) => (bmiCalculated ? text : '-'),
     },
     {
-      id: "D005",
-      name: "David Anderson",
-      license: "CDL-A",
-      status: "available",
-      rating: 4.5
-    }
-  ]);
-
-  const [selectedTruck, setSelectedTruck] = useState<Truck | null>(null);
-  const [selectedDriver, setSelectedDriver] = useState<string | null>(null);
-  const [filterColor, setFilterColor] = useState<string>("all");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [assignmentModalVisible, setAssignmentModalVisible] = useState<boolean>(false);
-
-  const filteredTrucks = useMemo(() => {
-    return trucks.filter(t => 
-      (filterColor === 'all' || t.color === filterColor) && 
-      (filterStatus === 'all' || t.status === filterStatus) && 
-      (searchQuery === '' || t.id.includes(searchQuery) || t.model.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-  }, [trucks, filterColor, filterStatus, searchQuery]);
-
-  const availableTrucksCount = useMemo(() => {
-    return trucks.filter(t => t.status === 'available').length;
-  }, [trucks]);
-
-  const occupiedTrucksCount = useMemo(() => {
-    return trucks.filter(t => t.status === 'occupied').length;
-  }, [trucks]);
-
-  const unassignedTrucksCount = useMemo(() => {
-    return trucks.filter(t => t.status === 'unassigned').length;
-  }, [trucks]);
-
-  const availableDrivers = useMemo(() => {
-    return drivers.filter(d => d.status === 'available');
-  }, [drivers]);
-
-  const onColorFilterChange = (color: string) => {
-    setFilterColor(color);
-  };
-
-  const onStatusFilterChange = (status: string) => {
-    setFilterStatus(status);
-  };
-
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const onDriverSelect = (driverId: string) => {
-    setSelectedDriver(driverId);
-  };
-
-  const onOpenAssignmentModal = (truck: Truck) => {
-    setAssignmentModalVisible(true);
-    setSelectedTruck(truck);
-  };
-
-  const onCloseAssignmentModal = () => {
-    setAssignmentModalVisible(false);
-    setSelectedTruck(null);
-    setSelectedDriver(null);
-  };
-
-  const onAssignDriver = () => {
-    if (!selectedTruck || !selectedDriver) {
-      messageApi.error('Please select a driver');
-      return;
-    }
-
-    const driver = drivers.find(d => d.id === selectedDriver);
-    if (!driver) {
-      messageApi.error('Driver not found');
-      return;
-    }
-
-    setTrucks(trucks.map(t => 
-      t.id === selectedTruck.id 
-        ? {...t, driver: driver.name, status: 'occupied'} 
-        : t
-    ));
-    
-    messageApi.success('Driver assigned successfully');
-    setAssignmentModalVisible(false);
-    setSelectedTruck(null);
-    setSelectedDriver(null);
-  };
-
-  const onUnassignDriver = (truckId: string) => {
-    setTrucks(trucks.map(t => 
-      t.id === truckId 
-        ? {...t, driver: null, status: 'available'} 
-        : t
-    ));
-    messageApi.success('Driver unassigned successfully');
-  };
-
-  const getStatusColor = (status: string): string => {
-    switch (status) {
-      case 'available':
-        return 'green';
-      case 'occupied':
-        return 'blue';
-      case 'unassigned':
-        return 'orange';
-      default:
-        return 'default';
-    }
-  };
+      title: 'Category',
+      dataIndex: 'category',
+      key: 'category',
+      width: '15%',
+      render: (text: string) => (bmiCalculated ? text : '-'),
+    },
+  ];
 
   const rootContainerStyle: CSSProperties = {
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "#f5f5f5",
-    overflow: "hidden",
-    display: "flex",
-    flexDirection: "column"
-  };
-
-  const headerSectionStyle: CSSProperties = {
-    backgroundColor: "#2c2c2c",
-    padding: "24px 32px",
-    borderBottom: "1px solid #1a1a1a"
+    width: '100vw',
+    height: '100vh',
+    padding: '24px',
+    backgroundColor: '#f5f5f5',
+    overflow: 'auto',
   };
 
   const pageTitleStyle: CSSProperties = {
-    color: "#ffffff",
-    margin: 0,
-    fontWeight: 300,
-    letterSpacing: "0.5px"
+    marginBottom: '24px',
+    textAlign: 'center',
   };
 
-  const statsContainerStyle: CSSProperties = {
-    display: "flex",
-    gap: "16px",
-    marginTop: "16px"
+  const tableStyle: CSSProperties = {
+    backgroundColor: '#ffffff',
+    borderRadius: '8px',
+    cursor: 'pointer',
   };
 
-  const statCardStyle: CSSProperties = {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    border: "1px solid #e0e0e0"
-  };
-
-  const mainContentStyle: CSSProperties = {
-    flex: 1,
-    padding: "32px",
-    overflow: "auto"
-  };
-
-  const filtersSectionStyle: CSSProperties = {
-    display: "flex",
-    gap: "16px",
-    marginBottom: "24px",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-    padding: "20px",
-    border: "1px solid #e0e0e0"
-  };
-
-  const trucksGridStyle: CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-    gap: "20px"
-  };
-
-  const truckCardStyle: CSSProperties = {
-    backgroundColor: "#ffffff",
-    border: "1px solid #e0e0e0",
-    transition: "all 0.3s"
+  const calculateButtonStyle: CSSProperties = {
+    backgroundColor: '#52c41a',
+    borderColor: '#52c41a',
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    zIndex: 1000,
+    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
   };
 
   const modalContentStyle: CSSProperties = {
-    padding: "20px 0"
+    padding: '16px',
   };
 
-  const truckInfoSectionStyle: CSSProperties = {
-    marginBottom: "24px",
-    padding: "16px",
-    backgroundColor: "#fafafa",
-    border: "1px solid #e0e0e0"
+  const modalNameStyle: CSSProperties = {
+    marginBottom: '16px',
   };
 
-  const assignButtonStyle: CSSProperties = {
-    backgroundColor: "#2c2c2c",
-    borderColor: "#2c2c2c"
+  const modalCategoryAlertStyle: CSSProperties = {
+    marginTop: '16px',
   };
+
+  const getCategoryMessage = () => {
+    if (!selectedStudent?.category) return 'Not calculated';
+    if (selectedStudent.category === 'Underweight') return 'This student is underweight';
+    if (selectedStudent.category === 'Overweight') return 'This student is overweight';
+    return 'This student has normal weight';
+  };
+
+  const getCategoryType = () => {
+    if (selectedStudent?.category === 'Normal') return 'success';
+    return 'warning';
+  };
+
+  const descriptionsItems = [
+    {
+      label: 'Height',
+      children: selectedStudent ? `${selectedStudent.height} cm` : '',
+    },
+    {
+      label: 'Weight',
+      children: selectedStudent ? `${selectedStudent.weight} kg` : '',
+    },
+    {
+      label: 'BMI',
+      children: selectedStudent?.bmi || 'Not calculated',
+    },
+    {
+      label: 'Category',
+      children: selectedStudent?.category || 'Not calculated',
+    },
+  ];
 
   return (
-    <>
+    <div style={rootContainerStyle}>
       {contextHolder}
-      <div style={rootContainerStyle}>
-        <div style={headerSectionStyle}>
-          <Typography.Title level={2} style={pageTitleStyle}>
-            Truck and Driver Assignment
+      <Typography.Title level={2} style={pageTitleStyle}>
+        Student BMI Dashboard
+      </Typography.Title>
+      {error && (
+        <Alert
+          message="Error"
+          description={error}
+          type="error"
+          showIcon
+          style={{ marginBottom: '24px' }}
+        />
+      )}
+      <Table
+        columns={columns}
+        dataSource={studentsWithBMI}
+        rowKey="id"
+        pagination={{
+          current: page,
+          pageSize: pageSize,
+          total: total,
+          showSizeChanger: true,
+        }}
+        loading={loading}
+        onRow={(record) => ({
+          onClick: () => openStudentModal(record),
+        })}
+        onChange={handleTableChange}
+        style={tableStyle}
+      />
+      <Button
+        type="primary"
+        size="large"
+        icon={<CalculatorOutlined />}
+        onClick={calculateBMI}
+        style={calculateButtonStyle}
+      >
+        Calculate BMI
+      </Button>
+      <Modal
+        open={modalVisible}
+        onCancel={closeModal}
+        title="Student BMI Details"
+        footer={null}
+        width={500}
+      >
+        <div style={modalContentStyle}>
+          <Typography.Title level={4} style={modalNameStyle}>
+            {selectedStudent?.name}
           </Typography.Title>
-          <div style={statsContainerStyle}>
-            <Card size="small" style={statCardStyle}>
-              <Statistic 
-                title="Available" 
-                value={availableTrucksCount} 
-                valueStyle={{ color: '#52c41a' }}
-              />
-            </Card>
-            <Card size="small" style={statCardStyle}>
-              <Statistic 
-                title="Occupied" 
-                value={occupiedTrucksCount} 
-                valueStyle={{ color: '#1890ff' }}
-              />
-            </Card>
-            <Card size="small" style={statCardStyle}>
-              <Statistic 
-                title="Unassigned" 
-                value={unassignedTrucksCount} 
-                valueStyle={{ color: '#fa8c16' }}
-              />
-            </Card>
-          </div>
+          <Descriptions column={1} bordered items={descriptionsItems} />
+          {selectedStudent?.category && (
+            <Alert
+              message={getCategoryMessage()}
+              type={getCategoryType()}
+              showIcon
+              style={modalCategoryAlertStyle}
+            />
+          )}
         </div>
-
-        <div style={mainContentStyle}>
-          <div style={filtersSectionStyle}>
-            <Input.Search
-              placeholder="Search by truck ID or model"
-              allowClear
-              value={searchQuery}
-              onChange={onSearchChange}
-              style={{ width: "300px" }}
-            />
-            <Select
-              placeholder="Filter by color"
-              value={filterColor}
-              onChange={onColorFilterChange}
-              style={{ width: "180px" }}
-              options={[
-                { label: "All Colors", value: "all" },
-                { label: "White", value: "White" },
-                { label: "Black", value: "Black" },
-                { label: "Silver", value: "Silver" },
-                { label: "Gray", value: "Gray" }
-              ]}
-            />
-            <Select
-              placeholder="Filter by status"
-              value={filterStatus}
-              onChange={onStatusFilterChange}
-              style={{ width: "180px" }}
-              options={[
-                { label: "All Status", value: "all" },
-                { label: "Available", value: "available" },
-                { label: "Occupied", value: "occupied" },
-                { label: "Unassigned", value: "unassigned" }
-              ]}
-            />
-          </div>
-
-          <div style={trucksGridStyle}>
-            {filteredTrucks.map((truck) => (
-              <Card
-                key={truck.id}
-                hoverable
-                style={truckCardStyle}
-                title={
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span>{truck.id}</span>
-                    <Tag color={getStatusColor(truck.status)}>{truck.status.toUpperCase()}</Tag>
-                  </div>
-                }
-              >
-                <div style={{ marginBottom: '12px' }}>
-                  <Typography.Text strong>Model: </Typography.Text>
-                  <Typography.Text>{truck.model}</Typography.Text>
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <Typography.Text strong>Color: </Typography.Text>
-                  <Typography.Text>{truck.color}</Typography.Text>
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <Typography.Text strong>Mileage: </Typography.Text>
-                  <Typography.Text>{truck.mileage.toLocaleString()} km</Typography.Text>
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <Typography.Text strong>Last Maintenance: </Typography.Text>
-                  <Typography.Text>{truck.lastMaintenance}</Typography.Text>
-                </div>
-                {truck.driver && (
-                  <div style={{ marginBottom: '12px' }}>
-                    <Typography.Text strong>Driver: </Typography.Text>
-                    <Typography.Text>{truck.driver}</Typography.Text>
-                  </div>
-                )}
-                <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
-                  {truck.status === 'available' && (
-                    <Button
-                      type="primary"
-                      size="small"
-                      block
-                      style={assignButtonStyle}
-                      onClick={() => onOpenAssignmentModal(truck)}
-                    >
-                      Assign Driver
-                    </Button>
-                  )}
-                  {truck.status === 'occupied' && (
-                    <Button
-                      danger
-                      size="small"
-                      block
-                      onClick={() => onUnassignDriver(truck.id)}
-                    >
-                      Unassign
-                    </Button>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        <Modal
-          title="Assign Driver to Truck"
-          open={assignmentModalVisible}
-          onCancel={onCloseAssignmentModal}
-          footer={null}
-          width={600}
-        >
-          <div style={modalContentStyle}>
-            {selectedTruck && (
-              <>
-                <div style={truckInfoSectionStyle}>
-                  <Typography.Title level={5}>Truck Information</Typography.Title>
-                  <div style={{ marginBottom: '8px' }}>
-                    <Typography.Text strong>ID: </Typography.Text>
-                    <Typography.Text>{selectedTruck.id}</Typography.Text>
-                  </div>
-                  <div style={{ marginBottom: '8px' }}>
-                    <Typography.Text strong>Model: </Typography.Text>
-                    <Typography.Text>{selectedTruck.model}</Typography.Text>
-                  </div>
-                  <div style={{ marginBottom: '8px' }}>
-                    <Typography.Text strong>Color: </Typography.Text>
-                    <Typography.Text>{selectedTruck.color}</Typography.Text>
-                  </div>
-                  <div>
-                    <Typography.Text strong>Mileage: </Typography.Text>
-                    <Typography.Text>{selectedTruck.mileage.toLocaleString()} km</Typography.Text>
-                  </div>
-                </div>
-
-                <Select
-                  placeholder="Select an available driver"
-                  value={selectedDriver}
-                  onChange={onDriverSelect}
-                  style={{ width: "100%", marginBottom: "20px" }}
-                  options={availableDrivers.map(driver => ({
-                    label: `${driver.name} - ${driver.license} (Rating: ${driver.rating})`,
-                    value: driver.id
-                  }))}
-                />
-
-                <Button
-                  type="primary"
-                  block
-                  size="large"
-                  style={assignButtonStyle}
-                  onClick={onAssignDriver}
-                  disabled={!selectedDriver}
-                >
-                  Assign Driver
-                </Button>
-              </>
-            )}
-          </div>
-        </Modal>
-      </div>
-    </>
+      </Modal>
+    </div>
   );
 }
