@@ -1,418 +1,164 @@
 {
   "page_ir": {
-    "page_goal": "Display truck availability across different colors with status tracking (occupied, available, unassigned) and enable assignment of available trucks to drivers for movement",
+    "page_goal": "Replicate UXpilot.ai UI design for generating Hifi UI and wireframes with design mode, style, type, font selection and prompt input",
     "style": {
       "tone": "professional",
-      "theme": "monochrome loft",
+      "theme": "light",
       "density": "comfortable",
-      "color_intent": "neutral"
+      "color_intent": "purple-primary"
     },
     "accessibility": {
       "required_labels": [
-        "truck_status",
-        "driver_assignment",
-        "color_filter"
+        "design_mode_select",
+        "style_select",
+        "type_select",
+        "font_select",
+        "prompt_textarea"
       ]
     },
     "responsive": {
-      "breakpoints": {
-        "mobile": 768,
-        "tablet": 1024,
-        "desktop": 1440
-      },
-      "collapse_rules": [
-        "stack_filters_on_mobile"
-      ],
+      "breakpoints": {},
+      "collapse_rules": [],
       "hidden_on_small": []
     },
-    "constraints": [
-      "full_screen_layout"
-    ]
+    "constraints": []
   },
   "data_ir": {
     "state": {
-      "trucks": {
-        "type": "array",
-        "initial": [
-          {
-            "id": "T001",
-            "model": "Volvo FH16",
-            "color": "White",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-15",
-            "mileage": 45000
-          },
-          {
-            "id": "T002",
-            "model": "Scania R500",
-            "color": "Black",
-            "status": "occupied",
-            "driver": "John Smith",
-            "lastMaintenance": "2024-01-10",
-            "mileage": 52000
-          },
-          {
-            "id": "T003",
-            "model": "Mercedes Actros",
-            "color": "Silver",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-20",
-            "mileage": 38000
-          },
-          {
-            "id": "T004",
-            "model": "MAN TGX",
-            "color": "White",
-            "status": "unassigned",
-            "driver": null,
-            "lastMaintenance": "2024-01-05",
-            "mileage": 61000
-          },
-          {
-            "id": "T005",
-            "model": "DAF XF",
-            "color": "Gray",
-            "status": "occupied",
-            "driver": "Sarah Johnson",
-            "lastMaintenance": "2024-01-18",
-            "mileage": 47000
-          },
-          {
-            "id": "T006",
-            "model": "Iveco Stralis",
-            "color": "Black",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-22",
-            "mileage": 33000
-          },
-          {
-            "id": "T007",
-            "model": "Volvo FH16",
-            "color": "Silver",
-            "status": "unassigned",
-            "driver": null,
-            "lastMaintenance": "2024-01-12",
-            "mileage": 55000
-          },
-          {
-            "id": "T008",
-            "model": "Scania R500",
-            "color": "White",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-25",
-            "mileage": 29000
-          }
-        ],
+      "designMode": {
+        "type": "string",
+        "initial": "Hifi Designs",
         "required": true,
         "constraints": {}
       },
-      "drivers": {
-        "type": "array",
-        "initial": [
-          {
-            "id": "D001",
-            "name": "Michael Brown",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.8
-          },
-          {
-            "id": "D002",
-            "name": "Emily Davis",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.9
-          },
-          {
-            "id": "D003",
-            "name": "Robert Wilson",
-            "license": "CDL-B",
-            "status": "available",
-            "rating": 4.6
-          },
-          {
-            "id": "D004",
-            "name": "Jennifer Martinez",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.7
-          },
-          {
-            "id": "D005",
-            "name": "David Anderson",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.5
-          }
-        ],
+      "styleOption": {
+        "type": "string",
+        "initial": "default",
         "required": true,
         "constraints": {}
       },
-      "selectedTruck": {
-        "type": "object",
-        "initial": null,
-        "required": false,
-        "constraints": {}
-      },
-      "selectedDriver": {
+      "deviceType": {
         "type": "string",
-        "initial": null,
-        "required": false,
+        "initial": "Desktop",
+        "required": true,
         "constraints": {}
       },
-      "filterColor": {
+      "fontFamily": {
         "type": "string",
-        "initial": "all",
-        "required": false,
+        "initial": "Inter",
+        "required": true,
         "constraints": {}
       },
-      "filterStatus": {
+      "promptText": {
         "type": "string",
-        "initial": "all",
-        "required": false,
+        "initial": "Landing page for a job search platform",
+        "required": true,
         "constraints": {}
       },
-      "searchQuery": {
-        "type": "string",
-        "initial": "",
-        "required": false,
-        "constraints": {}
-      },
-      "assignmentModalVisible": {
-        "type": "boolean",
-        "initial": false,
+      "characterCount": {
+        "type": "number",
+        "initial": 38,
         "required": false,
         "constraints": {}
       }
     },
     "derived": {
-      "filteredTrucks": {
-        "type": "array",
-        "expr": "state.trucks.filter(t => (state.filterColor === 'all' || t.color === state.filterColor) && (state.filterStatus === 'all' || t.status === state.filterStatus) && (state.searchQuery === '' || t.id.includes(state.searchQuery) || t.model.toLowerCase().includes(state.searchQuery.toLowerCase())))"
-      },
-      "availableTrucksCount": {
-        "type": "number",
-        "expr": "state.trucks.filter(t => t.status === 'available').length"
-      },
-      "occupiedTrucksCount": {
-        "type": "number",
-        "expr": "state.trucks.filter(t => t.status === 'occupied').length"
-      },
-      "unassignedTrucksCount": {
-        "type": "number",
-        "expr": "state.trucks.filter(t => t.status === 'unassigned').length"
-      },
-      "availableDrivers": {
-        "type": "array",
-        "expr": "state.drivers.filter(d => d.status === 'available')"
+      "isPromptValid": {
+        "type": "boolean",
+        "expr": "state.promptText.length >= 5"
       }
     }
   },
   "data_model_ir": {
-    "entities": {
-      "truck": {
-        "name": "Truck",
-        "fields": [
-          "id",
-          "model",
-          "color",
-          "status",
-          "driver",
-          "lastMaintenance",
-          "mileage"
-        ],
-        "computed": [],
-        "display_fields": [
-          "id",
-          "model",
-          "color",
-          "status"
-        ],
-        "filters": [
-          "color",
-          "status"
-        ]
-      },
-      "driver": {
-        "name": "Driver",
-        "fields": [
-          "id",
-          "name",
-          "license",
-          "status",
-          "rating"
-        ],
-        "computed": [],
-        "display_fields": [
-          "name",
-          "license",
-          "rating"
-        ],
-        "filters": [
-          "status"
-        ]
-      }
-    }
+    "entities": {}
   },
   "behaviour_ir": {
     "events": {
-      "onTruckSelect": {
+      "updateDesignMode": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.selectedTruck",
-            "expr": "payload.truck"
+            "target": "state.designMode",
+            "expr": "event.value"
           }
         ]
       },
-      "onColorFilterChange": {
+      "updateStyle": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.filterColor",
-            "expr": "payload.color"
+            "target": "state.styleOption",
+            "expr": "event.value"
           }
         ]
       },
-      "onStatusFilterChange": {
+      "updateDeviceType": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.filterStatus",
-            "expr": "payload.status"
+            "target": "state.deviceType",
+            "expr": "event.value"
           }
         ]
       },
-      "onSearchChange": {
+      "updateFont": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.searchQuery",
-            "expr": "payload.query"
+            "target": "state.fontFamily",
+            "expr": "event.value"
           }
         ]
       },
-      "onDriverSelect": {
+      "updatePrompt": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.selectedDriver",
-            "expr": "payload.driverId"
-          }
-        ]
-      },
-      "onOpenAssignmentModal": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.assignmentModalVisible",
-            "expr": "true"
+            "target": "state.promptText",
+            "expr": "event.value"
           },
           {
-            "target": "state.selectedTruck",
-            "expr": "payload.truck"
-          }
-        ]
-      },
-      "onCloseAssignmentModal": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.assignmentModalVisible",
-            "expr": "false"
-          },
-          {
-            "target": "state.selectedTruck",
-            "expr": "null"
-          },
-          {
-            "target": "state.selectedDriver",
-            "expr": "null"
-          }
-        ]
-      },
-      "onAssignDriver": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === state.selectedTruck.id ? {...t, driver: state.drivers.find(d => d.id === state.selectedDriver).name, status: 'occupied'} : t)"
-          },
-          {
-            "target": "state.assignmentModalVisible",
-            "expr": "false"
-          },
-          {
-            "target": "state.selectedTruck",
-            "expr": "null"
-          },
-          {
-            "target": "state.selectedDriver",
-            "expr": "null"
-          }
-        ]
-      },
-      "onUnassignDriver": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === payload.truckId ? {...t, driver: null, status: 'available'} : t)"
+            "target": "state.characterCount",
+            "expr": "event.value.length"
           }
         ]
       }
     },
     "actions": {
-      "assignDriverAction": {
-        "action_id": "assignDriverAction",
+      "generateDesign": {
+        "action_id": "generateDesign",
         "trigger": "button_click",
-        "target_component_id": "assign_button",
-        "operation": "assign_driver",
+        "target_component_id": "generate_button",
+        "operation": "submit",
         "payload": {},
         "validation_rules": [
-          "selectedDriver_required"
+          "state.promptText.length >= 5"
         ],
-        "requires_confirmation": true,
-        "updates": [
-          {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === state.selectedTruck.id ? {...t, driver: state.drivers.find(d => d.id === state.selectedDriver).name, status: 'occupied'} : t)"
-          }
-        ]
+        "requires_confirmation": false,
+        "updates": []
       },
-      "unassignDriverAction": {
-        "action_id": "unassignDriverAction",
+      "tryExample": {
+        "action_id": "tryExample",
         "trigger": "button_click",
-        "target_component_id": "unassign_button",
-        "operation": "unassign_driver",
+        "target_component_id": "try_example_button",
+        "operation": "populate",
         "payload": {},
         "validation_rules": [],
-        "requires_confirmation": true,
+        "requires_confirmation": false,
         "updates": [
           {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === payload.truckId ? {...t, driver: null, status: 'available'} : t)"
+            "target": "state.promptText",
+            "expr": "'Landing page for a job search platform'"
           }
         ]
       }
     },
     "feedback": {
-      "assignDriverAction": {
-        "action_id": "assignDriverAction",
+      "generateDesign": {
+        "action_id": "generateDesign",
         "loading_indicator": "spinner",
-        "success_message": "Driver assigned successfully",
-        "error_message": "Failed to assign driver",
-        "ui_updates": []
-      },
-      "unassignDriverAction": {
-        "action_id": "unassignDriverAction",
-        "loading_indicator": "spinner",
-        "success_message": "Driver unassigned successfully",
-        "error_message": "Failed to unassign driver",
+        "success_message": "Design generated successfully",
+        "error_message": "Failed to generate design",
         "ui_updates": []
       }
     }
@@ -420,10 +166,10 @@
   "component_ir": {
     "library": "antd",
     "theme": {
-      "primaryColor": "#2c2c2c",
-      "secondaryColor": "#6c6c6c",
-      "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      "borderRadius": 2
+      "primaryColor": "#6C5CE7",
+      "secondaryColor": "#A29BFE",
+      "fontFamily": "Inter",
+      "borderRadius": 8
     },
     "components": {
       "root_container": {
@@ -433,42 +179,13 @@
         "onClick": null,
         "props": {},
         "styles": {
-          "width": "100vw",
-          "height": "100vh",
-          "backgroundColor": "#f5f5f5",
-          "overflow": "hidden",
-          "display": "flex",
-          "flexDirection": "column"
+          "padding": "24px",
+          "backgroundColor": "#FFFFFF",
+          "maxWidth": "800px",
+          "margin": "0 auto"
         }
       },
-      "header_section": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "backgroundColor": "#2c2c2c",
-          "padding": "24px 32px",
-          "borderBottom": "1px solid #1a1a1a"
-        }
-      },
-      "page_title": {
-        "type": "Typography.Title",
-        "label": "Truck and Driver Assignment",
-        "bind": null,
-        "onClick": null,
-        "props": {
-          "level": 2
-        },
-        "styles": {
-          "color": "#ffffff",
-          "margin": 0,
-          "fontWeight": 300,
-          "letterSpacing": "0.5px"
-        }
-      },
-      "stats_container": {
+      "header_container": {
         "type": "div",
         "label": null,
         "bind": null,
@@ -476,158 +193,149 @@
         "props": {},
         "styles": {
           "display": "flex",
-          "gap": "16px",
-          "marginTop": "16px"
-        }
-      },
-      "stat_available": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.availableTrucksCount",
-        "onClick": null,
-        "props": {
-          "size": "small"
-        },
-        "styles": {
-          "flex": 1,
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "stat_occupied": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.occupiedTrucksCount",
-        "onClick": null,
-        "props": {
-          "size": "small"
-        },
-        "styles": {
-          "flex": 1,
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "stat_unassigned": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.unassignedTrucksCount",
-        "onClick": null,
-        "props": {
-          "size": "small"
-        },
-        "styles": {
-          "flex": 1,
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "main_content": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "flex": 1,
-          "padding": "32px",
-          "overflow": "auto"
-        }
-      },
-      "filters_section": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "display": "flex",
-          "gap": "16px",
-          "marginBottom": "24px",
           "alignItems": "center",
-          "backgroundColor": "#ffffff",
-          "padding": "20px",
-          "border": "1px solid #e0e0e0"
+          "justifyContent": "space-between",
+          "marginBottom": "24px"
         }
       },
-      "search_input": {
-        "type": "Input.Search",
+      "logo_title": {
+        "type": "div",
         "label": null,
-        "bind": "state.searchQuery",
+        "bind": null,
         "onClick": null,
-        "props": {
-          "placeholder": "Search by truck ID or model",
-          "allowClear": true
-        },
+        "props": {},
         "styles": {
-          "width": "300px"
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "8px",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "color": "#333333"
         }
       },
-      "color_filter": {
-        "type": "Select",
+      "close_button": {
+        "type": "Button",
         "label": null,
-        "bind": "state.filterColor",
+        "bind": null,
         "onClick": null,
         "props": {
-          "placeholder": "Filter by color",
-          "options": [
+          "type": "text",
+          "icon": "CloseOutlined",
+          "size": "large"
+        },
+        "styles": {}
+      },
+      "tabs_container": {
+        "type": "Tabs",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "defaultActiveKey": "ui_design",
+          "items": [
             {
-              "label": "All Colors",
-              "value": "all"
+              "key": "ui_design",
+              "label": "UI Design"
             },
             {
-              "label": "White",
-              "value": "White"
+              "key": "diagrams",
+              "label": "Diagrams"
             },
             {
-              "label": "Black",
-              "value": "Black"
+              "key": "ux_review",
+              "label": "UX Review"
             },
             {
-              "label": "Silver",
-              "value": "Silver"
+              "key": "workshops",
+              "label": "Workshops"
             },
             {
-              "label": "Gray",
-              "value": "Gray"
+              "key": "ai_tools",
+              "label": "AI Tools"
             }
           ]
         },
         "styles": {
-          "width": "180px"
+          "marginBottom": "24px"
         }
       },
-      "status_filter": {
-        "type": "Select",
+      "title_row": {
+        "type": "div",
         "label": null,
-        "bind": "state.filterStatus",
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "marginBottom": "24px"
+        }
+      },
+      "main_title": {
+        "type": "Typography.Title",
+        "label": "Generate Hifi UI & wireframes",
+        "bind": null,
         "onClick": null,
         "props": {
-          "placeholder": "Filter by status",
-          "options": [
-            {
-              "label": "All Status",
-              "value": "all"
-            },
-            {
-              "label": "Available",
-              "value": "available"
-            },
-            {
-              "label": "Occupied",
-              "value": "occupied"
-            },
-            {
-              "label": "Unassigned",
-              "value": "unassigned"
-            }
-          ]
+          "level": 3
         },
         "styles": {
-          "width": "180px"
+          "margin": "0",
+          "fontSize": "24px",
+          "fontWeight": "600"
         }
       },
-      "trucks_grid": {
+      "action_buttons": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "gap": "12px",
+          "alignItems": "center"
+        }
+      },
+      "generate_tab_button": {
+        "type": "Button",
+        "label": "Generate",
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "type": "default",
+          "size": "middle"
+        },
+        "styles": {
+          "color": "#6C5CE7",
+          "borderColor": "#E8E6F5"
+        }
+      },
+      "favorites_button": {
+        "type": "Button",
+        "label": "Favorites",
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "type": "text",
+          "size": "middle"
+        },
+        "styles": {}
+      },
+      "refresh_button": {
+        "type": "Button",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "type": "text",
+          "icon": "ReloadOutlined",
+          "size": "middle"
+        },
+        "styles": {}
+      },
+      "form_row_1": {
         "type": "div",
         "label": null,
         "bind": null,
@@ -635,115 +343,345 @@
         "props": {},
         "styles": {
           "display": "grid",
-          "gridTemplateColumns": "repeat(auto-fill, minmax(320px, 1fr))",
-          "gap": "20px"
+          "gridTemplateColumns": "1fr 1fr",
+          "gap": "16px",
+          "marginBottom": "24px"
         }
       },
-      "truck_card": {
-        "type": "Card",
+      "design_mode_group": {
+        "type": "div",
         "label": null,
-        "bind": "derived.filteredTrucks",
+        "bind": null,
         "onClick": null,
-        "props": {
-          "hoverable": true
-        },
-        "styles": {
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0",
-          "transition": "all 0.3s"
-        }
-      },
-      "assignment_modal": {
-        "type": "Modal",
-        "label": "Assign Driver",
-        "bind": "state.assignmentModalVisible",
-        "onClick": null,
-        "props": {
-          "title": "Assign Driver to Truck",
-          "open": true,
-          "onCancel": "onCloseAssignmentModal",
-          "footer": null,
-          "width": 600
-        },
+        "props": {},
         "styles": {}
       },
-      "modal_content": {
-        "type": "div",
-        "label": null,
+      "design_mode_label": {
+        "type": "Typography.Text",
+        "label": "Design Mode",
         "bind": null,
         "onClick": null,
-        "props": {},
+        "props": {
+          "strong": false
+        },
         "styles": {
-          "padding": "20px 0"
+          "display": "block",
+          "marginBottom": "8px",
+          "color": "#666666",
+          "fontSize": "14px"
         }
       },
-      "truck_info_section": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "marginBottom": "24px",
-          "padding": "16px",
-          "backgroundColor": "#fafafa",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "driver_select": {
+      "design_mode_select": {
         "type": "Select",
         "label": null,
-        "bind": "state.selectedDriver",
+        "bind": "state.designMode",
         "onClick": null,
         "props": {
-          "placeholder": "Select an available driver",
-          "style": {
-            "width": "100%"
-          }
+          "placeholder": "Select design mode",
+          "size": "large",
+          "options": [
+            {
+              "label": "Hifi Designs",
+              "value": "Hifi Designs"
+            },
+            {
+              "label": "Wireframes",
+              "value": "Wireframes"
+            }
+          ]
         },
         "styles": {
-          "marginBottom": "20px"
+          "width": "100%"
         }
       },
-      "assign_button": {
-        "type": "Button",
-        "label": "Assign Driver",
+      "style_group": {
+        "type": "div",
+        "label": null,
         "bind": null,
-        "onClick": "onAssignDriver",
+        "onClick": null,
+        "props": {},
+        "styles": {}
+      },
+      "style_label": {
+        "type": "Typography.Text",
+        "label": "Style",
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "8px",
+          "color": "#666666",
+          "fontSize": "14px"
+        }
+      },
+      "style_select_container": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "gap": "8px"
+        }
+      },
+      "style_select": {
+        "type": "Select",
+        "label": null,
+        "bind": "state.styleOption",
+        "onClick": null,
         "props": {
-          "type": "primary",
-          "block": true,
+          "placeholder": "Select style",
+          "size": "large",
+          "options": []
+        },
+        "styles": {
+          "flex": "1"
+        }
+      },
+      "style_icon_button": {
+        "type": "Button",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "type": "default",
+          "icon": "BgColorsOutlined",
           "size": "large"
-        },
-        "styles": {
-          "backgroundColor": "#2c2c2c",
-          "borderColor": "#2c2c2c"
-        }
-      },
-      "unassign_button": {
-        "type": "Button",
-        "label": "Unassign",
-        "bind": null,
-        "onClick": "onUnassignDriver",
-        "props": {
-          "danger": true,
-          "size": "small"
         },
         "styles": {}
       },
-      "assign_truck_button": {
-        "type": "Button",
-        "label": "Assign Driver",
+      "form_row_2": {
+        "type": "div",
+        "label": null,
         "bind": null,
-        "onClick": "onOpenAssignmentModal",
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "grid",
+          "gridTemplateColumns": "1fr 1fr",
+          "gap": "16px",
+          "marginBottom": "24px"
+        }
+      },
+      "type_group": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {}
+      },
+      "type_label": {
+        "type": "Typography.Text",
+        "label": "Select type",
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "8px",
+          "color": "#666666",
+          "fontSize": "14px"
+        }
+      },
+      "type_select": {
+        "type": "Select",
+        "label": null,
+        "bind": "state.deviceType",
+        "onClick": null,
+        "props": {
+          "placeholder": "Select type",
+          "size": "large",
+          "options": [
+            {
+              "label": "Desktop",
+              "value": "Desktop"
+            },
+            {
+              "label": "Mobile",
+              "value": "Mobile"
+            },
+            {
+              "label": "Tablet",
+              "value": "Tablet"
+            }
+          ]
+        },
+        "styles": {
+          "width": "100%"
+        }
+      },
+      "font_group": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {}
+      },
+      "font_label": {
+        "type": "Typography.Text",
+        "label": "Select font",
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "8px",
+          "color": "#666666",
+          "fontSize": "14px"
+        }
+      },
+      "font_select": {
+        "type": "Select",
+        "label": null,
+        "bind": "state.fontFamily",
+        "onClick": null,
+        "props": {
+          "placeholder": "Select font",
+          "size": "large",
+          "options": [
+            {
+              "label": "Inter",
+              "value": "Inter"
+            },
+            {
+              "label": "Roboto",
+              "value": "Roboto"
+            },
+            {
+              "label": "Arial",
+              "value": "Arial"
+            }
+          ]
+        },
+        "styles": {
+          "width": "100%"
+        }
+      },
+      "prompt_group": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "marginBottom": "24px"
+        }
+      },
+      "prompt_label": {
+        "type": "Typography.Text",
+        "label": "Write prompt",
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "8px",
+          "color": "#666666",
+          "fontSize": "14px",
+          "fontWeight": "500"
+        }
+      },
+      "prompt_textarea": {
+        "type": "Input.TextArea",
+        "label": null,
+        "bind": "state.promptText",
+        "onClick": null,
+        "props": {
+          "placeholder": "Landing page for a job search platform",
+          "rows": 6,
+          "maxLength": 500
+        },
+        "styles": {
+          "width": "100%",
+          "resize": "none"
+        }
+      },
+      "prompt_footer": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "justifyContent": "space-between",
+          "alignItems": "center",
+          "marginTop": "8px"
+        }
+      },
+      "min_characters_text": {
+        "type": "Typography.Text",
+        "label": "Min. 5 characters",
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "type": "secondary"
+        },
+        "styles": {
+          "fontSize": "12px",
+          "color": "#999999"
+        }
+      },
+      "character_count_container": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "gap": "12px",
+          "alignItems": "center"
+        }
+      },
+      "try_example_button": {
+        "type": "Button",
+        "label": "Try example",
+        "bind": null,
+        "onClick": "tryExample",
+        "props": {
+          "type": "link",
+          "icon": "BulbOutlined"
+        },
+        "styles": {
+          "color": "#6C5CE7",
+          "padding": "0"
+        }
+      },
+      "character_count_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "bind": "state.characterCount",
+        "onClick": null,
+        "props": {
+          "type": "secondary"
+        },
+        "styles": {
+          "fontSize": "12px",
+          "color": "#999999"
+        }
+      },
+      "generate_button": {
+        "type": "Button",
+        "label": "Generate hifi design",
+        "bind": null,
+        "onClick": "generateDesign",
         "props": {
           "type": "primary",
-          "size": "small",
+          "size": "large",
           "block": true
         },
         "styles": {
-          "backgroundColor": "#2c2c2c",
-          "borderColor": "#2c2c2c"
+          "backgroundColor": "#6C5CE7",
+          "borderColor": "#6C5CE7",
+          "height": "48px",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "borderRadius": "24px"
         }
       }
     }
@@ -752,38 +690,68 @@
     "root": "root_container",
     "children": {
       "root_container": [
-        "header_section",
-        "main_content",
-        "assignment_modal"
+        "header_container",
+        "tabs_container",
+        "title_row",
+        "form_row_1",
+        "form_row_2",
+        "prompt_group",
+        "generate_button"
       ],
-      "header_section": [
-        "page_title",
-        "stats_container"
+      "header_container": [
+        "logo_title",
+        "close_button"
       ],
-      "stats_container": [
-        "stat_available",
-        "stat_occupied",
-        "stat_unassigned"
+      "logo_title": [],
+      "title_row": [
+        "main_title",
+        "action_buttons"
       ],
-      "main_content": [
-        "filters_section",
-        "trucks_grid"
+      "action_buttons": [
+        "generate_tab_button",
+        "favorites_button",
+        "refresh_button"
       ],
-      "filters_section": [
-        "search_input",
-        "color_filter",
-        "status_filter"
+      "form_row_1": [
+        "design_mode_group",
+        "style_group"
       ],
-      "trucks_grid": [
-        "truck_card"
+      "design_mode_group": [
+        "design_mode_label",
+        "design_mode_select"
       ],
-      "assignment_modal": [
-        "modal_content"
+      "style_group": [
+        "style_label",
+        "style_select_container"
       ],
-      "modal_content": [
-        "truck_info_section",
-        "driver_select",
-        "assign_button"
+      "style_select_container": [
+        "style_select",
+        "style_icon_button"
+      ],
+      "form_row_2": [
+        "type_group",
+        "font_group"
+      ],
+      "type_group": [
+        "type_label",
+        "type_select"
+      ],
+      "font_group": [
+        "font_label",
+        "font_select"
+      ],
+      "prompt_group": [
+        "prompt_label",
+        "prompt_textarea",
+        "prompt_footer"
+      ],
+      "prompt_footer": [
+        "min_characters_text",
+        "character_count_container"
+      ],
+      "character_count_container": [
+        "try_example_button",
+        "character_count_text"
       ]
     },
     "layout": {
@@ -791,55 +759,67 @@
         "type": "vertical",
         "gap": 0
       },
-      "header_section": {
-        "type": "vertical",
-        "gap": 16
+      "header_container": {
+        "type": "horizontal",
+        "gap": 12
       },
-      "stats_container": {
+      "title_row": {
+        "type": "horizontal",
+        "gap": 12
+      },
+      "action_buttons": {
+        "type": "horizontal",
+        "gap": 12
+      },
+      "form_row_1": {
         "type": "horizontal",
         "gap": 16
       },
-      "main_content": {
+      "design_mode_group": {
         "type": "vertical",
-        "gap": 24
+        "gap": 8
       },
-      "filters_section": {
+      "style_group": {
+        "type": "vertical",
+        "gap": 8
+      },
+      "style_select_container": {
+        "type": "horizontal",
+        "gap": 8
+      },
+      "form_row_2": {
         "type": "horizontal",
         "gap": 16
       },
-      "trucks_grid": {
-        "type": "grid",
-        "gap": 20
-      },
-      "modal_content": {
+      "type_group": {
         "type": "vertical",
-        "gap": 16
+        "gap": 8
+      },
+      "font_group": {
+        "type": "vertical",
+        "gap": 8
+      },
+      "prompt_group": {
+        "type": "vertical",
+        "gap": 8
+      },
+      "prompt_footer": {
+        "type": "horizontal",
+        "gap": 12
+      },
+      "character_count_container": {
+        "type": "horizontal",
+        "gap": 12
       }
     },
     "layout_zones": [
       {
-        "zone_id": "header_zone",
-        "component": "header_section",
-        "anchor": "top-left",
-        "size_hint": "full-width",
-        "z_layer": "base",
-        "notes": "Fixed header with title and statistics"
-      },
-      {
-        "zone_id": "main_zone",
-        "component": "main_content",
+        "zone_id": "main_content",
+        "component": "root_container",
         "anchor": "center",
-        "size_hint": "full-width",
+        "size_hint": "800px",
         "z_layer": "base",
-        "notes": "Main content area with filters and truck grid"
-      },
-      {
-        "zone_id": "modal_zone",
-        "component": "assignment_modal",
-        "anchor": "center",
-        "size_hint": "auto",
-        "z_layer": "overlay",
-        "notes": "Modal for driver assignment"
+        "notes": "Main form container"
       }
     ]
   }

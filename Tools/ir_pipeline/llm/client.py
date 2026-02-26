@@ -1,6 +1,7 @@
 import os
 
 import boto3
+from botocore.config import Config
 from dotenv import load_dotenv
 from langchain_aws import ChatBedrockConverse
 
@@ -41,6 +42,16 @@ def _resolve_model_name(model_name: str | None) -> str:
     return _MODEL_ALIASES.get(target.lower(), target)
 
 
+def _read_int_env(key: str, default: int) -> int:
+    value = os.getenv(key, "").strip()
+    if not value:
+        return default
+    try:
+        return int(value)
+    except ValueError:
+        return default
+
+
 def build_chat_model(
     model_name: str = DEFAULT_CLAUDE_MODEL,
     temperature: float = 0,
@@ -57,6 +68,9 @@ def build_chat_model(
         "aws_region",
     ) or "us-east-1"
     resolved_model = _resolve_model_name(model_name)
+    connect_timeout = _read_int_env("BEDROCK_CONNECT_TIMEOUT_SECONDS", 20)
+    read_timeout = _read_int_env("BEDROCK_READ_TIMEOUT_SECONDS", 240)
+    max_retry_attempts = _read_int_env("BEDROCK_MAX_RETRY_ATTEMPTS", 8)
 
     if access_key and secret_key:
         session = boto3.Session(
@@ -81,6 +95,11 @@ def build_chat_model(
         "model": resolved_model,
         "region_name": region,
         "temperature": temperature,
+        "config": Config(
+            connect_timeout=connect_timeout,
+            read_timeout=read_timeout,
+            retries={"max_attempts": max_retry_attempts, "mode": "adaptive"},
+        ),
     }
     if access_key and secret_key:
         kwargs["aws_access_key_id"] = access_key
