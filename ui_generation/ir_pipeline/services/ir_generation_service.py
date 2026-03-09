@@ -11,6 +11,7 @@ from ir_pipeline.utils import (
     drop_extra_forbidden_fields,
     extract_json_object,
     get_logger,
+    log_timed_step,
     normalize_common_mismatches,
 )
 
@@ -28,7 +29,8 @@ def generate_ir_bundle(
         max_attempts,
         len(user_request),
     )
-    model = build_chat_model(model_name=model_name, temperature=0)
+    with log_timed_step(logger, "Build Bedrock chat model", model=model_name):
+        model = build_chat_model(model_name=model_name, temperature=0)
 
     prompt = build_base_prompt(user_request)
     last_error = None
@@ -36,24 +38,26 @@ def generate_ir_bundle(
 
     for attempt in range(1, max_attempts + 1):
         logger.info("IR generation attempt %s/%s", attempt, max_attempts)
-        response = model.invoke(prompt)
+        with log_timed_step(logger, "Invoke IR generation model", attempt=attempt):
+            response = model.invoke(prompt)
         raw_text = response.content if isinstance(response.content, str) else str(response.content)
         last_raw_text = raw_text
 
         try:
-            parsed = json.loads(extract_json_object(raw_text))
-            normalized = normalize_common_mismatches(parsed)
+            with log_timed_step(logger, "Parse and validate IR", attempt=attempt):
+                parsed = json.loads(extract_json_object(raw_text))
+                normalized = normalize_common_mismatches(parsed)
 
-            try:
-                bundle = IRBundle.model_validate(normalized)
-                logger.info("IR generation succeeded on attempt %s", attempt)
-                return bundle
-            except ValidationError as exc:
-                if not drop_extra_forbidden_fields(normalized, exc):
-                    raise
-                bundle = IRBundle.model_validate(normalized)
-                logger.info("IR generation succeeded on attempt %s after extra-field cleanup", attempt)
-                return bundle
+                try:
+                    bundle = IRBundle.model_validate(normalized)
+                    logger.info("IR generation succeeded on attempt %s", attempt)
+                    return bundle
+                except ValidationError as exc:
+                    if not drop_extra_forbidden_fields(normalized, exc):
+                        raise
+                    bundle = IRBundle.model_validate(normalized)
+                    logger.info("IR generation succeeded on attempt %s after extra-field cleanup", attempt)
+                    return bundle
 
         except (JSONDecodeError, ValidationError) as exc:
             last_error = exc
@@ -76,12 +80,13 @@ def generate_ir_bundle(
 
 def write_ir_bundle(bundle: IRBundle, output_path: Path, overwrite: bool = True) -> None:
     if output_path.exists() and not overwrite:
-        logger.error("IR JSON write blocked: file exists and overwrite is disabled | path=%s", output_path)
+        logger.error("IR JSON write blocked: file exists and overwrite is disabled")
         raise FileExistsError(f"Output file already exists: {output_path}")
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(bundle.model_dump_json(indent=2) + "\n", encoding="utf-8")
-    logger.info("IR JSON written | path=%s", output_path.resolve())
+    with log_timed_step(logger, "Write IR JSON"):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(bundle.model_dump_json(indent=2) + "\n", encoding="utf-8")
+    logger.info("IR JSON written")
 
 
 def run_interactive_ir_generation(
@@ -91,18 +96,18 @@ def run_interactive_ir_generation(
 ) -> Path:
     logger.info("Interactive IR generation command started")
     user_request = input("Enter your UI request: ").strip()
-    bundle = generate_ir_bundle(user_request=user_request, model_name=model_name)
+    if not user_request:
+        raise ValueError("UI request cannot be empty.")
 
-    canonical_output = Path(__file__).resolve().parents[2] / "generated_ir.json"
+    with log_timed_step(logger, "Generate IR bundle end-to-end", model=model_name):
+        bundle = generate_ir_bundle(user_request=user_request, model_name=model_name)
+
+    canonical_output = Path(__file__).resolve().parents[2] / "generated" / "ir" / "generated_ir.json"
     resolved_output = output_path or canonical_output
 
     write_ir_bundle(bundle=bundle, output_path=resolved_output, overwrite=overwrite)
     if resolved_output.resolve() != canonical_output.resolve():
         write_ir_bundle(bundle=bundle, output_path=canonical_output, overwrite=True)
 
-    print(bundle.model_dump_json(indent=2))
-    print(f"IR JSON written to: {resolved_output.resolve()}")
-    if resolved_output.resolve() != canonical_output.resolve():
-        print(f"IR JSON also written to: {canonical_output.resolve()} (overwrite=True)")
     logger.info("Interactive IR generation command completed")
     return resolved_output

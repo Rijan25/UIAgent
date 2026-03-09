@@ -11,3 +11,13 @@ wheels/
 
 # Environment Variables
 .env
+
+# Log Files
+*.log
+ui_generation/logs/
+Tools/logs/
+
+# Generated outputs
+ui_generation/generated/
+Tools/generated_ir.json
+Tools/generated_app.tsx
