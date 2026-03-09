@@ -149,7 +149,7 @@ class EntityDef(StrictBase):
     computed: List[str] = Field(default_factory=list)
     display_fields: List[str] = Field(default_factory=list)
     search_fields: List[str] = Field(default_factory=list)
-    filters: List[str] = Field(default_factory=list)
+    filters: List[Union[str, Dict[str, Any]]] = Field(default_factory=list)
     default_sort: Optional[str] = None
     default_sort_dir: str = "asc"
 

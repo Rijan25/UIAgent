@@ -1,0 +1,912 @@
+{
+  "page_ir": {
+    "page_goal": "Fullscreen student management dashboard with sortable table, CRUD operations, height filtering, and marks-based highlighting in neo grunge minimal theme",
+    "style": {
+      "tone": "minimal",
+      "theme": "neo_grunge",
+      "density": "comfortable",
+      "color_intent": "neutral"
+    },
+    "accessibility": {
+      "required_labels": [
+        "name_input",
+        "height_input",
+        "weight_input",
+        "marks_input"
+      ]
+    },
+    "responsive": {
+      "breakpoints": {
+        "mobile": 768,
+        "tablet": 1024,
+        "desktop": 1440
+      },
+      "collapse_rules": [],
+      "hidden_on_small": []
+    },
+    "constraints": [
+      "fullscreen_layout"
+    ]
+  },
+  "data_ir": {
+    "state": {
+      "rows": {
+        "type": "array",
+        "initial": [],
+        "required": false,
+        "constraints": {}
+      },
+      "loading": {
+        "type": "boolean",
+        "initial": false,
+        "required": false,
+        "constraints": {}
+      },
+      "error": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {}
+      },
+      "page": {
+        "type": "number",
+        "initial": 1,
+        "required": false,
+        "constraints": {}
+      },
+      "pageSize": {
+        "type": "number",
+        "initial": 50,
+        "required": false,
+        "constraints": {}
+      },
+      "total": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "heightMin": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "heightMax": {
+        "type": "number",
+        "initial": 300,
+        "required": false,
+        "constraints": {}
+      },
+      "sortField": {
+        "type": "string",
+        "initial": "marks",
+        "required": false,
+        "constraints": {}
+      },
+      "sortOrder": {
+        "type": "string",
+        "initial": "desc",
+        "required": false,
+        "constraints": {}
+      },
+      "modalVisible": {
+        "type": "boolean",
+        "initial": false,
+        "required": false,
+        "constraints": {}
+      },
+      "editingStudent": {
+        "type": "object",
+        "initial": null,
+        "required": false,
+        "constraints": {}
+      },
+      "formName": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {}
+      },
+      "formHeight": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "formWeight": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "formMarks": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "searchTerm": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {}
+      }
+    },
+    "derived": {
+      "filteredRows": {
+        "type": "array",
+        "expr": "state.rows.filter(r => r.height >= state.heightMin && r.height <= state.heightMax)"
+      },
+      "sortedRows": {
+        "type": "array",
+        "expr": "derived.filteredRows.sort((a, b) => state.sortOrder === 'asc' ? a[state.sortField] - b[state.sortField] : b[state.sortField] - a[state.sortField])"
+      }
+    }
+  },
+  "data_model_ir": {
+    "entities": {
+      "Student": {
+        "name": "Student",
+        "fields": [
+          "id",
+          "name",
+          "height",
+          "weight",
+          "marks"
+        ],
+        "computed": [],
+        "display_fields": [
+          "name",
+          "height",
+          "weight",
+          "marks"
+        ],
+        "filters": [
+          {
+            "field": "height",
+            "operator": "between",
+            "bind": "state.heightMin,state.heightMax"
+          }
+        ]
+      }
+    },
+    "external_source_ref": {
+      "source_id": "student_external",
+      "snapshot_path": "db/external_db_snapshot.json",
+      "db_path": "/db/student_data.db"
+    },
+    "sql_query_ir": {
+      "sql_template": "SELECT sd.id, sd.name, sd.height, sd.weight, (sm.nepali + sm.english + sm.mathematics + sm.science + sm.social_studies) AS marks FROM student_data sd LEFT JOIN student_marks sm ON sd.id = sm.student_id WHERE (:search = '' OR sd.name LIKE '%' || :search || '%') AND sd.height >= :heightMin AND sd.height <= :heightMax ORDER BY marks DESC LIMIT :limit OFFSET :offset",
+      "params": [
+        ":heightMax",
+        ":heightMin",
+        ":limit",
+        ":offset",
+        ":search"
+      ],
+      "default_page_size": 50,
+      "max_page_size": 200
+    }
+  },
+  "behaviour_ir": {
+    "events": {
+      "load_data": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.loading",
+            "expr": "true"
+          }
+        ]
+      },
+      "sort_change": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.sortField",
+            "expr": "event.field"
+          },
+          {
+            "target": "state.sortOrder",
+            "expr": "event.order"
+          }
+        ]
+      },
+      "filter_height": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.heightMin",
+            "expr": "event.min"
+          },
+          {
+            "target": "state.heightMax",
+            "expr": "event.max"
+          }
+        ]
+      },
+      "open_add_modal": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.modalVisible",
+            "expr": "true"
+          },
+          {
+            "target": "state.editingStudent",
+            "expr": "null"
+          },
+          {
+            "target": "state.formName",
+            "expr": "''"
+          },
+          {
+            "target": "state.formHeight",
+            "expr": "0"
+          },
+          {
+            "target": "state.formWeight",
+            "expr": "0"
+          },
+          {
+            "target": "state.formMarks",
+            "expr": "0"
+          }
+        ]
+      },
+      "open_edit_modal": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.modalVisible",
+            "expr": "true"
+          },
+          {
+            "target": "state.editingStudent",
+            "expr": "event.student"
+          },
+          {
+            "target": "state.formName",
+            "expr": "event.student.name"
+          },
+          {
+            "target": "state.formHeight",
+            "expr": "event.student.height"
+          },
+          {
+            "target": "state.formWeight",
+            "expr": "event.student.weight"
+          },
+          {
+            "target": "state.formMarks",
+            "expr": "event.student.marks"
+          }
+        ]
+      },
+      "close_modal": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.modalVisible",
+            "expr": "false"
+          }
+        ]
+      },
+      "update_form_name": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.formName",
+            "expr": "event.value"
+          }
+        ]
+      },
+      "update_form_height": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.formHeight",
+            "expr": "event.value"
+          }
+        ]
+      },
+      "update_form_weight": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.formWeight",
+            "expr": "event.value"
+          }
+        ]
+      },
+      "update_form_marks": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.formMarks",
+            "expr": "event.value"
+          }
+        ]
+      }
+    },
+    "actions": {
+      "add_student": {
+        "action_id": "add_student",
+        "trigger": "button_click",
+        "target_component_id": "add_button",
+        "operation": "create",
+        "payload": {
+          "name": "state.formName",
+          "height": "state.formHeight",
+          "weight": "state.formWeight",
+          "marks": "state.formMarks"
+        },
+        "validation_rules": [
+          "{\"field\": \"name\", \"rule\": \"required\"}",
+          "{\"field\": \"height\", \"rule\": \"min:0\"}",
+          "{\"field\": \"weight\", \"rule\": \"min:0\"}",
+          "{\"field\": \"marks\", \"rule\": \"min:0\"}"
+        ],
+        "requires_confirmation": false,
+        "updates": [
+          {
+            "target": "state.rows",
+            "expr": "[...state.rows, {id: Date.now(), name: state.formName, height: state.formHeight, weight: state.formWeight, marks: state.formMarks}]"
+          },
+          {
+            "target": "state.modalVisible",
+            "expr": "false"
+          }
+        ]
+      },
+      "edit_student": {
+        "action_id": "edit_student",
+        "trigger": "button_click",
+        "target_component_id": "save_button",
+        "operation": "update",
+        "payload": {
+          "id": "state.editingStudent.id",
+          "name": "state.formName",
+          "height": "state.formHeight",
+          "weight": "state.formWeight",
+          "marks": "state.formMarks"
+        },
+        "validation_rules": [
+          "{\"field\": \"name\", \"rule\": \"required\"}"
+        ],
+        "requires_confirmation": false,
+        "updates": [
+          {
+            "target": "state.rows",
+            "expr": "state.rows.map(r => r.id === state.editingStudent.id ? {...r, name: state.formName, height: state.formHeight, weight: state.formWeight, marks: state.formMarks} : r)"
+          },
+          {
+            "target": "state.modalVisible",
+            "expr": "false"
+          }
+        ]
+      },
+      "delete_student": {
+        "action_id": "delete_student",
+        "trigger": "button_click",
+        "target_component_id": "delete_button",
+        "operation": "delete",
+        "payload": {
+          "id": "event.studentId"
+        },
+        "validation_rules": [],
+        "requires_confirmation": true,
+        "updates": [
+          {
+            "target": "state.rows",
+            "expr": "state.rows.filter(r => r.id !== event.studentId)"
+          }
+        ]
+      }
+    },
+    "feedback": {
+      "add_student": {
+        "action_id": "add_student",
+        "loading_indicator": "spinner",
+        "success_message": "Student added successfully",
+        "error_message": "Failed to add student",
+        "ui_updates": []
+      },
+      "edit_student": {
+        "action_id": "edit_student",
+        "loading_indicator": "spinner",
+        "success_message": "Student updated successfully",
+        "error_message": "Failed to update student",
+        "ui_updates": []
+      },
+      "delete_student": {
+        "action_id": "delete_student",
+        "loading_indicator": null,
+        "success_message": "Student deleted successfully",
+        "error_message": "Failed to delete student",
+        "ui_updates": []
+      }
+    }
+  },
+  "component_ir": {
+    "library": "antd",
+    "theme": {
+      "primaryColor": "#22c55e",
+      "secondaryColor": "#f5f5f5",
+      "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "borderRadius": 2
+    },
+    "components": {
+      "root_container": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "width": "100vw",
+          "height": "100vh",
+          "backgroundColor": "#1a1a1a",
+          "color": "#e0e0e0",
+          "overflow": "hidden",
+          "display": "flex",
+          "flexDirection": "column"
+        }
+      },
+      "main_section": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "flex": 1,
+          "display": "flex",
+          "flexDirection": "column",
+          "padding": "32px",
+          "overflow": "auto"
+        }
+      },
+      "header_card": {
+        "type": "card",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "bordered": false
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "border": "1px solid #3d3d3d",
+          "marginBottom": "24px",
+          "boxShadow": "none"
+        }
+      },
+      "header_content": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "justifyContent": "space-between",
+          "alignItems": "center"
+        }
+      },
+      "title": {
+        "type": "text",
+        "label": "Student Management",
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "level": 2
+        },
+        "styles": {
+          "color": "#e0e0e0",
+          "fontWeight": 300,
+          "letterSpacing": "0.5px",
+          "margin": 0
+        }
+      },
+      "add_student_button": {
+        "type": "button",
+        "label": "Create Student",
+        "bind": null,
+        "onClick": "open_add_modal",
+        "props": {
+          "type": "primary"
+        },
+        "styles": {
+          "backgroundColor": "#22c55e",
+          "borderColor": "#16a34a",
+          "color": "#e0e0e0",
+          "borderRadius": "2px",
+          "fontWeight": 400
+        }
+      },
+      "filter_card": {
+        "type": "card",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "bordered": false
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "border": "1px solid #3d3d3d",
+          "marginBottom": "24px",
+          "boxShadow": "none"
+        }
+      },
+      "filter_form": {
+        "type": "form",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "layout": "inline"
+        },
+        "styles": {}
+      },
+      "height_min_input": {
+        "type": "input",
+        "label": "Min Height",
+        "bind": "state.heightMin",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Min Height"
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0",
+          "width": "150px"
+        }
+      },
+      "height_max_input": {
+        "type": "input",
+        "label": "Max Height",
+        "bind": "state.heightMax",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Max Height"
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0",
+          "width": "150px"
+        }
+      },
+      "table_card": {
+        "type": "card",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "bordered": false
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "border": "1px solid #3d3d3d",
+          "flex": 1,
+          "display": "flex",
+          "flexDirection": "column",
+          "boxShadow": "none"
+        }
+      },
+      "student_table": {
+        "type": "data_table",
+        "label": null,
+        "bind": "derived.sortedRows",
+        "onClick": null,
+        "props": {
+          "columns": [
+            {
+              "title": "Name",
+              "dataIndex": "name",
+              "key": "name",
+              "sorter": true
+            },
+            {
+              "title": "Height",
+              "dataIndex": "height",
+              "key": "height",
+              "sorter": true
+            },
+            {
+              "title": "Weight",
+              "dataIndex": "weight",
+              "key": "weight",
+              "sorter": true
+            },
+            {
+              "title": "Marks",
+              "dataIndex": "marks",
+              "key": "marks",
+              "sorter": true
+            },
+            {
+              "title": "Actions",
+              "key": "actions",
+              "render": "actions"
+            }
+          ],
+          "pagination": {
+            "current": "state.page",
+            "pageSize": "state.pageSize",
+            "total": "state.total"
+          },
+          "rowClassName": "row => row.marks > 90 ? 'highlight-row' : ''"
+        },
+        "styles": {
+          "flex": 1
+        }
+      },
+      "edit_button": {
+        "type": "button",
+        "label": "Edit",
+        "bind": null,
+        "onClick": "open_edit_modal",
+        "props": {
+          "size": "small"
+        },
+        "styles": {
+          "marginRight": "8px",
+          "backgroundColor": "transparent",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0"
+        }
+      },
+      "delete_button": {
+        "type": "button",
+        "label": "Delete",
+        "bind": null,
+        "onClick": "delete_student",
+        "props": {
+          "size": "small",
+          "danger": true
+        },
+        "styles": {
+          "backgroundColor": "transparent",
+          "borderColor": "#ff4d4f",
+          "color": "#ff4d4f"
+        }
+      },
+      "student_modal": {
+        "type": "modal",
+        "label": null,
+        "bind": "state.modalVisible",
+        "onClick": null,
+        "props": {
+          "title": "state.editingStudent ? 'Edit Student' : 'Add Student'",
+          "onCancel": "close_modal",
+          "footer": null
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d"
+        }
+      },
+      "modal_form": {
+        "type": "form",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "layout": "vertical"
+        },
+        "styles": {}
+      },
+      "name_input": {
+        "type": "input",
+        "label": "Name",
+        "bind": "state.formName",
+        "onClick": null,
+        "props": {
+          "placeholder": "Type student full name",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "height_input": {
+        "type": "input",
+        "label": "Height",
+        "bind": "state.formHeight",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Type height in cm",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "weight_input": {
+        "type": "input",
+        "label": "Weight",
+        "bind": "state.formWeight",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Enter weight",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "marks_input": {
+        "type": "input",
+        "label": "Marks",
+        "bind": "state.formMarks",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Enter marks",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "modal_buttons": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "justifyContent": "flex-end",
+          "gap": "8px",
+          "marginTop": "24px"
+        }
+      },
+      "cancel_button": {
+        "type": "button",
+        "label": "Cancel",
+        "bind": null,
+        "onClick": "close_modal",
+        "props": {},
+        "styles": {
+          "backgroundColor": "transparent",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "save_button": {
+        "type": "button",
+        "label": "Save",
+        "bind": null,
+        "onClick": "state.editingStudent ? edit_student : add_student",
+        "props": {
+          "type": "primary"
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0"
+        }
+      },
+      "add_button": {
+        "type": "button",
+        "label": "Add",
+        "bind": null,
+        "onClick": "add_student",
+        "props": {
+          "type": "primary"
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0"
+        }
+      }
+    }
+  },
+  "layout_ir": {
+    "root": "root_container",
+    "children": {
+      "root_container": [
+        "main_section",
+        "student_modal"
+      ],
+      "main_section": [
+        "header_card",
+        "filter_card",
+        "table_card"
+      ],
+      "header_card": [
+        "header_content"
+      ],
+      "header_content": [
+        "title",
+        "add_student_button"
+      ],
+      "filter_card": [
+        "filter_form"
+      ],
+      "filter_form": [
+        "height_min_input",
+        "height_max_input"
+      ],
+      "table_card": [
+        "student_table"
+      ],
+      "student_modal": [
+        "modal_form"
+      ],
+      "modal_form": [
+        "name_input",
+        "height_input",
+        "weight_input",
+        "marks_input",
+        "modal_buttons"
+      ],
+      "modal_buttons": [
+        "cancel_button",
+        "save_button"
+      ]
+    },
+    "layout": {
+      "root_container": {
+        "type": "vertical",
+        "gap": 24
+      },
+      "main_section": {
+        "type": "vertical",
+        "gap": 24
+      },
+      "header_content": {
+        "type": "horizontal",
+        "gap": 16
+      },
+      "filter_form": {
+        "type": "horizontal",
+        "gap": 16
+      },
+      "modal_form": {
+        "type": "vertical",
+        "gap": 16
+      },
+      "modal_buttons": {
+        "type": "horizontal",
+        "gap": 8
+      }
+    },
+    "layout_zones": [
+      {
+        "zone_id": "main_zone",
+        "component": "main_section",
+        "anchor": "center",
+        "size_hint": "full-width",
+        "z_layer": "base",
+        "notes": "Main content area with table and filters"
+      },
+      {
+        "zone_id": "modal_zone",
+        "component": "student_modal",
+        "anchor": "center",
+        "size_hint": "auto",
+        "z_layer": "overlay",
+        "notes": "Modal for add/edit operations"
+      }
+    ]
+  }
+}

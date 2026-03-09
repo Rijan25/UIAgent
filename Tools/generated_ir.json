@@ -1,186 +1,143 @@
 {
   "page_ir": {
-    "page_goal": "Fullscreen student management dashboard with sortable table, CRUD operations, height filtering, and marks-based highlighting in neo grunge minimal theme",
+    "page_id": "",
+    "page_goal": "A simple page to add students and display them in a table with their physical data and marks",
     "style": {
-      "tone": "minimal",
-      "theme": "neo_grunge",
+      "tone": "professional",
+      "theme": "light",
       "density": "comfortable",
-      "color_intent": "neutral"
+      "color_intent": "primary"
     },
     "accessibility": {
       "required_labels": [
-        "name_input",
-        "height_input",
-        "weight_input",
-        "marks_input"
-      ]
+        "name",
+        "height",
+        "weight"
+      ],
+      "skip_navigation": true,
+      "focus_management": true,
+      "announce_changes": []
     },
     "responsive": {
-      "breakpoints": {
-        "mobile": 768,
-        "tablet": 1024,
-        "desktop": 1440
-      },
+      "breakpoints": {},
       "collapse_rules": [],
-      "hidden_on_small": []
+      "hidden_on_small": [],
+      "stack_on_small": []
     },
-    "constraints": [
-      "fullscreen_layout"
-    ]
+    "constraints": [],
+    "seo_title": null,
+    "seo_description": null
   },
   "data_ir": {
+    "types": {},
     "state": {
       "rows": {
         "type": "array",
         "initial": [],
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
       "loading": {
         "type": "boolean",
         "initial": false,
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
       "error": {
         "type": "string",
         "initial": "",
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
       "page": {
         "type": "number",
         "initial": 1,
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
       "pageSize": {
         "type": "number",
         "initial": 50,
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
       "total": {
         "type": "number",
         "initial": 0,
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
-      "heightMin": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {}
-      },
-      "heightMax": {
-        "type": "number",
-        "initial": 300,
-        "required": false,
-        "constraints": {}
-      },
-      "sortField": {
-        "type": "string",
-        "initial": "marks",
-        "required": false,
-        "constraints": {}
-      },
-      "sortOrder": {
-        "type": "string",
-        "initial": "desc",
-        "required": false,
-        "constraints": {}
-      },
-      "modalVisible": {
-        "type": "boolean",
-        "initial": false,
-        "required": false,
-        "constraints": {}
-      },
-      "editingStudent": {
-        "type": "object",
-        "initial": null,
-        "required": false,
-        "constraints": {}
-      },
-      "formName": {
+      "newStudentName": {
         "type": "string",
         "initial": "",
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
-      "formHeight": {
+      "newStudentHeight": {
         "type": "number",
-        "initial": 0,
+        "initial": null,
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
-      "formWeight": {
+      "newStudentWeight": {
         "type": "number",
-        "initial": 0,
+        "initial": null,
         "required": false,
-        "constraints": {}
-      },
-      "formMarks": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       },
       "searchTerm": {
         "type": "string",
         "initial": "",
         "required": false,
-        "constraints": {}
+        "constraints": {},
+        "item_type": null
       }
     },
-    "derived": {
-      "filteredRows": {
-        "type": "array",
-        "expr": "state.rows.filter(r => r.height >= state.heightMin && r.height <= state.heightMax)"
-      },
-      "sortedRows": {
-        "type": "array",
-        "expr": "derived.filteredRows.sort((a, b) => state.sortOrder === 'asc' ? a[state.sortField] - b[state.sortField] : b[state.sortField] - a[state.sortField])"
-      }
-    }
+    "derived": {}
+  },
+  "data_fetch_ir": {
+    "endpoints": {}
   },
   "data_model_ir": {
     "entities": {
-      "Student": {
+      "student": {
         "name": "Student",
         "fields": [
           "id",
           "name",
           "height",
-          "weight",
-          "marks"
+          "weight"
         ],
         "computed": [],
         "display_fields": [
           "name",
           "height",
-          "weight",
-          "marks"
+          "weight"
         ],
-        "filters": [
-          {
-            "field": "height",
-            "operator": "between",
-            "bind": "state.heightMin,state.heightMax"
-          }
-        ]
+        "search_fields": [],
+        "filters": [],
+        "default_sort": null,
+        "default_sort_dir": "asc"
       }
     },
+    "relationships": [],
     "external_source_ref": {
       "source_id": "student_external",
       "snapshot_path": "db/external_db_snapshot.json",
       "db_path": "/db/student_data.db"
     },
     "sql_query_ir": {
-      "sql_template": "SELECT sd.id, sd.name, sd.height, sd.weight, (sm.nepali + sm.english + sm.mathematics + sm.science + sm.social_studies) AS marks FROM student_data sd LEFT JOIN student_marks sm ON sd.id = sm.student_id WHERE (:search = '' OR sd.name LIKE '%' || :search || '%') AND sd.height >= :heightMin AND sd.height <= :heightMax ORDER BY marks DESC LIMIT :limit OFFSET :offset",
+      "sql_template": "SELECT sd.id, sd.name, sd.height, sd.weight FROM student_data sd WHERE (:search = '' OR sd.name LIKE '%' || :search || '%') ORDER BY sd.id DESC LIMIT :limit OFFSET :offset",
       "params": [
-        ":heightMax",
-        ":heightMin",
         ":limit",
         ":offset",
         ":search"
@@ -191,240 +148,108 @@
   },
   "behaviour_ir": {
     "events": {
-      "load_data": {
+      "loadStudents": {
         "type": "mutation",
         "updates": [
           {
             "target": "state.loading",
             "expr": "true"
-          }
-        ]
-      },
-      "sort_change": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.sortField",
-            "expr": "event.field"
           },
           {
-            "target": "state.sortOrder",
-            "expr": "event.order"
-          }
-        ]
-      },
-      "filter_height": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.heightMin",
-            "expr": "event.min"
-          },
-          {
-            "target": "state.heightMax",
-            "expr": "event.max"
-          }
-        ]
-      },
-      "open_add_modal": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.modalVisible",
-            "expr": "true"
-          },
-          {
-            "target": "state.editingStudent",
-            "expr": "null"
-          },
-          {
-            "target": "state.formName",
+            "target": "state.error",
             "expr": "''"
-          },
-          {
-            "target": "state.formHeight",
-            "expr": "0"
-          },
-          {
-            "target": "state.formWeight",
-            "expr": "0"
-          },
-          {
-            "target": "state.formMarks",
-            "expr": "0"
           }
-        ]
+        ],
+        "description": ""
       },
-      "open_edit_modal": {
+      "updateSearchTerm": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.modalVisible",
-            "expr": "true"
+            "target": "state.searchTerm",
+            "expr": "event.target.value"
           },
           {
-            "target": "state.editingStudent",
-            "expr": "event.student"
-          },
-          {
-            "target": "state.formName",
-            "expr": "event.student.name"
-          },
-          {
-            "target": "state.formHeight",
-            "expr": "event.student.height"
-          },
-          {
-            "target": "state.formWeight",
-            "expr": "event.student.weight"
-          },
-          {
-            "target": "state.formMarks",
-            "expr": "event.student.marks"
+            "target": "state.page",
+            "expr": "1"
           }
-        ]
+        ],
+        "description": ""
       },
-      "close_modal": {
+      "updatePage": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.modalVisible",
-            "expr": "false"
+            "target": "state.page",
+            "expr": "event.page"
           }
-        ]
+        ],
+        "description": ""
       },
-      "update_form_name": {
+      "updatePageSize": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.formName",
-            "expr": "event.value"
-          }
-        ]
-      },
-      "update_form_height": {
-        "type": "mutation",
-        "updates": [
+            "target": "state.pageSize",
+            "expr": "event.pageSize"
+          },
           {
-            "target": "state.formHeight",
-            "expr": "event.value"
+            "target": "state.page",
+            "expr": "1"
           }
-        ]
-      },
-      "update_form_weight": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.formWeight",
-            "expr": "event.value"
-          }
-        ]
-      },
-      "update_form_marks": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.formMarks",
-            "expr": "event.value"
-          }
-        ]
+        ],
+        "description": ""
       }
     },
     "actions": {
-      "add_student": {
-        "action_id": "add_student",
+      "addStudent": {
+        "action_id": "addStudent",
         "trigger": "button_click",
-        "target_component_id": "add_button",
+        "target_component_id": "addStudentButton",
         "operation": "create",
+        "description": "",
         "payload": {
-          "name": "state.formName",
-          "height": "state.formHeight",
-          "weight": "state.formWeight",
-          "marks": "state.formMarks"
+          "name": "state.newStudentName",
+          "height": "state.newStudentHeight",
+          "weight": "state.newStudentWeight"
         },
-        "validation_rules": [
-          "{\"field\": \"name\", \"rule\": \"required\"}",
-          "{\"field\": \"height\", \"rule\": \"min:0\"}",
-          "{\"field\": \"weight\", \"rule\": \"min:0\"}",
-          "{\"field\": \"marks\", \"rule\": \"min:0\"}"
-        ],
+        "guard": null,
         "requires_confirmation": false,
+        "confirmation_message": null,
+        "validation_rules": [
+          "state.newStudentName !== ''",
+          "state.newStudentHeight > 0",
+          "state.newStudentWeight > 0"
+        ],
+        "validation_messages": {},
         "updates": [
           {
-            "target": "state.rows",
-            "expr": "[...state.rows, {id: Date.now(), name: state.formName, height: state.formHeight, weight: state.formWeight, marks: state.formMarks}]"
+            "target": "state.newStudentName",
+            "expr": "''"
           },
           {
-            "target": "state.modalVisible",
-            "expr": "false"
-          }
-        ]
-      },
-      "edit_student": {
-        "action_id": "edit_student",
-        "trigger": "button_click",
-        "target_component_id": "save_button",
-        "operation": "update",
-        "payload": {
-          "id": "state.editingStudent.id",
-          "name": "state.formName",
-          "height": "state.formHeight",
-          "weight": "state.formWeight",
-          "marks": "state.formMarks"
-        },
-        "validation_rules": [
-          "{\"field\": \"name\", \"rule\": \"required\"}"
-        ],
-        "requires_confirmation": false,
-        "updates": [
-          {
-            "target": "state.rows",
-            "expr": "state.rows.map(r => r.id === state.editingStudent.id ? {...r, name: state.formName, height: state.formHeight, weight: state.formWeight, marks: state.formMarks} : r)"
+            "target": "state.newStudentHeight",
+            "expr": "null"
           },
           {
-            "target": "state.modalVisible",
-            "expr": "false"
+            "target": "state.newStudentWeight",
+            "expr": "null"
           }
-        ]
-      },
-      "delete_student": {
-        "action_id": "delete_student",
-        "trigger": "button_click",
-        "target_component_id": "delete_button",
-        "operation": "delete",
-        "payload": {
-          "id": "event.studentId"
-        },
-        "validation_rules": [],
-        "requires_confirmation": true,
-        "updates": [
-          {
-            "target": "state.rows",
-            "expr": "state.rows.filter(r => r.id !== event.studentId)"
-          }
-        ]
+        ],
+        "api_endpoint": null,
+        "api_body": null,
+        "side_effects": [],
+        "then": null,
+        "catch": null
       }
     },
     "feedback": {
-      "add_student": {
-        "action_id": "add_student",
+      "addStudent": {
+        "action_id": "addStudent",
         "loading_indicator": "spinner",
+        "loading_text": null,
         "success_message": "Student added successfully",
-        "error_message": "Failed to add student",
-        "ui_updates": []
-      },
-      "edit_student": {
-        "action_id": "edit_student",
-        "loading_indicator": "spinner",
-        "success_message": "Student updated successfully",
-        "error_message": "Failed to update student",
-        "ui_updates": []
-      },
-      "delete_student": {
-        "action_id": "delete_student",
-        "loading_indicator": null,
-        "success_message": "Student deleted successfully",
-        "error_message": "Failed to delete student",
+        "error_message": "Failed to add student. Please check all fields.",
         "ui_updates": []
       }
     }
@@ -432,481 +257,465 @@
   "component_ir": {
     "library": "antd",
     "theme": {
-      "primaryColor": "#2d2d2d",
-      "secondaryColor": "#f5f5f5",
-      "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      "borderRadius": 2
+      "primaryColor": "#1677ff",
+      "secondaryColor": "#000000",
+      "successColor": null,
+      "warningColor": null,
+      "errorColor": null,
+      "fontFamily": "Inter, system-ui, sans-serif",
+      "fontSize": null,
+      "borderRadius": 8
     },
     "components": {
-      "root_container": {
+      "rootContainer": {
         "type": "div",
         "label": null,
+        "description": null,
         "bind": null,
         "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
         "props": {},
+        "dynamic_props": {},
         "styles": {
-          "width": "100vw",
-          "height": "100vh",
-          "backgroundColor": "#1a1a1a",
-          "color": "#e0e0e0",
-          "overflow": "hidden",
-          "display": "flex",
-          "flexDirection": "column"
-        }
-      },
-      "main_section": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "flex": 1,
-          "display": "flex",
-          "flexDirection": "column",
-          "padding": "32px",
-          "overflow": "auto"
-        }
-      },
-      "header_card": {
-        "type": "card",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {
-          "bordered": false
+          "padding": "24px",
+          "maxWidth": "1200px",
+          "margin": "0 auto"
         },
-        "styles": {
-          "backgroundColor": "#2d2d2d",
-          "border": "1px solid #3d3d3d",
-          "marginBottom": "24px",
-          "boxShadow": "none"
-        }
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
       },
-      "header_content": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "display": "flex",
-          "justifyContent": "space-between",
-          "alignItems": "center"
-        }
-      },
-      "title": {
-        "type": "text",
+      "pageTitle": {
+        "type": "Typography.Title",
         "label": "Student Management",
+        "description": null,
         "bind": null,
         "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
         "props": {
           "level": 2
         },
+        "dynamic_props": {},
         "styles": {
-          "color": "#e0e0e0",
-          "fontWeight": 300,
-          "letterSpacing": "0.5px",
-          "margin": 0
-        }
+          "marginBottom": "24px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
       },
-      "add_student_button": {
-        "type": "button",
-        "label": "Add Student",
+      "addStudentCard": {
+        "type": "Card",
+        "label": null,
+        "description": null,
         "bind": null,
-        "onClick": "open_add_modal",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "title": "Add New Student"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "24px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "addStudentForm": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "display": "flex",
+          "gap": "12px",
+          "flexWrap": "wrap",
+          "alignItems": "flex-end"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "nameInput": {
+        "type": "Input",
+        "label": "Name",
+        "description": null,
+        "bind": "state.newStudentName",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Enter student name"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "200px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "heightInput": {
+        "type": "InputNumber",
+        "label": "Height (cm)",
+        "description": null,
+        "bind": "state.newStudentHeight",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Height",
+          "min": 0,
+          "step": 0.1
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "120px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "weightInput": {
+        "type": "InputNumber",
+        "label": "Weight (kg)",
+        "description": null,
+        "bind": "state.newStudentWeight",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Weight",
+          "min": 0,
+          "step": 0.1
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "120px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "addStudentButton": {
+        "type": "Button",
+        "label": "Add Student",
+        "description": null,
+        "bind": null,
+        "onClick": "addStudent",
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
         "props": {
           "type": "primary"
         },
-        "styles": {
-          "backgroundColor": "#2d2d2d",
-          "borderColor": "#e0e0e0",
-          "color": "#e0e0e0",
-          "borderRadius": "2px",
-          "fontWeight": 400
-        }
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
       },
-      "filter_card": {
-        "type": "card",
+      "studentsCard": {
+        "type": "Card",
         "label": null,
+        "description": null,
         "bind": null,
         "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
         "props": {
-          "bordered": false
+          "title": "Students List"
         },
-        "styles": {
-          "backgroundColor": "#2d2d2d",
-          "border": "1px solid #3d3d3d",
-          "marginBottom": "24px",
-          "boxShadow": "none"
-        }
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
       },
-      "filter_form": {
-        "type": "form",
+      "searchInput": {
+        "type": "Input.Search",
         "label": null,
-        "bind": null,
+        "description": null,
+        "bind": "state.searchTerm",
         "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
         "props": {
-          "layout": "inline"
+          "placeholder": "Search by name",
+          "allowClear": true
         },
-        "styles": {}
-      },
-      "height_min_input": {
-        "type": "input",
-        "label": "Min Height",
-        "bind": "state.heightMin",
-        "onClick": null,
-        "props": {
-          "type": "number",
-          "placeholder": "Min Height"
-        },
+        "dynamic_props": {},
         "styles": {
-          "backgroundColor": "#1a1a1a",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0",
-          "width": "150px"
-        }
-      },
-      "height_max_input": {
-        "type": "input",
-        "label": "Max Height",
-        "bind": "state.heightMax",
-        "onClick": null,
-        "props": {
-          "type": "number",
-          "placeholder": "Max Height"
+          "marginBottom": "16px",
+          "maxWidth": "400px"
         },
-        "styles": {
-          "backgroundColor": "#1a1a1a",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0",
-          "width": "150px"
-        }
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
       },
-      "table_card": {
-        "type": "card",
+      "studentsTable": {
+        "type": "Table",
         "label": null,
-        "bind": null,
+        "description": null,
+        "bind": "state.rows",
         "onClick": null,
-        "props": {
-          "bordered": false
-        },
-        "styles": {
-          "backgroundColor": "#2d2d2d",
-          "border": "1px solid #3d3d3d",
-          "flex": 1,
-          "display": "flex",
-          "flexDirection": "column",
-          "boxShadow": "none"
-        }
-      },
-      "student_table": {
-        "type": "data_table",
-        "label": null,
-        "bind": "derived.sortedRows",
-        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
         "props": {
           "columns": [
             {
+              "title": "ID",
+              "dataIndex": "id",
+              "key": "id",
+              "width": 80
+            },
+            {
               "title": "Name",
               "dataIndex": "name",
-              "key": "name",
-              "sorter": true
+              "key": "name"
             },
             {
-              "title": "Height",
+              "title": "Height (cm)",
               "dataIndex": "height",
               "key": "height",
-              "sorter": true
+              "width": 120
             },
             {
-              "title": "Weight",
+              "title": "Weight (kg)",
               "dataIndex": "weight",
               "key": "weight",
-              "sorter": true
-            },
-            {
-              "title": "Marks",
-              "dataIndex": "marks",
-              "key": "marks",
-              "sorter": true
-            },
-            {
-              "title": "Actions",
-              "key": "actions",
-              "render": "actions"
+              "width": 120
             }
           ],
+          "loading": "state.loading",
           "pagination": {
             "current": "state.page",
             "pageSize": "state.pageSize",
-            "total": "state.total"
+            "total": "state.total",
+            "showSizeChanger": true,
+            "showTotal": true
           },
-          "rowClassName": "row => row.marks > 90 ? 'highlight-row' : ''"
+          "rowKey": "id"
         },
-        "styles": {
-          "flex": 1
-        }
-      },
-      "edit_button": {
-        "type": "button",
-        "label": "Edit",
-        "bind": null,
-        "onClick": "open_edit_modal",
-        "props": {
-          "size": "small"
-        },
-        "styles": {
-          "marginRight": "8px",
-          "backgroundColor": "transparent",
-          "borderColor": "#e0e0e0",
-          "color": "#e0e0e0"
-        }
-      },
-      "delete_button": {
-        "type": "button",
-        "label": "Delete",
-        "bind": null,
-        "onClick": "delete_student",
-        "props": {
-          "size": "small",
-          "danger": true
-        },
-        "styles": {
-          "backgroundColor": "transparent",
-          "borderColor": "#ff4d4f",
-          "color": "#ff4d4f"
-        }
-      },
-      "student_modal": {
-        "type": "modal",
-        "label": null,
-        "bind": "state.modalVisible",
-        "onClick": null,
-        "props": {
-          "title": "state.editingStudent ? 'Edit Student' : 'Add Student'",
-          "onCancel": "close_modal",
-          "footer": null
-        },
-        "styles": {
-          "backgroundColor": "#2d2d2d"
-        }
-      },
-      "modal_form": {
-        "type": "form",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {
-          "layout": "vertical"
-        },
-        "styles": {}
-      },
-      "name_input": {
-        "type": "input",
-        "label": "Name",
-        "bind": "state.formName",
-        "onClick": null,
-        "props": {
-          "placeholder": "Enter student name",
-          "required": true
-        },
-        "styles": {
-          "backgroundColor": "#1a1a1a",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0"
-        }
-      },
-      "height_input": {
-        "type": "input",
-        "label": "Height",
-        "bind": "state.formHeight",
-        "onClick": null,
-        "props": {
-          "type": "number",
-          "placeholder": "Enter height",
-          "required": true
-        },
-        "styles": {
-          "backgroundColor": "#1a1a1a",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0"
-        }
-      },
-      "weight_input": {
-        "type": "input",
-        "label": "Weight",
-        "bind": "state.formWeight",
-        "onClick": null,
-        "props": {
-          "type": "number",
-          "placeholder": "Enter weight",
-          "required": true
-        },
-        "styles": {
-          "backgroundColor": "#1a1a1a",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0"
-        }
-      },
-      "marks_input": {
-        "type": "input",
-        "label": "Marks",
-        "bind": "state.formMarks",
-        "onClick": null,
-        "props": {
-          "type": "number",
-          "placeholder": "Enter marks",
-          "required": true
-        },
-        "styles": {
-          "backgroundColor": "#1a1a1a",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0"
-        }
-      },
-      "modal_buttons": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "display": "flex",
-          "justifyContent": "flex-end",
-          "gap": "8px",
-          "marginTop": "24px"
-        }
-      },
-      "cancel_button": {
-        "type": "button",
-        "label": "Cancel",
-        "bind": null,
-        "onClick": "close_modal",
-        "props": {},
-        "styles": {
-          "backgroundColor": "transparent",
-          "borderColor": "#3d3d3d",
-          "color": "#e0e0e0"
-        }
-      },
-      "save_button": {
-        "type": "button",
-        "label": "Save",
-        "bind": null,
-        "onClick": "state.editingStudent ? edit_student : add_student",
-        "props": {
-          "type": "primary"
-        },
-        "styles": {
-          "backgroundColor": "#2d2d2d",
-          "borderColor": "#e0e0e0",
-          "color": "#e0e0e0"
-        }
-      },
-      "add_button": {
-        "type": "button",
-        "label": "Add",
-        "bind": null,
-        "onClick": "add_student",
-        "props": {
-          "type": "primary"
-        },
-        "styles": {
-          "backgroundColor": "#2d2d2d",
-          "borderColor": "#e0e0e0",
-          "color": "#e0e0e0"
-        }
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
       }
     }
   },
   "layout_ir": {
-    "root": "root_container",
+    "root": "rootContainer",
     "children": {
-      "root_container": [
-        "main_section",
-        "student_modal"
+      "rootContainer": [
+        "pageTitle",
+        "addStudentCard",
+        "studentsCard"
       ],
-      "main_section": [
-        "header_card",
-        "filter_card",
-        "table_card"
+      "addStudentCard": [
+        "addStudentForm"
       ],
-      "header_card": [
-        "header_content"
+      "addStudentForm": [
+        "nameInput",
+        "heightInput",
+        "weightInput",
+        "addStudentButton"
       ],
-      "header_content": [
-        "title",
-        "add_student_button"
-      ],
-      "filter_card": [
-        "filter_form"
-      ],
-      "filter_form": [
-        "height_min_input",
-        "height_max_input"
-      ],
-      "table_card": [
-        "student_table"
-      ],
-      "student_modal": [
-        "modal_form"
-      ],
-      "modal_form": [
-        "name_input",
-        "height_input",
-        "weight_input",
-        "marks_input",
-        "modal_buttons"
-      ],
-      "modal_buttons": [
-        "cancel_button",
-        "save_button"
+      "studentsCard": [
+        "searchInput",
+        "studentsTable"
       ]
     },
     "layout": {
-      "root_container": {
+      "rootContainer": {
         "type": "vertical",
-        "gap": 0
+        "gap": 24,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
       },
-      "main_section": {
+      "addStudentCard": {
         "type": "vertical",
-        "gap": 24
+        "gap": 0,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
       },
-      "header_content": {
+      "addStudentForm": {
         "type": "horizontal",
-        "gap": 16
+        "gap": 12,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
       },
-      "filter_form": {
-        "type": "horizontal",
-        "gap": 16
-      },
-      "modal_form": {
+      "studentsCard": {
         "type": "vertical",
-        "gap": 16
-      },
-      "modal_buttons": {
-        "type": "horizontal",
-        "gap": 8
+        "gap": 16,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
       }
     },
     "layout_zones": [
       {
-        "zone_id": "main_zone",
-        "component": "main_section",
+        "zone_id": "mainContent",
+        "component": "rootContainer",
         "anchor": "center",
         "size_hint": "full-width",
         "z_layer": "base",
-        "notes": "Main content area with table and filters"
-      },
-      {
-        "zone_id": "modal_zone",
-        "component": "student_modal",
-        "anchor": "center",
-        "size_hint": "auto",
-        "z_layer": "overlay",
-        "notes": "Modal for add/edit operations"
+        "notes": "Main content area containing the student management interface"
       }
-    ]
+    ],
+    "responsive_overrides": []
+  },
+  "navigation_ir": {
+    "tabs": [],
+    "modals": {},
+    "drawers": {},
+    "routes": [],
+    "breadcrumb": null,
+    "default_tab": null
+  },
+  "realtime_ir": {
+    "timers": {},
+    "polling": {}
+  },
+  "metadata": {
+    "ir_version": "3.5",
+    "generated_at": "",
+    "source_prompt": null,
+    "schema_session_id": null,
+    "warnings": []
   }
 }

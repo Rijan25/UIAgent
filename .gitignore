@@ -33,3 +33,5 @@ ui-compiler-poc/frontend/node_modules/
 ui-compiler-poc/frontend/dist/
 ui-compiler-poc/frontend/.vite/
 ui-compiler-poc/frontend/*.tsbuildinfo
+
+tests/

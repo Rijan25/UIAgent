@@ -349,3 +349,226 @@
 2026-02-27 15:26:28 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
 2026-02-28 08:45:15 | INFO | uiagent.ir_pipeline.services.ir_generation_service | Interactive IR generation command started
 2026-02-28 10:32:44 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 09:49:16 | ERROR | uiagent.patchops.cli | Patch failed: Component 'btn_sum' not found in component_ir.components
+2026-03-09 09:49:20 | ERROR | uiagent.patchops.cli | Patch failed: Component 'btn_sum' not found in component_ir.components
+2026-03-09 09:53:19 | INFO | uiagent.patchops.cli | Patched IR written to /Users/mac/Documents/UIAgent/Tools/patched_ir.json (6 ops)
+2026-03-09 09:56:55 | INFO | uiagent.patchops.cli | Patched IR written to /Users/mac/Documents/UIAgent/Tools/patched_ir.json (6 ops)
+2026-03-09 09:57:06 | INFO | uiagent.patchops.cli | Patched IR written to /Users/mac/Documents/UIAgent/Tools/patched_ir.json (6 ops)
+2026-03-09 09:57:31 | INFO | uiagent.patchops.cli | Patched IR written to /Users/mac/Documents/UIAgent/Tools/patched_ir.json (6 ops)
+2026-03-09 10:18:28 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=47
+2026-03-09 10:18:29 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:18:29 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:19:00 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 2 validation errors for IRBundle
+behaviour_ir.actions.submit_action.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='submit_form', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.reset_action.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='reset_form', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:19:00 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:19:21 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:19:21 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:19:39 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=38
+2026-03-09 10:19:40 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:19:40 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:20:02 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 2 validation errors for IRBundle
+behaviour_ir.actions.load_data_action.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='fetch_data', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.handle_page_change.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='change_page', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:20:02 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:20:18 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:20:18 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:20:18 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=29
+2026-03-09 10:20:18 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 10:20:22 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=1
+2026-03-09 10:20:31 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=33
+2026-03-09 10:20:31 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:20:31 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:20:46 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 1 validation error for IRBundle
+behaviour_ir.actions.fetch_students.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='fetch_data', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:20:46 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:20:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:20:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:20:57 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:20:57 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:20:57 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 10:21:11 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 10:21:11 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:25:56 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=97
+2026-03-09 10:25:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:25:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:26:39 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 4 validation errors for IRBundle
+behaviour_ir.actions.openAddStudentModal.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='open_modal', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.closeAddStudentModal.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='close_modal', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.submitAddStudent.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='insert_record', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.applyFilters.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='filter_data', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:26:39 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:27:21 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:27:21 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:27:21 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:27:21 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:27:21 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 10:27:52 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 10:27:52 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:28:28 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=99
+2026-03-09 10:28:28 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 10:28:36 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=12
+2026-03-09 10:28:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:28:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:28:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 10:29:07 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 10:29:07 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:29:39 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=99
+2026-03-09 10:29:40 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 10:29:44 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=2
+2026-03-09 10:29:44 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:29:44 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:29:44 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 10:30:15 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 10:30:15 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:33:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=29
+2026-03-09 10:33:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:33:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:34:15 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 1 validation error for IRBundle
+behaviour_ir.actions.add_todo_action.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='add_todo', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:34:15 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:34:29 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:34:29 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:34:29 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=47
+2026-03-09 10:34:29 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 10:34:32 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit produced empty patch: Cannot rename component 'xyz' because it does not exist in the current UI
+2026-03-09 10:38:40 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=29
+2026-03-09 10:38:40 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:38:40 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:38:56 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 1 validation error for IRBundle
+behaviour_ir.actions.add_todo_action.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='add_todo', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:38:56 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:39:09 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:39:09 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:39:09 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=63
+2026-03-09 10:39:09 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 10:39:13 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=2
+2026-03-09 10:56:53 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=42
+2026-03-09 10:56:53 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:56:53 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:57:18 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 3 validation errors for IRBundle
+behaviour_ir.actions.searchStudents.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='fetch_data', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.clearFilters.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='reset_filters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.feedback.searchStudents.ui_updates.0
+  Input should be a valid string [type=string_type, input_value={'target': 'state.loading', 'expr': 'false'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/string_type
+2026-03-09 10:57:18 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:57:41 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:57:41 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:57:41 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=39
+2026-03-09 10:57:41 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 10:57:45 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=1
+2026-03-09 10:59:11 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=77
+2026-03-09 10:59:11 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 10:59:11 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 10:59:36 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 2 validation errors for IRBundle
+behaviour_ir.actions.add_student.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='insert_student', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+behaviour_ir.actions.load_students.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='fetch_students', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 10:59:36 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 10:59:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 10:59:57 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:59:57 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 10:59:57 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 10:59:57 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 11:00:15 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 11:00:15 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:00:26 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=63
+2026-03-09 11:00:26 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:00:36 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=13
+2026-03-09 11:00:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:00:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 11:00:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 11:00:58 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 11:00:58 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:01:08 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=44
+2026-03-09 11:01:09 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:01:12 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=1
+2026-03-09 11:01:12 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:01:12 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 11:01:12 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 11:01:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 11:01:36 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:01:52 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=46
+2026-03-09 11:01:53 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:02:02 | WARNING | uiagent.ir_pipeline.services.ir_edit_service | Attempt 1: patch application error: Component 'student_marks_input' not found in component_ir.components
+2026-03-09 11:02:02 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 2/3
+2026-03-09 11:02:09 | WARNING | uiagent.ir_pipeline.services.ir_edit_service | Attempt 2: patch application error: Component 'student_marks_input' not found in component_ir.components
+2026-03-09 11:02:09 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 3/3
+2026-03-09 11:02:16 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 3 | ops=11
+2026-03-09 11:02:16 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:02:16 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 11:02:16 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 11:02:40 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 11:02:40 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:03:16 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=20
+2026-03-09 11:03:16 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:03:19 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit produced empty patch: Summary of changes made to the student management UI
+2026-03-09 11:03:19 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:03:19 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 11:03:19 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 11:03:40 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 11:03:40 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 11:04:10 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=44
+2026-03-09 11:04:10 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 11:04:10 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 11:04:31 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 1 validation error for IRBundle
+behaviour_ir.actions.addTaskAction.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='add_task', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 11:04:31 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 11:04:50 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 11:04:50 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 11:04:50 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=25
+2026-03-09 11:04:50 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:04:54 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=1
+2026-03-09 11:04:54 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=9
+2026-03-09 11:04:54 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:04:57 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit produced empty patch: Cannot fulfil: no previous action to undo - this appears to be the initial state of the task tracker UI
+2026-03-09 11:04:57 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | request_chars=22
+2026-03-09 11:04:57 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit attempt 1/3
+2026-03-09 11:05:01 | INFO | uiagent.ir_pipeline.services.ir_edit_service | IR edit succeeded on attempt 1 | ops=1
+2026-03-09 12:43:27 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | max_attempts=3 | request_chars=70
+2026-03-09 12:43:27 | INFO | uiagent.ir_pipeline.services.ir_generation_service | External DB snapshot refreshed | db=/Users/mac/Documents/UIAgent/db/student_data.db | snapshot=/Users/mac/Documents/UIAgent/db/external_db_snapshot.json | frontend_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/student_data.db | wasm_copy=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/public/db/sql-wasm.wasm
+2026-03-09 12:43:27 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1/3
+2026-03-09 12:43:52 | WARNING | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 1 failed: 1 validation error for IRBundle
+behaviour_ir.actions.addStudent.operation
+  Input should be 'create', 'update', 'delete', 'read' or 'custom' [type=literal_error, input_value='insert_student', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/literal_error
+2026-03-09 12:43:52 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation attempt 2/3
+2026-03-09 12:44:12 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR generation succeeded on attempt 2
+2026-03-09 12:44:12 | INFO | uiagent.ir_pipeline.services.ir_generation_service | IR JSON written | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 12:44:12 | INFO | uiagent.ir_pipeline.services.react_generation_service | IR->React conversion started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0 | input=/Users/mac/Documents/UIAgent/Tools/generated_ir.json | output=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
+2026-03-09 12:44:12 | INFO | uiagent.ir_pipeline.services.react_generation_service | Loaded IR JSON | path=/Users/mac/Documents/UIAgent/Tools/generated_ir.json
+2026-03-09 12:44:12 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation started | model=global.anthropic.claude-sonnet-4-5-20250929-v1:0
+2026-03-09 12:44:35 | INFO | uiagent.ir_pipeline.services.react_generation_service | React code generation completed
+2026-03-09 12:44:35 | INFO | uiagent.ir_pipeline.services.react_generation_service | React TSX written | path=/Users/mac/Documents/UIAgent/ui-compiler-poc/frontend/src/App.tsx
