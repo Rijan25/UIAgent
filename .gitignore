@@ -5,9 +5,31 @@ build/
 dist/
 wheels/
 *.egg-info
+*.pyc
 
 # Virtual environments
 .venv
 
 # Environment Variables
 .env
+
+logs/
+
+# macOS / editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Local context artifacts
+.ocontext/
+
+# UI pipeline generated artifacts
+db/external_db_snapshot.json
+Tools/generated_ir.json
+Tools/generated_app.tsx
+
+# Frontend local/build artifacts
+ui-compiler-poc/frontend/node_modules/
+ui-compiler-poc/frontend/dist/
+ui-compiler-poc/frontend/.vite/
+ui-compiler-poc/frontend/*.tsbuildinfo

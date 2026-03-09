@@ -6,6 +6,7 @@
 Tools/
   ir_generation.py              # CLI entrypoint: NL request -> IR JSON
   ir_to_react.py                # CLI entrypoint: IR JSON -> TSX
+  db_snapshot.py                # CLI entrypoint: SQLite -> external snapshot JSON
   ir_structure.py               # Backward-compatible schema export
   generated_ir.json             # Generated IR output
   generated_app.tsx             # Generated React output
@@ -23,6 +24,8 @@ Tools/
     utils/
       extractors.py             # JSON/code block extraction helpers
       normalization.py          # LLM output normalization helpers
+      db_snapshot.py            # snapshot generation + schema context helpers
+      sql_safety.py             # SELECT-only SQL validation/normalization
 ```
 
 ## Run
@@ -32,9 +35,15 @@ From `Tools`:
 ```powershell
 uv run ir_generation.py
 uv run ir_to_react.py
+uv run db_snapshot.py
 ```
 
 `ir_generation.py` writes IR to `Tools/generated_ir.json` (overwrite enabled by default).
+When `db/student_data.db` exists, IR generation now auto-refreshes `db/external_db_snapshot.json`,
+validates any `data_model_ir.sql_query_ir.sql_template` with SELECT-only safety guards, and syncs DB
+to `ui-compiler-poc/frontend/public/db/student_data.db` for frontend runtime reads.
+If `ui-compiler-poc/frontend/node_modules/sql.js/dist/sql-wasm.wasm` exists, it is also copied to
+`ui-compiler-poc/frontend/public/db/sql-wasm.wasm`.
 
 Bedrock/Claude config is read from `.env` (or environment variables):
 

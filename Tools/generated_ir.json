@@ -1,17 +1,18 @@
 {
   "page_ir": {
-    "page_goal": "Display truck availability across different colors with status tracking (occupied, available, unassigned) and enable assignment of available trucks to drivers for movement",
+    "page_goal": "Fullscreen student management dashboard with sortable table, CRUD operations, height filtering, and marks-based highlighting in neo grunge minimal theme",
     "style": {
-      "tone": "professional",
-      "theme": "monochrome loft",
+      "tone": "minimal",
+      "theme": "neo_grunge",
       "density": "comfortable",
       "color_intent": "neutral"
     },
     "accessibility": {
       "required_labels": [
-        "truck_status",
-        "driver_assignment",
-        "color_filter"
+        "name_input",
+        "height_input",
+        "weight_input",
+        "marks_input"
       ]
     },
     "responsive": {
@@ -20,399 +21,410 @@
         "tablet": 1024,
         "desktop": 1440
       },
-      "collapse_rules": [
-        "stack_filters_on_mobile"
-      ],
+      "collapse_rules": [],
       "hidden_on_small": []
     },
     "constraints": [
-      "full_screen_layout"
+      "fullscreen_layout"
     ]
   },
   "data_ir": {
     "state": {
-      "trucks": {
+      "rows": {
         "type": "array",
-        "initial": [
-          {
-            "id": "T001",
-            "model": "Volvo FH16",
-            "color": "White",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-15",
-            "mileage": 45000
-          },
-          {
-            "id": "T002",
-            "model": "Scania R500",
-            "color": "Black",
-            "status": "occupied",
-            "driver": "John Smith",
-            "lastMaintenance": "2024-01-10",
-            "mileage": 52000
-          },
-          {
-            "id": "T003",
-            "model": "Mercedes Actros",
-            "color": "Silver",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-20",
-            "mileage": 38000
-          },
-          {
-            "id": "T004",
-            "model": "MAN TGX",
-            "color": "White",
-            "status": "unassigned",
-            "driver": null,
-            "lastMaintenance": "2024-01-05",
-            "mileage": 61000
-          },
-          {
-            "id": "T005",
-            "model": "DAF XF",
-            "color": "Gray",
-            "status": "occupied",
-            "driver": "Sarah Johnson",
-            "lastMaintenance": "2024-01-18",
-            "mileage": 47000
-          },
-          {
-            "id": "T006",
-            "model": "Iveco Stralis",
-            "color": "Black",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-22",
-            "mileage": 33000
-          },
-          {
-            "id": "T007",
-            "model": "Volvo FH16",
-            "color": "Silver",
-            "status": "unassigned",
-            "driver": null,
-            "lastMaintenance": "2024-01-12",
-            "mileage": 55000
-          },
-          {
-            "id": "T008",
-            "model": "Scania R500",
-            "color": "White",
-            "status": "available",
-            "driver": null,
-            "lastMaintenance": "2024-01-25",
-            "mileage": 29000
-          }
-        ],
-        "required": true,
-        "constraints": {}
-      },
-      "drivers": {
-        "type": "array",
-        "initial": [
-          {
-            "id": "D001",
-            "name": "Michael Brown",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.8
-          },
-          {
-            "id": "D002",
-            "name": "Emily Davis",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.9
-          },
-          {
-            "id": "D003",
-            "name": "Robert Wilson",
-            "license": "CDL-B",
-            "status": "available",
-            "rating": 4.6
-          },
-          {
-            "id": "D004",
-            "name": "Jennifer Martinez",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.7
-          },
-          {
-            "id": "D005",
-            "name": "David Anderson",
-            "license": "CDL-A",
-            "status": "available",
-            "rating": 4.5
-          }
-        ],
-        "required": true,
-        "constraints": {}
-      },
-      "selectedTruck": {
-        "type": "object",
-        "initial": null,
+        "initial": [],
         "required": false,
         "constraints": {}
       },
-      "selectedDriver": {
-        "type": "string",
-        "initial": null,
+      "loading": {
+        "type": "boolean",
+        "initial": false,
         "required": false,
         "constraints": {}
       },
-      "filterColor": {
-        "type": "string",
-        "initial": "all",
-        "required": false,
-        "constraints": {}
-      },
-      "filterStatus": {
-        "type": "string",
-        "initial": "all",
-        "required": false,
-        "constraints": {}
-      },
-      "searchQuery": {
+      "error": {
         "type": "string",
         "initial": "",
         "required": false,
         "constraints": {}
       },
-      "assignmentModalVisible": {
+      "page": {
+        "type": "number",
+        "initial": 1,
+        "required": false,
+        "constraints": {}
+      },
+      "pageSize": {
+        "type": "number",
+        "initial": 50,
+        "required": false,
+        "constraints": {}
+      },
+      "total": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "heightMin": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "heightMax": {
+        "type": "number",
+        "initial": 300,
+        "required": false,
+        "constraints": {}
+      },
+      "sortField": {
+        "type": "string",
+        "initial": "marks",
+        "required": false,
+        "constraints": {}
+      },
+      "sortOrder": {
+        "type": "string",
+        "initial": "desc",
+        "required": false,
+        "constraints": {}
+      },
+      "modalVisible": {
         "type": "boolean",
         "initial": false,
+        "required": false,
+        "constraints": {}
+      },
+      "editingStudent": {
+        "type": "object",
+        "initial": null,
+        "required": false,
+        "constraints": {}
+      },
+      "formName": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {}
+      },
+      "formHeight": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "formWeight": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "formMarks": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {}
+      },
+      "searchTerm": {
+        "type": "string",
+        "initial": "",
         "required": false,
         "constraints": {}
       }
     },
     "derived": {
-      "filteredTrucks": {
+      "filteredRows": {
         "type": "array",
-        "expr": "state.trucks.filter(t => (state.filterColor === 'all' || t.color === state.filterColor) && (state.filterStatus === 'all' || t.status === state.filterStatus) && (state.searchQuery === '' || t.id.includes(state.searchQuery) || t.model.toLowerCase().includes(state.searchQuery.toLowerCase())))"
+        "expr": "state.rows.filter(r => r.height >= state.heightMin && r.height <= state.heightMax)"
       },
-      "availableTrucksCount": {
-        "type": "number",
-        "expr": "state.trucks.filter(t => t.status === 'available').length"
-      },
-      "occupiedTrucksCount": {
-        "type": "number",
-        "expr": "state.trucks.filter(t => t.status === 'occupied').length"
-      },
-      "unassignedTrucksCount": {
-        "type": "number",
-        "expr": "state.trucks.filter(t => t.status === 'unassigned').length"
-      },
-      "availableDrivers": {
+      "sortedRows": {
         "type": "array",
-        "expr": "state.drivers.filter(d => d.status === 'available')"
+        "expr": "derived.filteredRows.sort((a, b) => state.sortOrder === 'asc' ? a[state.sortField] - b[state.sortField] : b[state.sortField] - a[state.sortField])"
       }
     }
   },
   "data_model_ir": {
     "entities": {
-      "truck": {
-        "name": "Truck",
-        "fields": [
-          "id",
-          "model",
-          "color",
-          "status",
-          "driver",
-          "lastMaintenance",
-          "mileage"
-        ],
-        "computed": [],
-        "display_fields": [
-          "id",
-          "model",
-          "color",
-          "status"
-        ],
-        "filters": [
-          "color",
-          "status"
-        ]
-      },
-      "driver": {
-        "name": "Driver",
+      "Student": {
+        "name": "Student",
         "fields": [
           "id",
           "name",
-          "license",
-          "status",
-          "rating"
+          "height",
+          "weight",
+          "marks"
         ],
         "computed": [],
         "display_fields": [
           "name",
-          "license",
-          "rating"
+          "height",
+          "weight",
+          "marks"
         ],
         "filters": [
-          "status"
+          {
+            "field": "height",
+            "operator": "between",
+            "bind": "state.heightMin,state.heightMax"
+          }
         ]
       }
+    },
+    "external_source_ref": {
+      "source_id": "student_external",
+      "snapshot_path": "db/external_db_snapshot.json",
+      "db_path": "/db/student_data.db"
+    },
+    "sql_query_ir": {
+      "sql_template": "SELECT sd.id, sd.name, sd.height, sd.weight, (sm.nepali + sm.english + sm.mathematics + sm.science + sm.social_studies) AS marks FROM student_data sd LEFT JOIN student_marks sm ON sd.id = sm.student_id WHERE (:search = '' OR sd.name LIKE '%' || :search || '%') AND sd.height >= :heightMin AND sd.height <= :heightMax ORDER BY marks DESC LIMIT :limit OFFSET :offset",
+      "params": [
+        ":heightMax",
+        ":heightMin",
+        ":limit",
+        ":offset",
+        ":search"
+      ],
+      "default_page_size": 50,
+      "max_page_size": 200
     }
   },
   "behaviour_ir": {
     "events": {
-      "onTruckSelect": {
+      "load_data": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.selectedTruck",
-            "expr": "payload.truck"
+            "target": "state.loading",
+            "expr": "true"
           }
         ]
       },
-      "onColorFilterChange": {
+      "sort_change": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.filterColor",
-            "expr": "payload.color"
+            "target": "state.sortField",
+            "expr": "event.field"
+          },
+          {
+            "target": "state.sortOrder",
+            "expr": "event.order"
           }
         ]
       },
-      "onStatusFilterChange": {
+      "filter_height": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.filterStatus",
-            "expr": "payload.status"
+            "target": "state.heightMin",
+            "expr": "event.min"
+          },
+          {
+            "target": "state.heightMax",
+            "expr": "event.max"
           }
         ]
       },
-      "onSearchChange": {
+      "open_add_modal": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.searchQuery",
-            "expr": "payload.query"
-          }
-        ]
-      },
-      "onDriverSelect": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.selectedDriver",
-            "expr": "payload.driverId"
-          }
-        ]
-      },
-      "onOpenAssignmentModal": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.assignmentModalVisible",
+            "target": "state.modalVisible",
             "expr": "true"
           },
           {
-            "target": "state.selectedTruck",
-            "expr": "payload.truck"
+            "target": "state.editingStudent",
+            "expr": "null"
+          },
+          {
+            "target": "state.formName",
+            "expr": "''"
+          },
+          {
+            "target": "state.formHeight",
+            "expr": "0"
+          },
+          {
+            "target": "state.formWeight",
+            "expr": "0"
+          },
+          {
+            "target": "state.formMarks",
+            "expr": "0"
           }
         ]
       },
-      "onCloseAssignmentModal": {
+      "open_edit_modal": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.assignmentModalVisible",
+            "target": "state.modalVisible",
+            "expr": "true"
+          },
+          {
+            "target": "state.editingStudent",
+            "expr": "event.student"
+          },
+          {
+            "target": "state.formName",
+            "expr": "event.student.name"
+          },
+          {
+            "target": "state.formHeight",
+            "expr": "event.student.height"
+          },
+          {
+            "target": "state.formWeight",
+            "expr": "event.student.weight"
+          },
+          {
+            "target": "state.formMarks",
+            "expr": "event.student.marks"
+          }
+        ]
+      },
+      "close_modal": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.modalVisible",
             "expr": "false"
-          },
-          {
-            "target": "state.selectedTruck",
-            "expr": "null"
-          },
-          {
-            "target": "state.selectedDriver",
-            "expr": "null"
           }
         ]
       },
-      "onAssignDriver": {
+      "update_form_name": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === state.selectedTruck.id ? {...t, driver: state.drivers.find(d => d.id === state.selectedDriver).name, status: 'occupied'} : t)"
-          },
-          {
-            "target": "state.assignmentModalVisible",
-            "expr": "false"
-          },
-          {
-            "target": "state.selectedTruck",
-            "expr": "null"
-          },
-          {
-            "target": "state.selectedDriver",
-            "expr": "null"
+            "target": "state.formName",
+            "expr": "event.value"
           }
         ]
       },
-      "onUnassignDriver": {
+      "update_form_height": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === payload.truckId ? {...t, driver: null, status: 'available'} : t)"
+            "target": "state.formHeight",
+            "expr": "event.value"
+          }
+        ]
+      },
+      "update_form_weight": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.formWeight",
+            "expr": "event.value"
+          }
+        ]
+      },
+      "update_form_marks": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.formMarks",
+            "expr": "event.value"
           }
         ]
       }
     },
     "actions": {
-      "assignDriverAction": {
-        "action_id": "assignDriverAction",
+      "add_student": {
+        "action_id": "add_student",
         "trigger": "button_click",
-        "target_component_id": "assign_button",
-        "operation": "assign_driver",
-        "payload": {},
+        "target_component_id": "add_button",
+        "operation": "create",
+        "payload": {
+          "name": "state.formName",
+          "height": "state.formHeight",
+          "weight": "state.formWeight",
+          "marks": "state.formMarks"
+        },
         "validation_rules": [
-          "selectedDriver_required"
+          "{\"field\": \"name\", \"rule\": \"required\"}",
+          "{\"field\": \"height\", \"rule\": \"min:0\"}",
+          "{\"field\": \"weight\", \"rule\": \"min:0\"}",
+          "{\"field\": \"marks\", \"rule\": \"min:0\"}"
         ],
-        "requires_confirmation": true,
+        "requires_confirmation": false,
         "updates": [
           {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === state.selectedTruck.id ? {...t, driver: state.drivers.find(d => d.id === state.selectedDriver).name, status: 'occupied'} : t)"
+            "target": "state.rows",
+            "expr": "[...state.rows, {id: Date.now(), name: state.formName, height: state.formHeight, weight: state.formWeight, marks: state.formMarks}]"
+          },
+          {
+            "target": "state.modalVisible",
+            "expr": "false"
           }
         ]
       },
-      "unassignDriverAction": {
-        "action_id": "unassignDriverAction",
+      "edit_student": {
+        "action_id": "edit_student",
         "trigger": "button_click",
-        "target_component_id": "unassign_button",
-        "operation": "unassign_driver",
-        "payload": {},
+        "target_component_id": "save_button",
+        "operation": "update",
+        "payload": {
+          "id": "state.editingStudent.id",
+          "name": "state.formName",
+          "height": "state.formHeight",
+          "weight": "state.formWeight",
+          "marks": "state.formMarks"
+        },
+        "validation_rules": [
+          "{\"field\": \"name\", \"rule\": \"required\"}"
+        ],
+        "requires_confirmation": false,
+        "updates": [
+          {
+            "target": "state.rows",
+            "expr": "state.rows.map(r => r.id === state.editingStudent.id ? {...r, name: state.formName, height: state.formHeight, weight: state.formWeight, marks: state.formMarks} : r)"
+          },
+          {
+            "target": "state.modalVisible",
+            "expr": "false"
+          }
+        ]
+      },
+      "delete_student": {
+        "action_id": "delete_student",
+        "trigger": "button_click",
+        "target_component_id": "delete_button",
+        "operation": "delete",
+        "payload": {
+          "id": "event.studentId"
+        },
         "validation_rules": [],
         "requires_confirmation": true,
         "updates": [
           {
-            "target": "state.trucks",
-            "expr": "state.trucks.map(t => t.id === payload.truckId ? {...t, driver: null, status: 'available'} : t)"
+            "target": "state.rows",
+            "expr": "state.rows.filter(r => r.id !== event.studentId)"
           }
         ]
       }
     },
     "feedback": {
-      "assignDriverAction": {
-        "action_id": "assignDriverAction",
+      "add_student": {
+        "action_id": "add_student",
         "loading_indicator": "spinner",
-        "success_message": "Driver assigned successfully",
-        "error_message": "Failed to assign driver",
+        "success_message": "Student added successfully",
+        "error_message": "Failed to add student",
         "ui_updates": []
       },
-      "unassignDriverAction": {
-        "action_id": "unassignDriverAction",
+      "edit_student": {
+        "action_id": "edit_student",
         "loading_indicator": "spinner",
-        "success_message": "Driver unassigned successfully",
-        "error_message": "Failed to unassign driver",
+        "success_message": "Student updated successfully",
+        "error_message": "Failed to update student",
+        "ui_updates": []
+      },
+      "delete_student": {
+        "action_id": "delete_student",
+        "loading_indicator": null,
+        "success_message": "Student deleted successfully",
+        "error_message": "Failed to delete student",
         "ui_updates": []
       }
     }
@@ -420,8 +432,8 @@
   "component_ir": {
     "library": "antd",
     "theme": {
-      "primaryColor": "#2c2c2c",
-      "secondaryColor": "#6c6c6c",
+      "primaryColor": "#2d2d2d",
+      "secondaryColor": "#f5f5f5",
       "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       "borderRadius": 2
     },
@@ -435,315 +447,375 @@
         "styles": {
           "width": "100vw",
           "height": "100vh",
-          "backgroundColor": "#f5f5f5",
+          "backgroundColor": "#1a1a1a",
+          "color": "#e0e0e0",
           "overflow": "hidden",
           "display": "flex",
           "flexDirection": "column"
         }
       },
-      "header_section": {
+      "main_section": {
         "type": "div",
         "label": null,
         "bind": null,
         "onClick": null,
         "props": {},
         "styles": {
-          "backgroundColor": "#2c2c2c",
-          "padding": "24px 32px",
-          "borderBottom": "1px solid #1a1a1a"
+          "flex": 1,
+          "display": "flex",
+          "flexDirection": "column",
+          "padding": "32px",
+          "overflow": "auto"
         }
       },
-      "page_title": {
-        "type": "Typography.Title",
-        "label": "Truck and Driver Assignment",
+      "header_card": {
+        "type": "card",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "bordered": false
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "border": "1px solid #3d3d3d",
+          "marginBottom": "24px",
+          "boxShadow": "none"
+        }
+      },
+      "header_content": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "justifyContent": "space-between",
+          "alignItems": "center"
+        }
+      },
+      "title": {
+        "type": "text",
+        "label": "Student Management",
         "bind": null,
         "onClick": null,
         "props": {
           "level": 2
         },
         "styles": {
-          "color": "#ffffff",
-          "margin": 0,
+          "color": "#e0e0e0",
           "fontWeight": 300,
-          "letterSpacing": "0.5px"
+          "letterSpacing": "0.5px",
+          "margin": 0
         }
       },
-      "stats_container": {
-        "type": "div",
+      "add_student_button": {
+        "type": "button",
+        "label": "Add Student",
+        "bind": null,
+        "onClick": "open_add_modal",
+        "props": {
+          "type": "primary"
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0",
+          "borderRadius": "2px",
+          "fontWeight": 400
+        }
+      },
+      "filter_card": {
+        "type": "card",
         "label": null,
         "bind": null,
         "onClick": null,
-        "props": {},
-        "styles": {
-          "display": "flex",
-          "gap": "16px",
-          "marginTop": "16px"
-        }
-      },
-      "stat_available": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.availableTrucksCount",
-        "onClick": null,
         "props": {
-          "size": "small"
+          "bordered": false
         },
         "styles": {
-          "flex": 1,
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "stat_occupied": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.occupiedTrucksCount",
-        "onClick": null,
-        "props": {
-          "size": "small"
-        },
-        "styles": {
-          "flex": 1,
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "stat_unassigned": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.unassignedTrucksCount",
-        "onClick": null,
-        "props": {
-          "size": "small"
-        },
-        "styles": {
-          "flex": 1,
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "main_content": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "flex": 1,
-          "padding": "32px",
-          "overflow": "auto"
-        }
-      },
-      "filters_section": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "display": "flex",
-          "gap": "16px",
+          "backgroundColor": "#2d2d2d",
+          "border": "1px solid #3d3d3d",
           "marginBottom": "24px",
-          "alignItems": "center",
-          "backgroundColor": "#ffffff",
-          "padding": "20px",
-          "border": "1px solid #e0e0e0"
+          "boxShadow": "none"
         }
       },
-      "search_input": {
-        "type": "Input.Search",
-        "label": null,
-        "bind": "state.searchQuery",
-        "onClick": null,
-        "props": {
-          "placeholder": "Search by truck ID or model",
-          "allowClear": true
-        },
-        "styles": {
-          "width": "300px"
-        }
-      },
-      "color_filter": {
-        "type": "Select",
-        "label": null,
-        "bind": "state.filterColor",
-        "onClick": null,
-        "props": {
-          "placeholder": "Filter by color",
-          "options": [
-            {
-              "label": "All Colors",
-              "value": "all"
-            },
-            {
-              "label": "White",
-              "value": "White"
-            },
-            {
-              "label": "Black",
-              "value": "Black"
-            },
-            {
-              "label": "Silver",
-              "value": "Silver"
-            },
-            {
-              "label": "Gray",
-              "value": "Gray"
-            }
-          ]
-        },
-        "styles": {
-          "width": "180px"
-        }
-      },
-      "status_filter": {
-        "type": "Select",
-        "label": null,
-        "bind": "state.filterStatus",
-        "onClick": null,
-        "props": {
-          "placeholder": "Filter by status",
-          "options": [
-            {
-              "label": "All Status",
-              "value": "all"
-            },
-            {
-              "label": "Available",
-              "value": "available"
-            },
-            {
-              "label": "Occupied",
-              "value": "occupied"
-            },
-            {
-              "label": "Unassigned",
-              "value": "unassigned"
-            }
-          ]
-        },
-        "styles": {
-          "width": "180px"
-        }
-      },
-      "trucks_grid": {
-        "type": "div",
+      "filter_form": {
+        "type": "form",
         "label": null,
         "bind": null,
         "onClick": null,
-        "props": {},
-        "styles": {
-          "display": "grid",
-          "gridTemplateColumns": "repeat(auto-fill, minmax(320px, 1fr))",
-          "gap": "20px"
-        }
-      },
-      "truck_card": {
-        "type": "Card",
-        "label": null,
-        "bind": "derived.filteredTrucks",
-        "onClick": null,
         "props": {
-          "hoverable": true
-        },
-        "styles": {
-          "backgroundColor": "#ffffff",
-          "border": "1px solid #e0e0e0",
-          "transition": "all 0.3s"
-        }
-      },
-      "assignment_modal": {
-        "type": "Modal",
-        "label": "Assign Driver",
-        "bind": "state.assignmentModalVisible",
-        "onClick": null,
-        "props": {
-          "title": "Assign Driver to Truck",
-          "open": true,
-          "onCancel": "onCloseAssignmentModal",
-          "footer": null,
-          "width": 600
+          "layout": "inline"
         },
         "styles": {}
       },
-      "modal_content": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "padding": "20px 0"
-        }
-      },
-      "truck_info_section": {
-        "type": "div",
-        "label": null,
-        "bind": null,
-        "onClick": null,
-        "props": {},
-        "styles": {
-          "marginBottom": "24px",
-          "padding": "16px",
-          "backgroundColor": "#fafafa",
-          "border": "1px solid #e0e0e0"
-        }
-      },
-      "driver_select": {
-        "type": "Select",
-        "label": null,
-        "bind": "state.selectedDriver",
+      "height_min_input": {
+        "type": "input",
+        "label": "Min Height",
+        "bind": "state.heightMin",
         "onClick": null,
         "props": {
-          "placeholder": "Select an available driver",
-          "style": {
-            "width": "100%"
-          }
+          "type": "number",
+          "placeholder": "Min Height"
         },
         "styles": {
-          "marginBottom": "20px"
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0",
+          "width": "150px"
         }
       },
-      "assign_button": {
-        "type": "Button",
-        "label": "Assign Driver",
-        "bind": null,
-        "onClick": "onAssignDriver",
+      "height_max_input": {
+        "type": "input",
+        "label": "Max Height",
+        "bind": "state.heightMax",
+        "onClick": null,
         "props": {
-          "type": "primary",
-          "block": true,
-          "size": "large"
+          "type": "number",
+          "placeholder": "Max Height"
         },
         "styles": {
-          "backgroundColor": "#2c2c2c",
-          "borderColor": "#2c2c2c"
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0",
+          "width": "150px"
         }
       },
-      "unassign_button": {
-        "type": "Button",
-        "label": "Unassign",
+      "table_card": {
+        "type": "card",
+        "label": null,
         "bind": null,
-        "onClick": "onUnassignDriver",
+        "onClick": null,
         "props": {
-          "danger": true,
+          "bordered": false
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "border": "1px solid #3d3d3d",
+          "flex": 1,
+          "display": "flex",
+          "flexDirection": "column",
+          "boxShadow": "none"
+        }
+      },
+      "student_table": {
+        "type": "data_table",
+        "label": null,
+        "bind": "derived.sortedRows",
+        "onClick": null,
+        "props": {
+          "columns": [
+            {
+              "title": "Name",
+              "dataIndex": "name",
+              "key": "name",
+              "sorter": true
+            },
+            {
+              "title": "Height",
+              "dataIndex": "height",
+              "key": "height",
+              "sorter": true
+            },
+            {
+              "title": "Weight",
+              "dataIndex": "weight",
+              "key": "weight",
+              "sorter": true
+            },
+            {
+              "title": "Marks",
+              "dataIndex": "marks",
+              "key": "marks",
+              "sorter": true
+            },
+            {
+              "title": "Actions",
+              "key": "actions",
+              "render": "actions"
+            }
+          ],
+          "pagination": {
+            "current": "state.page",
+            "pageSize": "state.pageSize",
+            "total": "state.total"
+          },
+          "rowClassName": "row => row.marks > 90 ? 'highlight-row' : ''"
+        },
+        "styles": {
+          "flex": 1
+        }
+      },
+      "edit_button": {
+        "type": "button",
+        "label": "Edit",
+        "bind": null,
+        "onClick": "open_edit_modal",
+        "props": {
           "size": "small"
         },
-        "styles": {}
+        "styles": {
+          "marginRight": "8px",
+          "backgroundColor": "transparent",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0"
+        }
       },
-      "assign_truck_button": {
-        "type": "Button",
-        "label": "Assign Driver",
+      "delete_button": {
+        "type": "button",
+        "label": "Delete",
         "bind": null,
-        "onClick": "onOpenAssignmentModal",
+        "onClick": "delete_student",
         "props": {
-          "type": "primary",
           "size": "small",
-          "block": true
+          "danger": true
         },
         "styles": {
-          "backgroundColor": "#2c2c2c",
-          "borderColor": "#2c2c2c"
+          "backgroundColor": "transparent",
+          "borderColor": "#ff4d4f",
+          "color": "#ff4d4f"
+        }
+      },
+      "student_modal": {
+        "type": "modal",
+        "label": null,
+        "bind": "state.modalVisible",
+        "onClick": null,
+        "props": {
+          "title": "state.editingStudent ? 'Edit Student' : 'Add Student'",
+          "onCancel": "close_modal",
+          "footer": null
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d"
+        }
+      },
+      "modal_form": {
+        "type": "form",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {
+          "layout": "vertical"
+        },
+        "styles": {}
+      },
+      "name_input": {
+        "type": "input",
+        "label": "Name",
+        "bind": "state.formName",
+        "onClick": null,
+        "props": {
+          "placeholder": "Enter student name",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "height_input": {
+        "type": "input",
+        "label": "Height",
+        "bind": "state.formHeight",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Enter height",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "weight_input": {
+        "type": "input",
+        "label": "Weight",
+        "bind": "state.formWeight",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Enter weight",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "marks_input": {
+        "type": "input",
+        "label": "Marks",
+        "bind": "state.formMarks",
+        "onClick": null,
+        "props": {
+          "type": "number",
+          "placeholder": "Enter marks",
+          "required": true
+        },
+        "styles": {
+          "backgroundColor": "#1a1a1a",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "modal_buttons": {
+        "type": "div",
+        "label": null,
+        "bind": null,
+        "onClick": null,
+        "props": {},
+        "styles": {
+          "display": "flex",
+          "justifyContent": "flex-end",
+          "gap": "8px",
+          "marginTop": "24px"
+        }
+      },
+      "cancel_button": {
+        "type": "button",
+        "label": "Cancel",
+        "bind": null,
+        "onClick": "close_modal",
+        "props": {},
+        "styles": {
+          "backgroundColor": "transparent",
+          "borderColor": "#3d3d3d",
+          "color": "#e0e0e0"
+        }
+      },
+      "save_button": {
+        "type": "button",
+        "label": "Save",
+        "bind": null,
+        "onClick": "state.editingStudent ? edit_student : add_student",
+        "props": {
+          "type": "primary"
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0"
+        }
+      },
+      "add_button": {
+        "type": "button",
+        "label": "Add",
+        "bind": null,
+        "onClick": "add_student",
+        "props": {
+          "type": "primary"
+        },
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "borderColor": "#e0e0e0",
+          "color": "#e0e0e0"
         }
       }
     }
@@ -752,38 +824,44 @@
     "root": "root_container",
     "children": {
       "root_container": [
-        "header_section",
-        "main_content",
-        "assignment_modal"
+        "main_section",
+        "student_modal"
       ],
-      "header_section": [
-        "page_title",
-        "stats_container"
+      "main_section": [
+        "header_card",
+        "filter_card",
+        "table_card"
       ],
-      "stats_container": [
-        "stat_available",
-        "stat_occupied",
-        "stat_unassigned"
+      "header_card": [
+        "header_content"
       ],
-      "main_content": [
-        "filters_section",
-        "trucks_grid"
+      "header_content": [
+        "title",
+        "add_student_button"
       ],
-      "filters_section": [
-        "search_input",
-        "color_filter",
-        "status_filter"
+      "filter_card": [
+        "filter_form"
       ],
-      "trucks_grid": [
-        "truck_card"
+      "filter_form": [
+        "height_min_input",
+        "height_max_input"
       ],
-      "assignment_modal": [
-        "modal_content"
+      "table_card": [
+        "student_table"
       ],
-      "modal_content": [
-        "truck_info_section",
-        "driver_select",
-        "assign_button"
+      "student_modal": [
+        "modal_form"
+      ],
+      "modal_form": [
+        "name_input",
+        "height_input",
+        "weight_input",
+        "marks_input",
+        "modal_buttons"
+      ],
+      "modal_buttons": [
+        "cancel_button",
+        "save_button"
       ]
     },
     "layout": {
@@ -791,55 +869,43 @@
         "type": "vertical",
         "gap": 0
       },
-      "header_section": {
-        "type": "vertical",
-        "gap": 16
-      },
-      "stats_container": {
-        "type": "horizontal",
-        "gap": 16
-      },
-      "main_content": {
+      "main_section": {
         "type": "vertical",
         "gap": 24
       },
-      "filters_section": {
+      "header_content": {
         "type": "horizontal",
         "gap": 16
       },
-      "trucks_grid": {
-        "type": "grid",
-        "gap": 20
+      "filter_form": {
+        "type": "horizontal",
+        "gap": 16
       },
-      "modal_content": {
+      "modal_form": {
         "type": "vertical",
         "gap": 16
+      },
+      "modal_buttons": {
+        "type": "horizontal",
+        "gap": 8
       }
     },
     "layout_zones": [
       {
-        "zone_id": "header_zone",
-        "component": "header_section",
-        "anchor": "top-left",
-        "size_hint": "full-width",
-        "z_layer": "base",
-        "notes": "Fixed header with title and statistics"
-      },
-      {
         "zone_id": "main_zone",
-        "component": "main_content",
+        "component": "main_section",
         "anchor": "center",
         "size_hint": "full-width",
         "z_layer": "base",
-        "notes": "Main content area with filters and truck grid"
+        "notes": "Main content area with table and filters"
       },
       {
         "zone_id": "modal_zone",
-        "component": "assignment_modal",
+        "component": "student_modal",
         "anchor": "center",
         "size_hint": "auto",
         "z_layer": "overlay",
-        "notes": "Modal for driver assignment"
+        "notes": "Modal for add/edit operations"
       }
     ]
   }

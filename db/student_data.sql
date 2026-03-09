@@ -21,6 +21,21 @@ INSERT INTO student_data (name, height, weight) VALUES
 ('Dipesh Adhikari', 169.8, 64.0),
 ('Kusum Koirala', 157.6, 51.3);
 
+-- Add 300 extra students so snapshot sampling does not include the full table.
+WITH RECURSIVE seq(n) AS (
+    SELECT 1
+    UNION ALL
+    SELECT n + 1
+    FROM seq
+    WHERE n < 300
+)
+INSERT INTO student_data (name, height, weight)
+SELECT
+    printf('Nepali Student %03d', n + 10),
+    round(150.0 + ((n * 7) % 40) + ((n % 10) * 0.1), 1),
+    round(45.0 + ((n * 11) % 45) + ((n % 10) * 0.1), 1)
+FROM seq;
+
 CREATE TABLE student_marks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id INTEGER NOT NULL UNIQUE,
@@ -43,3 +58,14 @@ INSERT INTO student_marks (student_id, nepali, english, mathematics, science, so
 (8, 85, 87, 88, 86, 84),
 (9, 69, 73, 72, 70, 71),
 (10, 92, 90, 94, 91, 89);
+
+INSERT INTO student_marks (student_id, nepali, english, mathematics, science, social_studies)
+SELEC
+    id,
+    60 + ((id * 3) % 41),
+    60 + ((id * 5) % 41),
+    60 + ((id * 7) % 41),
+    60 + ((id * 9) % 41),
+    60 + ((id * 11) % 41)
+FROM student_data
+WHERE id > 10;
