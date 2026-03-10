@@ -21,6 +21,13 @@ def _resolve_output(path_str: str) -> Path:
     return ROOT_DIR / path
 
 
+def _resolve_images_dir(path_str: str) -> Path:
+    path = Path(path_str).expanduser()
+    if path.is_absolute():
+        return path
+    return ROOT_DIR / path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate IRBundle JSON from a natural-language UI request.")
     parser.add_argument(
@@ -36,6 +43,16 @@ def main() -> None:
     )
     parser.add_argument("--model", default=DEFAULT_CLAUDE_MODEL, help="LLM model name.")
     parser.add_argument(
+        "--images-dir",
+        help="If set, read 1-3 UI reference images from this folder and generate IR from the images.",
+    )
+    parser.add_argument(
+        "--images-limit",
+        type=int,
+        default=None,
+        help="Max number of images to load from --images-dir (default: all images in the folder).",
+    )
+    parser.add_argument(
         "--log-level",
         default="INFO",
         help="Log level for file and console logs (DEBUG, INFO, WARNING, ERROR).",
@@ -45,12 +62,15 @@ def main() -> None:
     configure_logging(level=args.log_level)
     logger = get_logger("cli.ir_generation")
     output_path = _resolve_output(args.output)
+    images_dir = _resolve_images_dir(args.images_dir) if args.images_dir else None
 
     with log_timed_step(logger, "CLI command: IR generation", model=args.model):
         run_interactive_ir_generation(
             output_path=output_path,
             model_name=args.model,
             overwrite=args.overwrite,
+            images_dir=images_dir,
+            images_limit=args.images_limit,
         )
 
 

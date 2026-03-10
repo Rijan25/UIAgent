@@ -6,7 +6,12 @@ from pydantic import ValidationError
 from ir_pipeline.llm import build_chat_model
 from ir_pipeline.prompts import build_react_prompt
 from ir_pipeline.schemas import IRBundle
-from ir_pipeline.utils import extract_code_block, get_logger, log_timed_step
+from ir_pipeline.utils import (
+    coerce_message_content_to_text,
+    extract_code_block,
+    get_logger,
+    log_timed_step,
+)
 
 logger = get_logger(__name__)
 
@@ -27,7 +32,7 @@ def generate_react_code(ir_bundle: IRBundle, model_name: str = "gpt-5.2") -> str
 
     with log_timed_step(logger, "Invoke React generation model", model=model_name):
         response = model.invoke(prompt)
-    raw_text = response.content if isinstance(response.content, str) else str(response.content)
+    raw_text = coerce_message_content_to_text(getattr(response, "content", response))
     code = extract_code_block(raw_text)
     logger.info("React code generation completed")
     return code
@@ -61,3 +66,14 @@ def convert_ir_file_to_react(
         output_path.write_text(tsx_code + "\n", encoding="utf-8")
     logger.info("React TSX written")
     return output_path
+
+
+
+
+
+
+# Run from the repo root (where main.py is): C:\Users\rijan\OneDrive\Desktop\UIAgent.
+
+# Generate IR only (from images): uv run ui_generation/cli/ir_generation.py --images-dir ui_generation/uploads
+# Full pipeline (IR -> React, no dev server): uv run  main.py --images-dir ui_generation/uploads --no-serve
+# Full pipeline (and start frontend): uv run  main.py --images-dir ui_generation/uploads

@@ -75,6 +75,7 @@ Request body:
 ```json
 {
   "prompt": "Build a dashboard with summary cards and filters",
+  "images_dir": "ui_generation/uploads",
   "model": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
   "overwrite": true,
   "sync_frontend_app": true

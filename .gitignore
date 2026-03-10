@@ -21,3 +21,7 @@ Tools/logs/
 ui_generation/generated/
 Tools/generated_ir.json
 Tools/generated_app.tsx
+
+# Local image inputs (keep the folder, ignore files)
+ui_generation/uploads/*
+!ui_generation/uploads/.gitkeep

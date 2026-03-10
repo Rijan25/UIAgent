@@ -133,6 +133,10 @@ Output requirements:
 - component_ir.library must be "antd".
 - behaviour_ir.events/actions/feedback must be object maps (not lists).
 - Event type must be exactly "mutation".
+- Always design for a fullscreen responsive app:
+  - page_ir.constraints must include "fullscreen_layout".
+  - Root layout should fill the viewport (avoid fixed widths; prefer fluid/responsive layout).
+  - Provide sensible responsive behavior for small screens (stack/collapse/hide where appropriate).
 - Every id referenced must exist:
   - layout_ir.root must exist in component_ir.components
   - layout_ir.children keys and values must exist in component_ir.components

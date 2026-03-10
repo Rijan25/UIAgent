@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 UI_GENERATION_DIR = ROOT_DIR / "ui_generation"
@@ -23,13 +23,30 @@ from ir_pipeline.utils import configure_logging, get_logger, log_timed_step
 
 
 class GenerateRequest(BaseModel):
-    prompt: str = Field(min_length=1, description="Natural language prompt for UI generation.")
+    prompt: str | None = Field(default=None, description="Natural language prompt/hint for UI generation.")
+    images_dir: str | None = Field(
+        default=None,
+        description="Optional folder path containing UI reference images (png/jpg/webp/gif).",
+    )
+    images_limit: int | None = Field(
+        default=None,
+        description="Max images to load from images_dir (default: all images in the folder, up to 50).",
+    )
     model: str = Field(default=DEFAULT_CLAUDE_MODEL, description="Bedrock model ID.")
     overwrite: bool = Field(default=True, description="Overwrite existing generated files if present.")
     sync_frontend_app: bool = Field(
         default=True,
         description="Copy generated TSX to ui-compiler-poc/frontend/src/App.tsx.",
     )
+
+    @field_validator("images_limit")
+    @classmethod
+    def _validate_images_limit(cls, value: int | None) -> int | None:
+        if value is None:
+            return None
+        if 1 <= value <= 50:
+            return value
+        raise ValueError("images_limit must be between 1 and 50")
 
 
 class GenerateResponse(BaseModel):
@@ -45,14 +62,25 @@ logger = get_logger("api.main")
 
 @app.post("/v1/generate", response_model=GenerateResponse)
 def generate_ui(payload: GenerateRequest) -> GenerateResponse:
-    prompt = payload.prompt.strip()
-    if not prompt:
-        raise HTTPException(status_code=400, detail="prompt cannot be empty")
+    prompt = (payload.prompt or "").strip()
+    images_dir = (payload.images_dir or "").strip() or None
+    if not prompt and not images_dir:
+        raise HTTPException(status_code=400, detail="Either prompt or images_dir is required")
+
+    resolved_images_dir: Path | None = None
+    if images_dir is not None:
+        candidate = Path(images_dir).expanduser()
+        resolved_images_dir = candidate if candidate.is_absolute() else ROOT_DIR / candidate
 
     try:
         with log_timed_step(logger, "API request: generate pipeline", model=payload.model):
             with log_timed_step(logger, "API step: Generate IR", model=payload.model):
-                bundle = generate_ir_bundle(user_request=prompt, model_name=payload.model)
+                bundle = generate_ir_bundle(
+                    user_request=prompt,
+                    images_dir=resolved_images_dir,
+                    images_limit=payload.images_limit,
+                    model_name=payload.model,
+                )
 
             with log_timed_step(logger, "API step: Write IR"):
                 write_ir_bundle(bundle=bundle, output_path=DEFAULT_IR_OUTPUT, overwrite=payload.overwrite)

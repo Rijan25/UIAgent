@@ -29,8 +29,38 @@ def _run_command(command: list[str], cwd: Path) -> None:
     subprocess.run(command, cwd=cwd, check=True)
 
 
+def _preferred_python_executable() -> str:
+    """
+    Prefer the project's .venv interpreter for subprocess scripts.
+
+    This makes `python main.py ...` work even when the user invoked the system
+    Python (without deps) but has already installed deps into `.venv` via `uv sync`.
+    """
+    if os.environ.get("VIRTUAL_ENV"):
+        return sys.executable
+
+    venv_dir = ROOT_DIR / ".venv"
+    if sys.platform.startswith("win"):
+        candidates = [
+            venv_dir / "Scripts" / "python.exe",
+            venv_dir / "Scripts" / "python",
+        ]
+    else:
+        candidates = [
+            venv_dir / "bin" / "python3",
+            venv_dir / "bin" / "python",
+        ]
+
+    for candidate in candidates:
+        if candidate.exists():
+            return str(candidate)
+
+    return sys.executable
+
+
 def _run_python_script(script: Path, args: list[str]) -> None:
-    _run_command([sys.executable, str(script), *args], cwd=ROOT_DIR)
+    python_exe = _preferred_python_executable()
+    _run_command([python_exe, str(script), *args], cwd=ROOT_DIR)
 
 
 def _resolve_from_root(path_str: str) -> Path:
@@ -85,6 +115,10 @@ def _build_ir_generation_args(args: argparse.Namespace) -> list[str]:
     command_args.extend(["--output", str(_resolve_from_root(args.ir_output) if args.ir_output else DEFAULT_IR_OUTPUT)])
     if args.overwrite is not None:
         command_args.append("--overwrite" if args.overwrite else "--no-overwrite")
+    if args.images_dir:
+        command_args.extend(["--images-dir", str(_resolve_from_root(args.images_dir))])
+    if args.images_limit is not None:
+        command_args.extend(["--images-limit", str(args.images_limit)])
     command_args.extend(["--log-level", args.log_level])
     return command_args
 
@@ -127,6 +161,16 @@ def main() -> None:
         help="Whether to overwrite existing IR output (forwarded to ir_generation.py).",
     )
     parser.add_argument(
+        "--images-dir",
+        help="If set, generate IR from 1-3 reference images in this folder (forwarded to ir_generation.py).",
+    )
+    parser.add_argument(
+        "--images-limit",
+        type=int,
+        default=None,
+        help="Max images to load from --images-dir (forwarded to ir_generation.py).",
+    )
+    parser.add_argument(
         "--react-input",
         help="Input IR JSON path for React generation (defaults to --ir-output if provided).",
     )
@@ -154,9 +198,10 @@ def main() -> None:
     configure_logging(level=args.log_level)
     logger = get_logger("pipeline.main")
     logger.info(
-        "Pipeline run started | model=%s | serve=%s",
+        "Pipeline run started | model=%s | serve=%s | images_dir=%s",
         args.model,
         args.serve,
+        str(_resolve_from_root(args.images_dir)) if getattr(args, "images_dir", None) else None,
     )
 
     with log_timed_step(logger, "Pipeline step: IR generation"):

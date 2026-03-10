@@ -1,8 +1,35 @@
 import os
 
-import boto3
-from dotenv import load_dotenv
-from langchain_aws import ChatBedrockConverse
+try:
+    import boto3
+except ModuleNotFoundError as exc:  # pragma: no cover
+    raise ModuleNotFoundError(
+        "Missing dependency 'boto3'. Install project dependencies and run via the project environment.\n"
+        "Recommended:\n"
+        "  1) uv sync\n"
+        "  2) uv run python ui_generation/cli/ir_generation.py --images-dir ui_generation/uploads\n"
+        "Or (PowerShell):\n"
+        "  .\\.venv\\Scripts\\python ui_generation/cli/ir_generation.py --images-dir ui_generation/uploads"
+    ) from exc
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError as exc:  # pragma: no cover
+    raise ModuleNotFoundError(
+        "Missing dependency 'python-dotenv'. Run `uv sync` and use `uv run ...`."
+    ) from exc
+
+try:
+    from langchain_aws import ChatBedrockConverse
+except ModuleNotFoundError as exc:  # pragma: no cover
+    raise ModuleNotFoundError(
+        "Missing dependency 'langchain-aws'. Run `uv sync` and use `uv run ...`."
+    ) from exc
+
+try:
+    from botocore.config import Config
+except ModuleNotFoundError:  # pragma: no cover
+    Config = None  # type: ignore[assignment]
 
 DEFAULT_CLAUDE_MODEL = "global.anthropic.claude-sonnet-4-5-20250929-v1:0"
 _MODEL_ALIASES = {
@@ -82,6 +109,18 @@ def build_chat_model(
         "region_name": region,
         "temperature": temperature,
     }
+
+    # Image-based prompts can take minutes. Botocore defaults are often too short.
+    if Config is not None:
+        connect_timeout = int(os.getenv("BEDROCK_CONNECT_TIMEOUT_SECONDS", "30"))
+        read_timeout = int(os.getenv("BEDROCK_READ_TIMEOUT_SECONDS", "600"))
+        max_attempts = int(os.getenv("BEDROCK_MAX_ATTEMPTS", "2"))
+        kwargs["config"] = Config(
+            connect_timeout=connect_timeout,
+            read_timeout=read_timeout,
+            retries={"max_attempts": max_attempts, "mode": "standard"},
+            tcp_keepalive=True,
+        )
     if access_key and secret_key:
         kwargs["aws_access_key_id"] = access_key
         kwargs["aws_secret_access_key"] = secret_key

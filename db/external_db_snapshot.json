@@ -1,0 +1,279 @@
+{
+  "source": {
+    "source_id": "student_external",
+    "kind": "sqlite_snapshot",
+    "origin_db_path": "C:\\Users\\rijan\\OneDrive\\Desktop\\UIAgent\\db\\student_data.db",
+    "generated_at": "2026-03-10T02:56:29.963330+00:00"
+  },
+  "tables": {
+    "student_data": {
+      "schema": {
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "not_null": false,
+            "default": null,
+            "pk": true
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "height",
+            "type": "REAL",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "weight",
+            "type": "REAL",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "foreign_keys": []
+      },
+      "row_count": 310,
+      "sample_rows": [
+        {
+          "id": 1,
+          "name": "Sujan Thapa",
+          "height": 168.2,
+          "weight": 62.5
+        },
+        {
+          "id": 2,
+          "name": "Aarati Gurung",
+          "height": 156.4,
+          "weight": 50.8
+        },
+        {
+          "id": 3,
+          "name": "Bikash Karki",
+          "height": 172.1,
+          "weight": 68.3
+        },
+        {
+          "id": 4,
+          "name": "Nirmala Rai",
+          "height": 160.7,
+          "weight": 54.2
+        },
+        {
+          "id": 5,
+          "name": "Prakash Magar",
+          "height": 175.0,
+          "weight": 70.1
+        },
+        {
+          "id": 6,
+          "name": "Sita Tamang",
+          "height": 158.9,
+          "weight": 52.0
+        },
+        {
+          "id": 7,
+          "name": "Ramesh Shrestha",
+          "height": 170.3,
+          "weight": 65.4
+        },
+        {
+          "id": 8,
+          "name": "Manisha Bhandari",
+          "height": 162.5,
+          "weight": 56.7
+        },
+        {
+          "id": 9,
+          "name": "Dipesh Adhikari",
+          "height": 169.8,
+          "weight": 64.0
+        },
+        {
+          "id": 10,
+          "name": "Kusum Koirala",
+          "height": 157.6,
+          "weight": 51.3
+        }
+      ]
+    },
+    "student_marks": {
+      "schema": {
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "not_null": false,
+            "default": null,
+            "pk": true
+          },
+          {
+            "name": "student_id",
+            "type": "INTEGER",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "nepali",
+            "type": "INTEGER",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "english",
+            "type": "INTEGER",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "mathematics",
+            "type": "INTEGER",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "science",
+            "type": "INTEGER",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          },
+          {
+            "name": "social_studies",
+            "type": "INTEGER",
+            "not_null": true,
+            "default": null,
+            "pk": false
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "foreign_keys": [
+          {
+            "from_column": "student_id",
+            "to_table": "student_data",
+            "to_column": "id",
+            "on_update": "NO ACTION",
+            "on_delete": "NO ACTION"
+          }
+        ]
+      },
+      "row_count": 310,
+      "sample_rows": [
+        {
+          "id": 1,
+          "student_id": 1,
+          "nepali": 78,
+          "english": 82,
+          "mathematics": 85,
+          "science": 80,
+          "social_studies": 76
+        },
+        {
+          "id": 2,
+          "student_id": 2,
+          "nepali": 88,
+          "english": 84,
+          "mathematics": 90,
+          "science": 87,
+          "social_studies": 83
+        },
+        {
+          "id": 3,
+          "student_id": 3,
+          "nepali": 72,
+          "english": 75,
+          "mathematics": 79,
+          "science": 74,
+          "social_studies": 70
+        },
+        {
+          "id": 4,
+          "student_id": 4,
+          "nepali": 91,
+          "english": 89,
+          "mathematics": 93,
+          "science": 90,
+          "social_studies": 88
+        },
+        {
+          "id": 5,
+          "student_id": 5,
+          "nepali": 67,
+          "english": 71,
+          "mathematics": 69,
+          "science": 73,
+          "social_studies": 68
+        },
+        {
+          "id": 6,
+          "student_id": 6,
+          "nepali": 81,
+          "english": 79,
+          "mathematics": 84,
+          "science": 82,
+          "social_studies": 80
+        },
+        {
+          "id": 7,
+          "student_id": 7,
+          "nepali": 76,
+          "english": 78,
+          "mathematics": 77,
+          "science": 75,
+          "social_studies": 74
+        },
+        {
+          "id": 8,
+          "student_id": 8,
+          "nepali": 85,
+          "english": 87,
+          "mathematics": 88,
+          "science": 86,
+          "social_studies": 84
+        },
+        {
+          "id": 9,
+          "student_id": 9,
+          "nepali": 69,
+          "english": 73,
+          "mathematics": 72,
+          "science": 70,
+          "social_studies": 71
+        },
+        {
+          "id": 10,
+          "student_id": 10,
+          "nepali": 92,
+          "english": 90,
+          "mathematics": 94,
+          "science": 91,
+          "social_studies": 89
+        }
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "from_table": "student_marks",
+      "from_column": "student_id",
+      "to_table": "student_data",
+      "to_column": "id"
+    }
+  ]
+}
