@@ -1,102 +1,280 @@
 {
   "page_ir": {
     "page_id": "",
-    "page_goal": "A simple page to add students and display them in a table with their physical data and marks",
+    "page_goal": "Display a student marks entry form for 3 students with 5 subjects, calculate percentage, GPA, and overall grade with educational theme",
     "style": {
       "tone": "professional",
-      "theme": "light",
+      "theme": "educational",
       "density": "comfortable",
-      "color_intent": "primary"
+      "color_intent": "academic"
     },
     "accessibility": {
       "required_labels": [
-        "name",
-        "height",
-        "weight"
+        "student_name",
+        "subject_marks",
+        "calculate_button"
       ],
       "skip_navigation": true,
       "focus_management": true,
       "announce_changes": []
     },
     "responsive": {
-      "breakpoints": {},
+      "breakpoints": {
+        "mobile": 768,
+        "tablet": 1024,
+        "desktop": 1440
+      },
       "collapse_rules": [],
       "hidden_on_small": [],
       "stack_on_small": []
     },
-    "constraints": [],
+    "constraints": [
+      "full_screen_layout",
+      "marks_range_0_100"
+    ],
     "seo_title": null,
     "seo_description": null
   },
   "data_ir": {
     "types": {},
     "state": {
-      "rows": {
-        "type": "array",
-        "initial": [],
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "loading": {
-        "type": "boolean",
-        "initial": false,
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "error": {
+      "student1_name": {
         "type": "string",
-        "initial": "",
-        "required": false,
+        "initial": "Aarav Sharma",
+        "required": true,
         "constraints": {},
         "item_type": null
       },
-      "page": {
+      "student1_nepali": {
         "type": "number",
-        "initial": 1,
-        "required": false,
-        "constraints": {},
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
         "item_type": null
       },
-      "pageSize": {
+      "student1_english": {
         "type": "number",
-        "initial": 50,
-        "required": false,
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_social": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_name": {
+        "type": "string",
+        "initial": "Sita Thapa",
+        "required": true,
         "constraints": {},
         "item_type": null
       },
-      "total": {
+      "student2_nepali": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_english": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_social": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_name": {
+        "type": "string",
+        "initial": "Rajesh Gurung",
+        "required": true,
+        "constraints": {},
+        "item_type": null
+      },
+      "student3_nepali": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_english": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_social": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_percentage": {
         "type": "number",
         "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "newStudentName": {
+      "student1_gpa": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student1_grade": {
         "type": "string",
         "initial": "",
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "newStudentHeight": {
+      "student2_percentage": {
         "type": "number",
-        "initial": null,
+        "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "newStudentWeight": {
+      "student2_gpa": {
         "type": "number",
-        "initial": null,
+        "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "searchTerm": {
+      "student2_grade": {
         "type": "string",
         "initial": "",
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student3_percentage": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student3_gpa": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student3_grade": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "calculated": {
+        "type": "boolean",
+        "initial": false,
         "required": false,
         "constraints": {},
         "item_type": null
@@ -108,132 +286,113 @@
     "endpoints": {}
   },
   "data_model_ir": {
-    "entities": {
-      "student": {
-        "name": "Student",
-        "fields": [
-          "id",
-          "name",
-          "height",
-          "weight"
-        ],
-        "computed": [],
-        "display_fields": [
-          "name",
-          "height",
-          "weight"
-        ],
-        "search_fields": [],
-        "filters": [],
-        "default_sort": null,
-        "default_sort_dir": "asc"
-      }
-    },
+    "entities": {},
     "relationships": [],
-    "external_source_ref": {
-      "source_id": "student_external",
-      "snapshot_path": "db/external_db_snapshot.json",
-      "db_path": "/db/student_data.db"
-    },
-    "sql_query_ir": {
-      "sql_template": "SELECT sd.id, sd.name, sd.height, sd.weight FROM student_data sd WHERE (:search = '' OR sd.name LIKE '%' || :search || '%') ORDER BY sd.id DESC LIMIT :limit OFFSET :offset",
-      "params": [
-        ":limit",
-        ":offset",
-        ":search"
-      ],
-      "default_page_size": 50,
-      "max_page_size": 200
-    }
+    "external_source_ref": null,
+    "sql_query_ir": null
   },
   "behaviour_ir": {
     "events": {
-      "loadStudents": {
+      "calculate_results": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.loading",
+            "target": "state.student1_percentage",
+            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5)"
+          },
+          {
+            "target": "state.student1_gpa",
+            "expr": "(((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) / 25)"
+          },
+          {
+            "target": "state.student1_grade",
+            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 90 ? 'A+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 80 ? 'A' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 70 ? 'B+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 60 ? 'B' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 50 ? 'C+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student2_percentage",
+            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5)"
+          },
+          {
+            "target": "state.student2_gpa",
+            "expr": "(((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) / 25)"
+          },
+          {
+            "target": "state.student2_grade",
+            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 90 ? 'A+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 80 ? 'A' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 70 ? 'B+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 60 ? 'B' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 50 ? 'C+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student3_percentage",
+            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5)"
+          },
+          {
+            "target": "state.student3_gpa",
+            "expr": "(((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) / 25)"
+          },
+          {
+            "target": "state.student3_grade",
+            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 90 ? 'A+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 80 ? 'A' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 70 ? 'B+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 60 ? 'B' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 50 ? 'C+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.calculated",
             "expr": "true"
-          },
-          {
-            "target": "state.error",
-            "expr": "''"
-          }
-        ],
-        "description": ""
-      },
-      "updateSearchTerm": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.searchTerm",
-            "expr": "event.target.value"
-          },
-          {
-            "target": "state.page",
-            "expr": "1"
-          }
-        ],
-        "description": ""
-      },
-      "updatePage": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.page",
-            "expr": "event.page"
-          }
-        ],
-        "description": ""
-      },
-      "updatePageSize": {
-        "type": "mutation",
-        "updates": [
-          {
-            "target": "state.pageSize",
-            "expr": "event.pageSize"
-          },
-          {
-            "target": "state.page",
-            "expr": "1"
           }
         ],
         "description": ""
       }
     },
     "actions": {
-      "addStudent": {
-        "action_id": "addStudent",
+      "calculate_action": {
+        "action_id": "calculate_action",
         "trigger": "button_click",
-        "target_component_id": "addStudentButton",
-        "operation": "create",
+        "target_component_id": "calculate_button",
+        "operation": "custom",
         "description": "",
-        "payload": {
-          "name": "state.newStudentName",
-          "height": "state.newStudentHeight",
-          "weight": "state.newStudentWeight"
-        },
+        "payload": {},
         "guard": null,
         "requires_confirmation": false,
         "confirmation_message": null,
-        "validation_rules": [
-          "state.newStudentName !== ''",
-          "state.newStudentHeight > 0",
-          "state.newStudentWeight > 0"
-        ],
+        "validation_rules": [],
         "validation_messages": {},
         "updates": [
           {
-            "target": "state.newStudentName",
-            "expr": "''"
+            "target": "state.student1_percentage",
+            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5)"
           },
           {
-            "target": "state.newStudentHeight",
-            "expr": "null"
+            "target": "state.student1_gpa",
+            "expr": "(((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) / 25)"
           },
           {
-            "target": "state.newStudentWeight",
-            "expr": "null"
+            "target": "state.student1_grade",
+            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 90 ? 'A+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 80 ? 'A' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 70 ? 'B+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 60 ? 'B' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 50 ? 'C+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student2_percentage",
+            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5)"
+          },
+          {
+            "target": "state.student2_gpa",
+            "expr": "(((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) / 25)"
+          },
+          {
+            "target": "state.student2_grade",
+            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 90 ? 'A+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 80 ? 'A' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 70 ? 'B+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 60 ? 'B' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 50 ? 'C+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student3_percentage",
+            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5)"
+          },
+          {
+            "target": "state.student3_gpa",
+            "expr": "(((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) / 25)"
+          },
+          {
+            "target": "state.student3_grade",
+            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 90 ? 'A+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 80 ? 'A' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 70 ? 'B+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 60 ? 'B' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 50 ? 'C+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.calculated",
+            "expr": "true"
           }
         ],
         "api_endpoint": null,
@@ -244,12 +403,12 @@
       }
     },
     "feedback": {
-      "addStudent": {
-        "action_id": "addStudent",
+      "calculate_action": {
+        "action_id": "calculate_action",
         "loading_indicator": "spinner",
         "loading_text": null,
-        "success_message": "Student added successfully",
-        "error_message": "Failed to add student. Please check all fields.",
+        "success_message": "Grades calculated successfully!",
+        "error_message": "Failed to calculate grades",
         "ui_updates": []
       }
     }
@@ -257,17 +416,17 @@
   "component_ir": {
     "library": "antd",
     "theme": {
-      "primaryColor": "#1677ff",
-      "secondaryColor": "#000000",
+      "primaryColor": "#1890ff",
+      "secondaryColor": "#52c41a",
       "successColor": null,
       "warningColor": null,
       "errorColor": null,
-      "fontFamily": "Inter, system-ui, sans-serif",
+      "fontFamily": "Arial, sans-serif",
       "fontSize": null,
       "borderRadius": 8
     },
     "components": {
-      "rootContainer": {
+      "root_container": {
         "type": "div",
         "label": null,
         "description": null,
@@ -280,9 +439,9 @@
         "props": {},
         "dynamic_props": {},
         "styles": {
-          "padding": "24px",
-          "maxWidth": "1200px",
-          "margin": "0 auto"
+          "minHeight": "100vh",
+          "backgroundColor": "#f0f2f5",
+          "padding": "24px"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -295,9 +454,39 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "pageTitle": {
-        "type": "Typography.Title",
-        "label": "Student Management",
+      "header_card": {
+        "type": "Card",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "bordered": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "24px",
+          "textAlign": "center",
+          "backgroundColor": "#ffffff"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "school_name": {
+        "type": "Title",
+        "label": "Himalayan Secondary School",
         "description": null,
         "bind": null,
         "onClick": null,
@@ -310,7 +499,8 @@
         },
         "dynamic_props": {},
         "styles": {
-          "marginBottom": "24px"
+          "color": "#1890ff",
+          "marginBottom": "8px"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -323,7 +513,34 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "addStudentCard": {
+      "school_address": {
+        "type": "Text",
+        "label": "Kathmandu, Nepal | Est. 1985",
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "fontSize": "16px",
+          "color": "#595959"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "marks_card": {
         "type": "Card",
         "label": null,
         "description": null,
@@ -334,7 +551,8 @@
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "title": "Add New Student"
+          "title": "Student Marks Entry",
+          "bordered": true
         },
         "dynamic_props": {},
         "styles": {
@@ -351,7 +569,128 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "addStudentForm": {
+      "marks_table": {
+        "type": "Table",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "bordered": true,
+          "pagination": false,
+          "columns": [
+            {
+              "title": "Student Name",
+              "dataIndex": "name",
+              "key": "name",
+              "width": 200
+            },
+            {
+              "title": "Nepali",
+              "dataIndex": "nepali",
+              "key": "nepali",
+              "width": 120
+            },
+            {
+              "title": "English",
+              "dataIndex": "english",
+              "key": "english",
+              "width": 120
+            },
+            {
+              "title": "Mathematics",
+              "dataIndex": "mathematics",
+              "key": "mathematics",
+              "width": 120
+            },
+            {
+              "title": "Science",
+              "dataIndex": "science",
+              "key": "science",
+              "width": 120
+            },
+            {
+              "title": "Social Studies",
+              "dataIndex": "social",
+              "key": "social",
+              "width": 120
+            },
+            {
+              "title": "Percentage",
+              "dataIndex": "percentage",
+              "key": "percentage",
+              "width": 120
+            },
+            {
+              "title": "GPA",
+              "dataIndex": "gpa",
+              "key": "gpa",
+              "width": 100
+            },
+            {
+              "title": "Grade",
+              "dataIndex": "grade",
+              "key": "grade",
+              "width": 100
+            }
+          ],
+          "dataSource": [
+            {
+              "key": "1",
+              "name": "state.student1_name",
+              "nepali": "input:student1_nepali",
+              "english": "input:student1_english",
+              "mathematics": "input:student1_mathematics",
+              "science": "input:student1_science",
+              "social": "input:student1_social",
+              "percentage": "state.student1_percentage",
+              "gpa": "state.student1_gpa",
+              "grade": "state.student1_grade"
+            },
+            {
+              "key": "2",
+              "name": "state.student2_name",
+              "nepali": "input:student2_nepali",
+              "english": "input:student2_english",
+              "mathematics": "input:student2_mathematics",
+              "science": "input:student2_science",
+              "social": "input:student2_social",
+              "percentage": "state.student2_percentage",
+              "gpa": "state.student2_gpa",
+              "grade": "state.student2_grade"
+            },
+            {
+              "key": "3",
+              "name": "state.student3_name",
+              "nepali": "input:student3_nepali",
+              "english": "input:student3_english",
+              "mathematics": "input:student3_mathematics",
+              "science": "input:student3_science",
+              "social": "input:student3_social",
+              "percentage": "state.student3_percentage",
+              "gpa": "state.student3_gpa",
+              "grade": "state.student3_grade"
+            }
+          ]
+        },
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "button_container": {
         "type": "div",
         "label": null,
         "description": null,
@@ -365,9 +704,8 @@
         "dynamic_props": {},
         "styles": {
           "display": "flex",
-          "gap": "12px",
-          "flexWrap": "wrap",
-          "alignItems": "flex-end"
+          "justifyContent": "flex-end",
+          "marginTop": "24px"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -380,221 +718,20 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "nameInput": {
-        "type": "Input",
-        "label": "Name",
-        "description": null,
-        "bind": "state.newStudentName",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Enter student name"
-        },
-        "dynamic_props": {},
-        "styles": {
-          "width": "200px"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "heightInput": {
-        "type": "InputNumber",
-        "label": "Height (cm)",
-        "description": null,
-        "bind": "state.newStudentHeight",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Height",
-          "min": 0,
-          "step": 0.1
-        },
-        "dynamic_props": {},
-        "styles": {
-          "width": "120px"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "weightInput": {
-        "type": "InputNumber",
-        "label": "Weight (kg)",
-        "description": null,
-        "bind": "state.newStudentWeight",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Weight",
-          "min": 0,
-          "step": 0.1
-        },
-        "dynamic_props": {},
-        "styles": {
-          "width": "120px"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "addStudentButton": {
+      "calculate_button": {
         "type": "Button",
-        "label": "Add Student",
+        "label": "Calculate Results",
         "description": null,
         "bind": null,
-        "onClick": "addStudent",
+        "onClick": "calculate_action",
         "onChange": null,
         "onSubmit": null,
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "type": "primary"
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "studentsCard": {
-        "type": "Card",
-        "label": null,
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "title": "Students List"
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "searchInput": {
-        "type": "Input.Search",
-        "label": null,
-        "description": null,
-        "bind": "state.searchTerm",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Search by name",
-          "allowClear": true
-        },
-        "dynamic_props": {},
-        "styles": {
-          "marginBottom": "16px",
-          "maxWidth": "400px"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "studentsTable": {
-        "type": "Table",
-        "label": null,
-        "description": null,
-        "bind": "state.rows",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "columns": [
-            {
-              "title": "ID",
-              "dataIndex": "id",
-              "key": "id",
-              "width": 80
-            },
-            {
-              "title": "Name",
-              "dataIndex": "name",
-              "key": "name"
-            },
-            {
-              "title": "Height (cm)",
-              "dataIndex": "height",
-              "key": "height",
-              "width": 120
-            },
-            {
-              "title": "Weight (kg)",
-              "dataIndex": "weight",
-              "key": "weight",
-              "width": 120
-            }
-          ],
-          "loading": "state.loading",
-          "pagination": {
-            "current": "state.page",
-            "pageSize": "state.pageSize",
-            "total": "state.total",
-            "showSizeChanger": true,
-            "showTotal": true
-          },
-          "rowKey": "id"
+          "type": "primary",
+          "size": "large",
+          "icon": "CalculatorOutlined"
         },
         "dynamic_props": {},
         "styles": {},
@@ -612,29 +749,26 @@
     }
   },
   "layout_ir": {
-    "root": "rootContainer",
+    "root": "root_container",
     "children": {
-      "rootContainer": [
-        "pageTitle",
-        "addStudentCard",
-        "studentsCard"
+      "root_container": [
+        "header_card",
+        "marks_card",
+        "button_container"
       ],
-      "addStudentCard": [
-        "addStudentForm"
+      "header_card": [
+        "school_name",
+        "school_address"
       ],
-      "addStudentForm": [
-        "nameInput",
-        "heightInput",
-        "weightInput",
-        "addStudentButton"
+      "marks_card": [
+        "marks_table"
       ],
-      "studentsCard": [
-        "searchInput",
-        "studentsTable"
+      "button_container": [
+        "calculate_button"
       ]
     },
     "layout": {
-      "rootContainer": {
+      "root_container": {
         "type": "vertical",
         "gap": 24,
         "padding": null,
@@ -647,9 +781,9 @@
         "min_height": null,
         "overflow": null
       },
-      "addStudentCard": {
+      "header_card": {
         "type": "vertical",
-        "gap": 0,
+        "gap": 8,
         "padding": null,
         "columns": null,
         "column_template": null,
@@ -660,22 +794,22 @@
         "min_height": null,
         "overflow": null
       },
-      "addStudentForm": {
-        "type": "horizontal",
-        "gap": 12,
-        "padding": null,
-        "columns": null,
-        "column_template": null,
-        "row_template": null,
-        "align_items": null,
-        "justify_content": null,
-        "wrap": false,
-        "min_height": null,
-        "overflow": null
-      },
-      "studentsCard": {
+      "marks_card": {
         "type": "vertical",
         "gap": 16,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "button_container": {
+        "type": "horizontal",
+        "gap": 0,
         "padding": null,
         "columns": null,
         "column_template": null,
@@ -689,12 +823,28 @@
     },
     "layout_zones": [
       {
-        "zone_id": "mainContent",
-        "component": "rootContainer",
+        "zone_id": "header_zone",
+        "component": "header_card",
+        "anchor": "top-left",
+        "size_hint": "full-width",
+        "z_layer": "base",
+        "notes": "School header with name and address"
+      },
+      {
+        "zone_id": "marks_zone",
+        "component": "marks_card",
         "anchor": "center",
         "size_hint": "full-width",
         "z_layer": "base",
-        "notes": "Main content area containing the student management interface"
+        "notes": "Main marks entry table"
+      },
+      {
+        "zone_id": "button_zone",
+        "component": "button_container",
+        "anchor": "bottom-right",
+        "size_hint": "auto",
+        "z_layer": "base",
+        "notes": "Calculate button positioned at bottom right"
       }
     ],
     "responsive_overrides": []

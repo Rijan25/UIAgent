@@ -1,233 +1,336 @@
-import { useEffect, useState } from 'react';
-import { Button, Card, Input, InputNumber, Table, Typography, message } from 'antd';
-import type { TablePaginationConfig } from 'antd';
-import initSqlJs from 'sql.js';
-import type { Database } from 'sql.js';
+import { useState } from 'react';
+import { Card, Typography, Button, InputNumber, message } from 'antd';
+import { CalculatorOutlined } from '@ant-design/icons';
+import type { CSSProperties } from 'react';
 
-interface StudentRow {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-}
+const { Title, Text } = Typography;
 
 export default function GeneratedApp() {
-  const [rows, setRows] = useState<StudentRow[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
-  const [total, setTotal] = useState(0);
-  const [newStudentName, setNewStudentName] = useState('');
-  const [newStudentHeight, setNewStudentHeight] = useState<number | null>(null);
-  const [newStudentWeight, setNewStudentWeight] = useState<number | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [db, setDb] = useState<Database | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
-  useEffect(() => {
-    const initDb = async () => {
-      try {
-        const SQL = await initSqlJs({ locateFile: () => '/db/sql-wasm.wasm' });
-        const response = await fetch('/db/student_data.db');
-        const buffer = await response.arrayBuffer();
-        const database = new SQL.Database(new Uint8Array(buffer));
-        setDb(database);
-      } catch (err) {
-        const errMsg = err instanceof Error ? err.message : 'Failed to initialize database';
-        setError(errMsg);
-        messageApi.error(errMsg);
-      }
-    };
-    initDb();
-  }, [messageApi]);
+  const [student1_name] = useState<string>("Aarav Sharma");
+  const [student1_nepali, setStudent1_nepali] = useState<number>(0);
+  const [student1_english, setStudent1_english] = useState<number>(0);
+  const [student1_mathematics, setStudent1_mathematics] = useState<number>(0);
+  const [student1_science, setStudent1_science] = useState<number>(0);
+  const [student1_social, setStudent1_social] = useState<number>(0);
 
-  useEffect(() => {
-    if (!db) return;
+  const [student2_name] = useState<string>("Sita Thapa");
+  const [student2_nepali, setStudent2_nepali] = useState<number>(0);
+  const [student2_english, setStudent2_english] = useState<number>(0);
+  const [student2_mathematics, setStudent2_mathematics] = useState<number>(0);
+  const [student2_science, setStudent2_science] = useState<number>(0);
+  const [student2_social, setStudent2_social] = useState<number>(0);
 
-    const loadStudents = async () => {
-      setLoading(true);
-      setError('');
+  const [student3_name] = useState<string>("Rajesh Gurung");
+  const [student3_nepali, setStudent3_nepali] = useState<number>(0);
+  const [student3_english, setStudent3_english] = useState<number>(0);
+  const [student3_mathematics, setStudent3_mathematics] = useState<number>(0);
+  const [student3_science, setStudent3_science] = useState<number>(0);
+  const [student3_social, setStudent3_social] = useState<number>(0);
 
-      try {
-        const currentPage = Number(page);
-        const currentPageSize = Number(pageSize);
-        const safePage = Number.isInteger(currentPage) && currentPage > 0 ? currentPage : 1;
-        const safePageSize = Number.isInteger(currentPageSize) && currentPageSize > 0 ? currentPageSize : 50;
-        const offset = (safePage - 1) * safePageSize;
+  const [student1_percentage, setStudent1_percentage] = useState<number>(0);
+  const [student1_gpa, setStudent1_gpa] = useState<number>(0);
+  const [student1_grade, setStudent1_grade] = useState<string>("");
 
-        const countSql = `SELECT COUNT(*) as count FROM student_data sd WHERE (:search = '' OR sd.name LIKE '%' || :search || '%')`;
-        const countResult = db.exec(countSql, { ':search': searchTerm });
-        const totalCount = countResult.length > 0 && countResult[0].values.length > 0 
-          ? Number(countResult[0].values[0][0]) 
-          : 0;
-        setTotal(totalCount);
+  const [student2_percentage, setStudent2_percentage] = useState<number>(0);
+  const [student2_gpa, setStudent2_gpa] = useState<number>(0);
+  const [student2_grade, setStudent2_grade] = useState<string>("");
 
-        const dataSql = `SELECT sd.id, sd.name, sd.height, sd.weight FROM student_data sd WHERE (:search = '' OR sd.name LIKE '%' || :search || '%') ORDER BY sd.id DESC LIMIT ${safePageSize} OFFSET ${offset}`;
-        const dataResult = db.exec(dataSql, { ':search': searchTerm });
+  const [student3_percentage, setStudent3_percentage] = useState<number>(0);
+  const [student3_gpa, setStudent3_gpa] = useState<number>(0);
+  const [student3_grade, setStudent3_grade] = useState<string>("");
 
-        if (dataResult.length > 0) {
-          const mappedRows: StudentRow[] = dataResult[0].values.map((row) => ({
-            id: Number(row[0]),
-            name: String(row[1]),
-            height: Number(row[2]),
-            weight: Number(row[3]),
-          }));
-          setRows(mappedRows);
-        } else {
-          setRows([]);
-        }
-      } catch (err) {
-        const errMsg = err instanceof Error ? err.message : 'Failed to load students';
-        setError(errMsg);
-        messageApi.error(errMsg);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleCalculate = () => {
+    const s1_avg = (student1_nepali + student1_english + student1_mathematics + student1_science + student1_social) / 5;
+    setStudent1_percentage(s1_avg);
+    setStudent1_gpa(s1_avg / 25);
+    setStudent1_grade(
+      s1_avg >= 90 ? 'A+' :
+      s1_avg >= 80 ? 'A' :
+      s1_avg >= 70 ? 'B+' :
+      s1_avg >= 60 ? 'B' :
+      s1_avg >= 50 ? 'C+' :
+      s1_avg >= 40 ? 'C' : 'F'
+    );
 
-    loadStudents();
-  }, [db, page, pageSize, searchTerm, messageApi]);
+    const s2_avg = (student2_nepali + student2_english + student2_mathematics + student2_science + student2_social) / 5;
+    setStudent2_percentage(s2_avg);
+    setStudent2_gpa(s2_avg / 25);
+    setStudent2_grade(
+      s2_avg >= 90 ? 'A+' :
+      s2_avg >= 80 ? 'A' :
+      s2_avg >= 70 ? 'B+' :
+      s2_avg >= 60 ? 'B' :
+      s2_avg >= 50 ? 'C+' :
+      s2_avg >= 40 ? 'C' : 'F'
+    );
 
-  const handleAddStudent = async () => {
-    const name = newStudentName;
-    const height = newStudentHeight;
-    const weight = newStudentWeight;
+    const s3_avg = (student3_nepali + student3_english + student3_mathematics + student3_science + student3_social) / 5;
+    setStudent3_percentage(s3_avg);
+    setStudent3_gpa(s3_avg / 25);
+    setStudent3_grade(
+      s3_avg >= 90 ? 'A+' :
+      s3_avg >= 80 ? 'A' :
+      s3_avg >= 70 ? 'B+' :
+      s3_avg >= 60 ? 'B' :
+      s3_avg >= 50 ? 'C+' :
+      s3_avg >= 40 ? 'C' : 'F'
+    );
 
-    if (name === '' || height === null || height <= 0 || weight === null || weight <= 0) {
-      messageApi.error('Failed to add student. Please check all fields.');
-      return;
-    }
-
-    if (!db) {
-      messageApi.error('Database not initialized');
-      return;
-    }
-
-    try {
-      db.run('INSERT INTO student_data (name, height, weight) VALUES (?, ?, ?)', [name, height, weight]);
-      messageApi.success('Student added successfully');
-      setNewStudentName('');
-      setNewStudentHeight(null);
-      setNewStudentWeight(null);
-      setPage(1);
-    } catch (err) {
-      const errMsg = err instanceof Error ? err.message : 'Failed to add student';
-      messageApi.error(errMsg);
-    }
+    messageApi.success("Grades calculated successfully!");
   };
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    if (pagination.current !== undefined) {
-      setPage(pagination.current);
-    }
-    if (pagination.pageSize !== undefined) {
-      setPageSize(pagination.pageSize);
-      setPage(1);
-    }
+  const rootContainerStyle: CSSProperties = {
+    minHeight: "100vh",
+    backgroundColor: "#f0f2f5",
+    padding: "24px"
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setPage(1);
+  const headerCardStyle: CSSProperties = {
+    marginBottom: "24px",
+    textAlign: "center",
+    backgroundColor: "#ffffff"
+  };
+
+  const schoolNameStyle: CSSProperties = {
+    color: "#1890ff",
+    marginBottom: "8px"
+  };
+
+  const schoolAddressStyle: CSSProperties = {
+    fontSize: "16px",
+    color: "#595959"
+  };
+
+  const marksCardStyle: CSSProperties = {
+    marginBottom: "24px"
+  };
+
+  const buttonContainerStyle: CSSProperties = {
+    display: "flex",
+    justifyContent: "flex-end",
+    marginTop: "24px"
+  };
+
+  const tableContainerStyle: CSSProperties = {
+    overflowX: "auto"
+  };
+
+  const tableStyle: CSSProperties = {
+    width: "100%",
+    borderCollapse: "collapse",
+    border: "1px solid #f0f0f0"
+  };
+
+  const thStyle: CSSProperties = {
+    backgroundColor: "#fafafa",
+    padding: "12px 16px",
+    textAlign: "left",
+    fontWeight: 600,
+    borderBottom: "1px solid #f0f0f0",
+    borderRight: "1px solid #f0f0f0"
+  };
+
+  const tdStyle: CSSProperties = {
+    padding: "12px 16px",
+    borderBottom: "1px solid #f0f0f0",
+    borderRight: "1px solid #f0f0f0"
   };
 
   return (
-    <>
+    <div style={rootContainerStyle}>
       {contextHolder}
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-        <Typography.Title level={2} style={{ marginBottom: '24px' }}>
-          Student Management
-        </Typography.Title>
+      <Card bordered={true} style={headerCardStyle}>
+        <Title level={2} style={schoolNameStyle}>Himalayan Secondary School</Title>
+        <Text style={schoolAddressStyle}>Kathmandu, Nepal | Est. 1985</Text>
+      </Card>
 
-        <Card title="Add New Student" style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-            <div>
-              <div style={{ marginBottom: '4px', fontSize: '14px' }}>Name</div>
-              <Input
-                placeholder="Enter student name"
-                value={newStudentName}
-                onChange={(e) => setNewStudentName(e.target.value)}
-                style={{ width: '200px' }}
-              />
-            </div>
-            <div>
-              <div style={{ marginBottom: '4px', fontSize: '14px' }}>Height (cm)</div>
-              <InputNumber
-                placeholder="Height"
-                min={0}
-                step={0.1}
-                value={newStudentHeight}
-                onChange={(value) => setNewStudentHeight(value)}
-                style={{ width: '120px' }}
-              />
-            </div>
-            <div>
-              <div style={{ marginBottom: '4px', fontSize: '14px' }}>Weight (kg)</div>
-              <InputNumber
-                placeholder="Weight"
-                min={0}
-                step={0.1}
-                value={newStudentWeight}
-                onChange={(value) => setNewStudentWeight(value)}
-                style={{ width: '120px' }}
-              />
-            </div>
-            <Button type="primary" onClick={handleAddStudent}>
-              Add Student
-            </Button>
-          </div>
-        </Card>
+      <Card title="Student Marks Entry" bordered={true} style={marksCardStyle}>
+        <div style={tableContainerStyle}>
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Student Name</th>
+                <th style={thStyle}>Nepali</th>
+                <th style={thStyle}>English</th>
+                <th style={thStyle}>Mathematics</th>
+                <th style={thStyle}>Science</th>
+                <th style={thStyle}>Social Studies</th>
+                <th style={thStyle}>Percentage</th>
+                <th style={thStyle}>GPA</th>
+                <th style={thStyle}>Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={tdStyle}>{student1_name}</td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student1_nepali}
+                    onChange={(val) => setStudent1_nepali(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student1_english}
+                    onChange={(val) => setStudent1_english(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student1_mathematics}
+                    onChange={(val) => setStudent1_mathematics(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student1_science}
+                    onChange={(val) => setStudent1_science(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student1_social}
+                    onChange={(val) => setStudent1_social(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>{student1_percentage.toFixed(2)}</td>
+                <td style={tdStyle}>{student1_gpa.toFixed(2)}</td>
+                <td style={tdStyle}>{student1_grade}</td>
+              </tr>
+              <tr>
+                <td style={tdStyle}>{student2_name}</td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student2_nepali}
+                    onChange={(val) => setStudent2_nepali(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student2_english}
+                    onChange={(val) => setStudent2_english(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student2_mathematics}
+                    onChange={(val) => setStudent2_mathematics(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student2_science}
+                    onChange={(val) => setStudent2_science(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student2_social}
+                    onChange={(val) => setStudent2_social(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>{student2_percentage.toFixed(2)}</td>
+                <td style={tdStyle}>{student2_gpa.toFixed(2)}</td>
+                <td style={tdStyle}>{student2_grade}</td>
+              </tr>
+              <tr>
+                <td style={tdStyle}>{student3_name}</td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student3_nepali}
+                    onChange={(val) => setStudent3_nepali(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student3_english}
+                    onChange={(val) => setStudent3_english(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student3_mathematics}
+                    onChange={(val) => setStudent3_mathematics(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student3_science}
+                    onChange={(val) => setStudent3_science(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={student3_social}
+                    onChange={(val) => setStudent3_social(val ?? 0)}
+                    style={{ width: '100%' }}
+                  />
+                </td>
+                <td style={tdStyle}>{student3_percentage.toFixed(2)}</td>
+                <td style={tdStyle}>{student3_gpa.toFixed(2)}</td>
+                <td style={tdStyle}>{student3_grade}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </Card>
 
-        <Card title="Students List">
-          <Input.Search
-            placeholder="Search by name"
-            allowClear
-            value={searchTerm}
-            onChange={handleSearchChange}
-            style={{ marginBottom: '16px', maxWidth: '400px' }}
-          />
-          {error && <div style={{ color: '#ff4d4f', marginBottom: '16px' }}>{error}</div>}
-          <Table
-            dataSource={rows}
-            loading={loading}
-            rowKey="id"
-            columns={[
-              {
-                title: 'ID',
-                dataIndex: 'id',
-                key: 'id',
-                width: 80,
-              },
-              {
-                title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-              },
-              {
-                title: 'Height (cm)',
-                dataIndex: 'height',
-                key: 'height',
-                width: 120,
-              },
-              {
-                title: 'Weight (kg)',
-                dataIndex: 'weight',
-                key: 'weight',
-                width: 120,
-              },
-            ]}
-            pagination={{
-              current: page,
-              pageSize: pageSize,
-              total: total,
-              showSizeChanger: true,
-              showTotal: (total) => `Total ${total} students`,
-            }}
-            onChange={handleTableChange}
-          />
-        </Card>
+      <div style={buttonContainerStyle}>
+        <Button
+          type="primary"
+          size="large"
+          icon={<CalculatorOutlined />}
+          onClick={handleCalculate}
+        >
+          Calculate Results
+        </Button>
       </div>
-    </>
+    </div>
   );
 }

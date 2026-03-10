@@ -128,6 +128,9 @@ exit
 
 PatchOps applies patch files to an existing IR.
 
+Detailed internals and operation semantics:
+- `Tools/PATCHOPS.md`
+
 From repo root:
 
 ```powershell

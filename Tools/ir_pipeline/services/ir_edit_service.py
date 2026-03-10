@@ -1,251 +1,89 @@
-"""ir_edit_service.py
+"""ir_edit_service.py  (LLM-direct mode)
 
-Given the current IRBundle JSON and a plain-English edit request from the user,
-calls the LLM to produce a minimal patch (list of PatchOps), applies it, and
-returns the updated IRBundle.
+The LLM receives the current IR and the user's edit request, then returns
+the complete updated IR JSON directly.  No patch schema, no deterministic
+patcher — the LLM owns the full edit.
 
-This is the core of the chat-driven edit loop.
+Why this is the right call for a POC
+--------------------------------------
+- Zero friction on complex requests (modals, new features, restructuring)
+- No hallucinated-ID failures — the LLM edits what it can already see
+- Faster iteration: one round-trip, one output, done
+- The only guardrail that matters for a showcase is schema validation,
+  which we still run so the React compiler always gets a valid IR
+
+Public surface is identical to the old version so chat.py is unchanged:
+    new_ir, summary = generate_ir_edit(current_ir, user_request, model_name)
 """
 
 from __future__ import annotations
 
 import json
-import re
 from typing import Any
 
 from pydantic import ValidationError
 
 from ir_pipeline.llm import DEFAULT_CLAUDE_MODEL, build_chat_model
-from ir_pipeline.patchops import IRPatcher, PatchError
-from ir_pipeline.patchops.patch_schema import AnyPatchOp, PatchFile
 from ir_pipeline.schemas import IRBundle
-from ir_pipeline.utils import get_logger
+from ir_pipeline.utils import (
+    drop_extra_forbidden_fields,
+    extract_json_object,
+    get_logger,
+    normalize_common_mismatches,
+)
 
 logger = get_logger(__name__)
 
-
-def _format_value(value: Any) -> str:
-    """Compact and deterministic value rendering for chat summaries."""
-    return json.dumps(value, ensure_ascii=True, separators=(",", ":"))
-
-
-def _humanize_token(token: str) -> str:
-    """Convert snake/camel identifiers into readable words."""
-    text = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", token)
-    text = text.replace("_", " ").replace("-", " ")
-    return " ".join(text.split()).lower()
-
-
-def _label_for_component(component_id: str, components: dict[str, Any]) -> str:
-    comp = components.get(component_id, {})
-    label = comp.get("label")
-    if isinstance(label, str) and label.strip():
-        return f"{label} ({component_id})"
-    return component_id
-
-
-def _label_for_container(container_id: str, components: dict[str, Any]) -> str:
-    if container_id in components:
-        return _label_for_component(container_id, components)
-    return container_id
-
-
-def _summarize_patch(patch: AnyPatchOp, patched_ir: dict[str, Any]) -> str:
-    components = patched_ir.get("component_ir", {}).get("components", {})
-    theme = patched_ir.get("component_ir", {}).get("theme", {})
-    layout = patched_ir.get("layout_ir", {}).get("layout", {})
-    children = patched_ir.get("layout_ir", {}).get("children", {})
-    state = patched_ir.get("data_ir", {}).get("state", {})
-    derived = patched_ir.get("data_ir", {}).get("derived", {})
-    events = patched_ir.get("behaviour_ir", {}).get("events", {})
-
-    op = patch.op
-
-    if op == "set_component_prop":
-        comp = components.get(patch.component_id, {})
-        value = comp.get("props", {}).get(patch.prop)
-        comp_name = _label_for_component(patch.component_id, components)
-        return f"Updated {comp_name} {_humanize_token(patch.prop)} to {_format_value(value)}"
-
-    if op == "set_component_style":
-        comp = components.get(patch.component_id, {})
-        styles = comp.get("styles", {})
-        keys = list(patch.styles.keys())
-        style_bits = [
-            f"{_humanize_token(key)} {_format_value(styles.get(key))}" for key in keys
-        ]
-        comp_name = _label_for_component(patch.component_id, components)
-        return f"Updated {comp_name} styles: {', '.join(style_bits)}"
-
-    if op == "set_component_label":
-        label = components.get(patch.component_id, {}).get("label")
-        return f"Renamed {patch.component_id} to {_format_value(label)}"
-
-    if op == "set_component_bind":
-        bind = components.get(patch.component_id, {}).get("bind")
-        comp_name = _label_for_component(patch.component_id, components)
-        return f"Rebound {comp_name} to {_format_value(bind)}"
-
-    if op == "set_component_event":
-        handler_value = components.get(patch.component_id, {}).get(patch.handler)
-        comp_name = _label_for_component(patch.component_id, components)
-        return f"Set {comp_name} {_humanize_token(patch.handler)} to {_format_value(handler_value)}"
-
-    if op == "set_component_visibility":
-        visible_when = components.get(patch.component_id, {}).get("visible_when")
-        comp_name = _label_for_component(patch.component_id, components)
-        return f"Set {comp_name} visibility rule to {_format_value(visible_when)}"
-
-    if op == "add_component":
-        return f"Added component {patch.component_id}"
-
-    if op == "remove_component":
-        return f"Removed component {patch.component_id}"
-
-    if op == "set_theme":
-        keys = list(patch.theme.keys())
-        rendered = ", ".join(
-            f"{_humanize_token(key)} {_format_value(theme.get(key))}" for key in keys
-        )
-        return f"Updated theme: {rendered}"
-
-    if op == "set_layout_order":
-        current_order = children.get(patch.container_id, [])
-        container_name = _label_for_container(patch.container_id, components)
-        return f"Reordered {container_name} children ({len(current_order)} items)"
-
-    if op == "set_layout_gap":
-        gap = layout.get(patch.container_id, {}).get("gap")
-        container_name = _label_for_container(patch.container_id, components)
-        return f"Set {container_name} layout gap to {_format_value(gap)}"
-
-    if op == "set_layout_type":
-        layout_type = layout.get(patch.container_id, {}).get("type")
-        container_name = _label_for_container(patch.container_id, components)
-        return f"Set {container_name} layout type to {_format_value(layout_type)}"
-
-    if op == "add_layout_child":
-        current_order = children.get(patch.container_id, [])
-        container_name = _label_for_container(patch.container_id, components)
-        component_name = _label_for_component(patch.component_id, components)
-        return f"Added {component_name} to {container_name} ({len(current_order)} items)"
-
-    if op == "remove_layout_child":
-        current_order = children.get(patch.container_id, [])
-        container_name = _label_for_container(patch.container_id, components)
-        return f"Removed {patch.component_id} from {container_name} ({len(current_order)} items)"
-
-    if op == "set_state_initial":
-        initial = state.get(patch.var_id, {}).get("initial")
-        return f"Set state {patch.var_id} initial value to {_format_value(initial)}"
-
-    if op == "add_state_var":
-        return f"Added state var {patch.var_id}"
-
-    if op == "remove_state_var":
-        return f"Removed state var {patch.var_id}"
-
-    if op == "set_derived_expr":
-        expr = derived.get(patch.var_id, {}).get("expr")
-        return f"Updated derived {patch.var_id} expression to {_format_value(expr)}"
-
-    if op == "set_event_mutation":
-        updates = events.get(patch.event_id, {}).get("updates", [])
-        expr = None
-        for update in updates:
-            if update.get("target") == patch.target:
-                expr = update.get("expr")
-                break
-        return f"Updated event {patch.event_id}: {patch.target} = {_format_value(expr)}"
-
-    if op == "add_event":
-        return f"Added event {patch.event_id}"
-
-    if op == "remove_event":
-        return f"Removed event {patch.event_id}"
-
-    return f"Applied {op}"
-
-
-def _build_applied_summary(patches: list[AnyPatchOp], patched_ir: dict[str, Any], max_items: int = 2) -> str:
-    parts = [_summarize_patch(patch, patched_ir) for patch in patches]
-    if not parts:
-        return "No changes needed."
-    if len(parts) <= max_items:
-        return "; ".join(parts)
-    head = "; ".join(parts[:max_items])
-    return f"{head}; and {len(parts) - max_items} more change(s)"
 
 # ---------------------------------------------------------------------------
 # Prompt
 # ---------------------------------------------------------------------------
 
-_PATCH_OP_REFERENCE = """
-Available patch operations (use the exact "op" values):
+def _build_prompt(current_ir_json: str, user_request: str) -> str:
+    return f"""You are an expert UI engineer working with an IRBundle JSON schema.
 
-COMPONENT OPS  — target: component_ir.components
-  set_component_prop      { op, component_id, prop, value }
-  set_component_style     { op, component_id, styles: {key: value, ...} }   ← merged, not replaced
-  set_component_label     { op, component_id, label }
-  set_component_bind      { op, component_id, bind }
-  set_component_event     { op, component_id, handler ("onClick"|"onChange"|"onSubmit"), event_id }
-  set_component_visibility{ op, component_id, visible_when }
-  add_component           { op, component_id, definition: {type, label, props, styles, ...}, container_id? }
-  remove_component        { op, component_id }
-  set_theme               { op, theme: {primaryColor?, borderRadius?, ...} }
+You will be given the current IR for a generated UI and a user request.
+Your job is to return the complete updated IR that satisfies the request.
 
-LAYOUT OPS  — target: layout_ir
-  set_layout_order        { op, container_id, order: [component_id, ...] }
-  set_layout_gap          { op, container_id, gap: int }
-  set_layout_type         { op, container_id, layout_type: "vertical"|"horizontal"|"grid"|"stack" }
-  add_layout_child        { op, container_id, component_id, position?: int }
-  remove_layout_child     { op, container_id, component_id }
-
-DATA OPS  — target: data_ir
-  set_state_initial       { op, var_id, initial }
-  add_state_var           { op, var_id, definition: {type, initial} }
-  remove_state_var        { op, var_id }
-  set_derived_expr        { op, var_id, expr }
-
-BEHAVIOUR OPS  — target: behaviour_ir
-  set_event_mutation      { op, event_id, target, expr }
-  add_event               { op, event_id, definition: {type: "mutation", updates: [{target, expr}]} }
-  remove_event            { op, event_id }
-""".strip()
-
-
-def _build_edit_prompt(current_ir_json: str, user_request: str) -> str:
-    return f"""You are an expert UI editor. The user wants to modify a generated UI.
-
-Current IRBundle JSON:
+=== CURRENT IR ===
 {current_ir_json}
 
-User request:
+=== USER REQUEST ===
 {user_request}
 
-Your task: produce a JSON patch file that applies the minimal set of changes to satisfy the request.
+=== INSTRUCTIONS ===
+- Return ONLY the complete updated IRBundle JSON. No markdown, no explanation.
+- Preserve every part of the IR that the request does not touch.
+- You may add, remove, or modify any section: component_ir, layout_ir,
+  data_ir, behaviour_ir, page_ir, navigation_ir, etc.
+- Keep all existing IDs and wiring intact unless the request explicitly changes them.
+- When adding new components, add them to layout_ir.children as well.
+- When adding interactive elements (modals, popups, drawers), also add:
+    - a boolean state var to control visibility
+    - open/close events in behaviour_ir
+    - visible_when on the component referencing the state var
+- Output the same top-level keys as the input IR.
+- Output valid JSON only.""".strip()
 
-{_PATCH_OP_REFERENCE}
 
-Rules:
-- Output ONLY a valid JSON object. No markdown, no explanation.
-- The object must have a "patches" array containing patch operation objects.
-- Use only component_id / container_id / var_id / event_id values that exist in the IR above,
-  unless you are using an "add_*" operation to create a new one.
-- For set_component_style, always merge — list only the keys you want to change.
-- If the request cannot be expressed with these ops, return {{"patches": [], "description": "Cannot fulfil: <reason>"}}.
-- Keep the patch minimal: only include the operations strictly required.
+def _build_retry_prompt(
+    original_prompt: str,
+    bad_output: str,
+    error: str,
+) -> str:
+    return f"""{original_prompt}
 
-Output format:
-{{
-  "description": "one-line summary of what this patch does",
-  "patches": [ ... ]
-}}
-""".strip()
+=== YOUR PREVIOUS OUTPUT WAS INVALID ===
+Error: {error}
+
+Previous output:
+{bad_output}
+
+Please output a corrected complete IRBundle JSON now. JSON only, no markdown.""".strip()
 
 
 # ---------------------------------------------------------------------------
-# Service function
+# Public API
 # ---------------------------------------------------------------------------
 
 def generate_ir_edit(
@@ -254,85 +92,85 @@ def generate_ir_edit(
     model_name: str = DEFAULT_CLAUDE_MODEL,
     max_attempts: int = 3,
 ) -> tuple[dict[str, Any], str]:
-    """Ask the LLM to produce a patch for `user_request`, apply it, return the new IR.
+    """Edit the IR using the LLM directly.
+
+    The LLM receives the full current IR and returns a complete updated IR.
+    Schema validation is run on the output; on failure the LLM is asked to
+    self-correct with the validation error appended.
 
     Returns:
-        (patched_ir_dict, summary_message)  — summary is shown back to the user.
+        (updated_ir_dict, summary_message)
 
     Raises:
-        RuntimeError if the LLM fails to produce a valid patch after max_attempts.
+        RuntimeError if all attempts fail.
     """
     logger.info(
-        "IR edit started | model=%s | request_chars=%s",
+        "IR edit (LLM-direct) started | model=%s | request=%r",
         model_name,
-        len(user_request),
+        user_request[:120],
     )
 
     model = build_chat_model(model_name=model_name, temperature=0)
     current_ir_json = json.dumps(current_ir, indent=2)
-    prompt = _build_edit_prompt(current_ir_json, user_request)
+    prompt = _build_prompt(current_ir_json, user_request)
 
-    last_error: Exception | None = None
+    last_error: str = ""
+    last_raw: str = ""
 
     for attempt in range(1, max_attempts + 1):
         logger.info("IR edit attempt %s/%s", attempt, max_attempts)
+
         response = model.invoke(prompt)
         raw_text = response.content if isinstance(response.content, str) else str(response.content)
-
-        # Strip markdown fences if the model wraps output anyway
         raw_text = raw_text.strip()
+
+        # Strip markdown fences — the LLM sometimes wraps output anyway
         if raw_text.startswith("```"):
-            lines = raw_text.splitlines()
             raw_text = "\n".join(
-                line for line in lines if not line.strip().startswith("```")
+                line for line in raw_text.splitlines()
+                if not line.strip().startswith("```")
             ).strip()
 
+        last_raw = raw_text
+
+        # ── Extract JSON ─────────────────────────────────────────────
         try:
-            patch_file = PatchFile.model_validate_json(raw_text)
-        except (ValueError, ValidationError) as exc:
-            last_error = exc
-            logger.warning("Attempt %s: patch JSON invalid: %s", attempt, exc)
-            # Retry with error context
-            prompt = (
-                f"{prompt}\n\nYour previous output was invalid JSON or failed schema validation:\n{exc}\n"
-                f"Previous output:\n{raw_text}\n\nPlease correct it."
-            )
+            parsed = json.loads(extract_json_object(raw_text))
+        except Exception as exc:
+            last_error = f"Could not parse JSON from response: {exc}"
+            logger.warning("Attempt %s: %s", attempt, last_error)
+            prompt = _build_retry_prompt(prompt, raw_text, last_error)
             continue
 
-        if not patch_file.patches:
-            summary = patch_file.description or "No changes needed."
-            logger.info("IR edit produced empty patch: %s", summary)
-            return current_ir, summary
+        # ── Normalise common LLM quirks ──────────────────────────────
+        parsed = normalize_common_mismatches(parsed)
 
-        patcher = IRPatcher(current_ir)
+        # ── Schema validation ────────────────────────────────────────
         try:
-            patched = patcher.apply(patch_file.patches)
-        except PatchError as exc:
-            last_error = exc
-            logger.warning("Attempt %s: patch application error: %s", attempt, exc)
-            prompt = (
-                f"{prompt}\n\nYour previous patch failed to apply:\n{exc}\n"
-                f"Previous patch:\n{raw_text}\n\nPlease fix the patch."
-            )
-            continue
-
-        # Validate the result against the full schema
-        try:
-            IRBundle.model_validate(patched)
+            bundle = IRBundle.model_validate(parsed)
         except ValidationError as exc:
-            last_error = exc
-            logger.warning("Attempt %s: patched IR failed schema validation: %s", attempt, exc)
-            prompt = (
-                f"{prompt}\n\nThe patched IR failed schema validation:\n{exc}\n"
-                f"Previous patch:\n{raw_text}\n\nPlease fix the patch."
-            )
-            continue
+            # Try dropping extra forbidden fields first (cheap auto-fix)
+            if drop_extra_forbidden_fields(parsed, exc):
+                try:
+                    bundle = IRBundle.model_validate(parsed)
+                except ValidationError as exc2:
+                    last_error = f"Schema validation failed: {exc2}"
+                    logger.warning("Attempt %s: %s", attempt, last_error)
+                    prompt = _build_retry_prompt(prompt, raw_text, last_error)
+                    continue
+            else:
+                last_error = f"Schema validation failed: {exc}"
+                logger.warning("Attempt %s: %s", attempt, last_error)
+                prompt = _build_retry_prompt(prompt, raw_text, last_error)
+                continue
 
-        summary = _build_applied_summary(patch_file.patches, patched)
-        logger.info("IR edit succeeded on attempt %s | ops=%s", attempt, len(patch_file.patches))
-        return patched, summary
+        # ── Success ──────────────────────────────────────────────────
+        updated_ir = json.loads(bundle.model_dump_json())
+        logger.info("IR edit succeeded on attempt %s", attempt)
+        return updated_ir, f"Done: {user_request}"
 
     raise RuntimeError(
-        f"Failed to generate a valid IR edit after {max_attempts} attempts.\n"
-        f"Last error: {last_error}"
+        f"Failed to produce a valid IR after {max_attempts} attempts.\n"
+        f"Last error: {last_error}\n"
+        f"Last output:\n{last_raw}"
     )

@@ -66,19 +66,22 @@ class IRPatcher:
     # ------------------------------------------------------------------
 
     def apply(self, patches: List[AnyPatchOp]) -> Dict[str, Any]:
-        """Apply all patches atomically (pre-flight validates every op first).
+        """Apply all patches, validating and mutating incrementally.
 
-        Returns the patched IR dict. Raises PatchError on any failure before
-        any mutation is written.
+        Each op is pre-flighted against the IR *after* all previous ops have
+        already been applied.  This means later ops in the same patch can safely
+        reference IDs that were created by earlier ops in the same patch (e.g.
+        add_component followed immediately by add_layout_child for that component).
+
+        Atomicity is preserved: we work on a deep copy of the original, so if
+        any op fails the caller still has the unchanged original.
         """
         ir = copy.deepcopy(self._original)
 
-        # Pre-flight: validate all targets exist before mutating anything
         for patch in patches:
+            # Validate against the current (already-mutated) state of ir
             self._preflight(patch, ir)
-
-        # Apply
-        for patch in patches:
+            # Then immediately apply so subsequent ops see the updated state
             self._dispatch(patch, ir)
 
         return ir
@@ -245,6 +248,13 @@ class IRPatcher:
 
     def _add_layout_child(self, patch: AddLayoutChild, ir: Dict[str, Any]) -> None:
         children = ir["layout_ir"]["children"][patch.container_id]
+        # Guard: if add_component already placed this ID via its container_id field,
+        # don't duplicate — just reposition if a specific position was requested.
+        if patch.component_id in children:
+            if patch.position is not None:
+                children.remove(patch.component_id)
+                children.insert(patch.position, patch.component_id)
+            return
         if patch.position is None:
             children.append(patch.component_id)
         else:
