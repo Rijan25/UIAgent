@@ -1,14 +1,11 @@
-# UIAgent Deployment Guide
+# UIAgent
 
-UIAgent exposes a FastAPI endpoint that takes a prompt and runs the full generation flow:
+UIAgent can generate a UI IR (JSON) from either:
 
-1. Prompt -> IR JSON
-2. IR JSON -> React TSX
-3. Optional sync to `ui-compiler-poc/frontend/src/App.tsx`
+1. A text prompt, or
+2. A folder of UI reference images (2–3 screenshots is typical)
 
-Current API endpoint:
-
-- `POST /v1/generate`
+Then it converts IR -> React TSX and can optionally sync it into the preview frontend.
 
 ## Repository Layout
 
@@ -20,7 +17,10 @@ UIAgent/
     ir_pipeline/                     # Core generation services
     generated/ir/                    # Generated IR output
     generated/react/                 # Generated React output
-    logs/                            # App logs + script transcripts
+    uploads/                         # Local image inputs (ignored by git)
+    PATCHOPS.md                      # PatchOps docs
+    patch_ops.py                     # PatchOps CLI
+    chat.py                          # Interactive edit loop
   ui-compiler-poc/frontend/          # Frontend preview app
   .env.example
   pyproject.toml
@@ -35,23 +35,16 @@ UIAgent/
 
 ## Environment Setup
 
-1. Create your env file:
-
 ```powershell
 copy .env.example .env
-```
-
-2. Fill required values in `.env`:
-
-- `AWS_PROFILE` or `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY`
-- `BEDROCK_AWS_REGION` (or `AWS_REGION`)
-- `BEDROCK_MODEL_ID`
-
-## Install Dependencies
-
-```powershell
 uv sync
 ```
+
+Set in `.env` (or your shell):
+
+- `AWS_PROFILE` or `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` (+ optional `AWS_SESSION_TOKEN`)
+- `BEDROCK_AWS_REGION` (or `AWS_REGION`)
+- `BEDROCK_MODEL_ID` (optional; defaults are provided in code)
 
 ## Run API (Local Validation)
 
@@ -62,15 +55,10 @@ uv run uvicorn ui_generation.api.main:app --host 127.0.0.1 --port 8000 --reload
 Open:
 
 - `http://127.0.0.1:8000/docs`
-- `http://127.0.0.1:8000/openapi.json`
 
-## API Contract
+### `POST /v1/generate`
 
-Endpoint:
-
-- `POST /v1/generate`
-
-Request body:
+Request body example:
 
 ```json
 {
@@ -82,88 +70,42 @@ Request body:
 }
 ```
 
-Response:
+Notes:
 
-- `status`
-- `ir` (generated IR object)
-- `react_code` (generated TSX source)
+- You can omit `prompt` when using `images_dir` (images-only generation).
+- `images_limit` is optional (defaults to all images in the folder, capped for safety).
 
-Common status codes:
+## Run Pipeline (CLI)
 
-- `200` success
-- `400` invalid input
-- `409` output file exists and overwrite disabled
-- `422` IR generation/validation failed
-- `500` internal error
-
-## Smoke Test
+Generate IR from images (then optionally type edits, or press Enter):
 
 ```powershell
-curl -X POST "http://127.0.0.1:8000/v1/generate" `
-  -H "Content-Type: application/json" `
-  -d "{\"prompt\":\"Create a simple analytics dashboard\",\"overwrite\":true,\"sync_frontend_app\":true}"
+uv run python ui_generation/cli/ir_generation.py --images-dir ui_generation/uploads
 ```
 
-## Production Start Command
+Run full pipeline (IR -> React, no dev server):
 
-Run without `--reload`:
-
-```bash
-uv run uvicorn ui_generation.api.main:app --host 0.0.0.0 --port 8000 --workers 1
+```powershell
+uv run python main.py --images-dir ui_generation/uploads --no-serve
 ```
 
-Use `--workers 1` by default because generation is heavy and writes shared output files.
+## PatchOps (Optional)
 
-## Systemd Example (Linux)
+Docs: `ui_generation/PATCHOPS.md`
 
-Create `/etc/systemd/system/uiagent.service`:
-
-```ini
-[Unit]
-Description=UIAgent FastAPI Service
-After=network.target
-
-[Service]
-Type=simple
-User=ubuntu
-WorkingDirectory=/opt/uiagent
-EnvironmentFile=/opt/uiagent/.env
-ExecStart=/usr/local/bin/uv run uvicorn ui_generation.api.main:app --host 0.0.0.0 --port 8000 --workers 1
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
+```powershell
+uv run python ui_generation/patch_ops.py --patch ui_generation/example.patch.json --dry-run
 ```
 
-Enable and start:
+## Chat Mode (Optional)
 
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable uiagent
-sudo systemctl start uiagent
-sudo systemctl status uiagent
+```powershell
+uv run python ui_generation/chat.py
 ```
-
-## Reverse Proxy Notes
-
-Place Nginx/ALB in front of the service for TLS and routing.
-
-Recommended:
-
-1. Keep API on private port `8000`
-2. Configure upstream timeout to allow LLM latency
-3. Restrict ingress to trusted callers (VPN, private subnet, or gateway auth)
 
 ## Logs and Artifacts
 
-- App logs: `ui_generation/logs/uia.log`
+- Logs: `ui_generation/logs/`
 - Generated IR: `ui_generation/generated/ir/generated_ir.json`
 - Generated React: `ui_generation/generated/react/generated_app.tsx`
-
-## Operational Notes
-
-1. `sync_frontend_app=true` overwrites `ui-compiler-poc/frontend/src/App.tsx`.
-2. Calls can take several seconds due to model invocation latency.
-3. Keep `.env` out of source control.
 

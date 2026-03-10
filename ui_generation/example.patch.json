@@ -1,0 +1,41 @@
+{
+  "description": "Example: rename add button, tweak input placeholders, tighten root gap",
+  "patches": [
+    {
+      "op": "set_component_label",
+      "component_id": "add_student_button",
+      "label": "Create Student"
+    },
+    {
+      "op": "set_component_style",
+      "component_id": "add_student_button",
+      "styles": {
+        "backgroundColor": "#22c55e",
+        "borderColor": "#16a34a"
+      }
+    },
+    {
+      "op": "set_component_prop",
+      "component_id": "name_input",
+      "prop": "placeholder",
+      "value": "Type student full name"
+    },
+    {
+      "op": "set_component_prop",
+      "component_id": "height_input",
+      "prop": "placeholder",
+      "value": "Type height in cm"
+    },
+    {
+      "op": "set_layout_gap",
+      "container_id": "root_container",
+      "gap": 24
+    },
+    {
+      "op": "set_theme",
+      "theme": {
+        "primaryColor": "#22c55e"
+      }
+    }
+  ]
+}

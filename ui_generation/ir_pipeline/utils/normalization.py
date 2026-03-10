@@ -58,6 +58,20 @@ def normalize_common_mismatches(payload: dict[str, Any]) -> dict[str, Any]:
                     if key in entity:
                         entity[key] = _normalize_string_list(entity[key])
 
+        sql_query = data_model.get("sql_query_ir")
+        if isinstance(sql_query, dict):
+            params = sql_query.get("params")
+            if isinstance(params, dict):
+                sql_query["params"] = _normalize_string_list(list(params.keys()))
+            elif isinstance(params, list):
+                sql_query["params"] = _normalize_string_list(params)
+
+            for key in ("default_page_size", "max_page_size"):
+                if key in sql_query and isinstance(sql_query.get(key), str):
+                    value = sql_query.get(key)
+                    if isinstance(value, str) and value.strip().isdigit():
+                        sql_query[key] = int(value.strip())
+
     behaviour = payload.get("behaviour_ir")
     if isinstance(behaviour, dict):
         actions = behaviour.get("actions")

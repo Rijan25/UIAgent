@@ -5,6 +5,7 @@ build/
 dist/
 wheels/
 *.egg-info
+*.pyc
 
 # Virtual environments
 .venv
@@ -12,16 +13,37 @@ wheels/
 # Environment Variables
 .env
 
-# Log Files
+# Log files
 *.log
+logs/
 ui_generation/logs/
 Tools/logs/
 
-# Generated outputs
+# macOS / editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Local context artifacts
+.ocontext/
+
+# UI pipeline generated artifacts
 ui_generation/generated/
+db/external_db_snapshot.json
 Tools/generated_ir.json
 Tools/generated_app.tsx
+
+# Local session artifacts
+ui_generation/generated_ir.json
+ui_generation/patched_ir.json
+ui_generation/*.ir.json
 
 # Local image inputs (keep the folder, ignore files)
 ui_generation/uploads/*
 !ui_generation/uploads/.gitkeep
+
+# Frontend local/build artifacts
+ui-compiler-poc/frontend/node_modules/
+ui-compiler-poc/frontend/dist/
+ui-compiler-poc/frontend/.vite/
+ui-compiler-poc/frontend/*.tsbuildinfo
