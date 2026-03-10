@@ -1,6 +1,7 @@
 import os
 
 import boto3
+from botocore.config import Config
 from dotenv import load_dotenv
 from langchain_aws import ChatBedrockConverse
 
@@ -11,6 +12,11 @@ _MODEL_ALIASES = {
     "claude sonnet 4.5": DEFAULT_CLAUDE_MODEL,
     "claude-sonnet-4.5": DEFAULT_CLAUDE_MODEL,
 }
+
+# LLM-direct IR editing sends the full IR as input and expects the full IR back.
+# For large IRs that can easily exceed Bedrock's default 60s read timeout.
+# 300s gives comfortable headroom for complex edits.
+_BEDROCK_READ_TIMEOUT = 300
 
 
 def _first_non_empty(*keys: str) -> str | None:
@@ -77,17 +83,23 @@ def build_chat_model(
             "or configure AWS_PROFILE."
         )
 
+    # Build a boto3 Bedrock client with an extended read timeout.
+    # The default (60s) is too short when the LLM must read and rewrite a large IR.
+    bedrock_client = session.client(
+        "bedrock-runtime",
+        region_name=region,
+        config=Config(read_timeout=_BEDROCK_READ_TIMEOUT),
+    )
+
     kwargs = {
         "model": resolved_model,
         "region_name": region,
         "temperature": temperature,
+        "client": bedrock_client,  # use our pre-configured client
     }
-    if access_key and secret_key:
-        kwargs["aws_access_key_id"] = access_key
-        kwargs["aws_secret_access_key"] = secret_key
-        if session_token:
-            kwargs["aws_session_token"] = session_token
-    elif profile:
+    # Credentials are already baked into bedrock_client via the session,
+    # so we only pass the profile name for LangChain's own reference if needed.
+    if profile and not (access_key and secret_key):
         kwargs["credentials_profile_name"] = profile
 
     return ChatBedrockConverse(**kwargs)

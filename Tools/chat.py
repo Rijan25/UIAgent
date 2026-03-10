@@ -19,6 +19,8 @@ import json
 import sys
 from pathlib import Path
 
+from botocore.exceptions import ReadTimeoutError as BotoReadTimeoutError
+
 from ir_pipeline.llm import DEFAULT_CLAUDE_MODEL
 from ir_pipeline.services import (
     convert_ir_file_to_react,
@@ -165,10 +167,18 @@ def main() -> None:
                 user_request=user_input,
                 model_name=args.model,
             )
-        except RuntimeError as exc:
+        except BotoReadTimeoutError:
+            print(
+                "[chat] ERROR: Bedrock read timeout — the model took too long to respond.\n"
+                "[chat] The IR was NOT changed. Try again (or simplify the request).",
+                file=sys.stderr,
+            )
+            logger.error("Bedrock read timeout on edit request: %r", user_input)
+            continue
+        except (RuntimeError, Exception) as exc:
             print(f"[chat] ERROR: {exc}", file=sys.stderr)
             logger.error("IR edit failed: %s", exc)
-            print("[chat] The IR was NOT changed. Please try rephrasing your request.")
+            print("[chat] The IR was NOT changed. Please try again.")
             continue
 
         current_ir = new_ir

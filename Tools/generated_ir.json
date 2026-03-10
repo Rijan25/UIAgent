@@ -1,18 +1,17 @@
 {
   "page_ir": {
     "page_id": "",
-    "page_goal": "Display a student marks entry form for 3 students with 5 subjects, calculate percentage, GPA, and overall grade with educational theme",
+    "page_goal": "Calculate and display BMI for students using their height and weight data",
     "style": {
       "tone": "professional",
-      "theme": "educational",
+      "theme": "light",
       "density": "comfortable",
-      "color_intent": "academic"
+      "color_intent": "informative"
     },
     "accessibility": {
       "required_labels": [
-        "student_name",
-        "subject_marks",
-        "calculate_button"
+        "student_table",
+        "search_input"
       ],
       "skip_navigation": true,
       "focus_management": true,
@@ -21,333 +20,203 @@
     "responsive": {
       "breakpoints": {
         "mobile": 768,
-        "tablet": 1024,
-        "desktop": 1440
+        "tablet": 1024
       },
       "collapse_rules": [],
       "hidden_on_small": [],
       "stack_on_small": []
     },
-    "constraints": [
-      "full_screen_layout",
-      "marks_range_0_100"
-    ],
+    "constraints": [],
     "seo_title": null,
     "seo_description": null
   },
   "data_ir": {
     "types": {},
     "state": {
-      "student1_name": {
-        "type": "string",
-        "initial": "Aarav Sharma",
-        "required": true,
-        "constraints": {},
-        "item_type": null
-      },
-      "student1_nepali": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student1_english": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student1_mathematics": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student1_science": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student1_social": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student2_name": {
-        "type": "string",
-        "initial": "Sita Thapa",
-        "required": true,
-        "constraints": {},
-        "item_type": null
-      },
-      "student2_nepali": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student2_english": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student2_mathematics": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student2_science": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student2_social": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student3_name": {
-        "type": "string",
-        "initial": "Rajesh Gurung",
-        "required": true,
-        "constraints": {},
-        "item_type": null
-      },
-      "student3_nepali": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student3_english": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student3_mathematics": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student3_science": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student3_social": {
-        "type": "number",
-        "initial": 0,
-        "required": true,
-        "constraints": {
-          "min": 0,
-          "max": 100
-        },
-        "item_type": null
-      },
-      "student1_percentage": {
-        "type": "number",
-        "initial": 0,
+      "rows": {
+        "type": "array",
+        "initial": [],
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "student1_gpa": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student1_grade": {
-        "type": "string",
-        "initial": "",
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student2_percentage": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student2_gpa": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student2_grade": {
-        "type": "string",
-        "initial": "",
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student3_percentage": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student3_gpa": {
-        "type": "number",
-        "initial": 0,
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "student3_grade": {
-        "type": "string",
-        "initial": "",
-        "required": false,
-        "constraints": {},
-        "item_type": null
-      },
-      "calculated": {
+      "loading": {
         "type": "boolean",
         "initial": false,
         "required": false,
         "constraints": {},
         "item_type": null
+      },
+      "error": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "page": {
+        "type": "number",
+        "initial": 1,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "pageSize": {
+        "type": "number",
+        "initial": 50,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "total": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "search": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "manualHeight": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "manualWeight": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "calculatedBMI": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
       }
     },
-    "derived": {}
+    "derived": {
+      "tableData": {
+        "type": "array",
+        "expr": "state.rows",
+        "deps": []
+      }
+    }
   },
   "data_fetch_ir": {
     "endpoints": {}
   },
   "data_model_ir": {
-    "entities": {},
+    "entities": {
+      "student": {
+        "name": "Student",
+        "fields": [
+          "id",
+          "name",
+          "height",
+          "weight"
+        ],
+        "computed": [
+          "bmi",
+          "bmi_category"
+        ],
+        "display_fields": [
+          "name",
+          "height",
+          "weight",
+          "bmi",
+          "bmi_category"
+        ],
+        "search_fields": [],
+        "filters": [
+          "name"
+        ],
+        "default_sort": null,
+        "default_sort_dir": "asc"
+      }
+    },
     "relationships": [],
-    "external_source_ref": null,
-    "sql_query_ir": null
+    "external_source_ref": {
+      "source_id": "student_external",
+      "snapshot_path": "db/external_db_snapshot.json",
+      "db_path": "/db/student_data.db"
+    },
+    "sql_query_ir": {
+      "sql_template": "SELECT id, name, height, weight FROM student_data WHERE (:search = '' OR name LIKE '%' || :search || '%') ORDER BY name LIMIT :limit OFFSET :offset",
+      "params": [
+        ":limit",
+        ":offset",
+        ":search"
+      ],
+      "default_page_size": 50,
+      "max_page_size": 200
+    }
   },
   "behaviour_ir": {
     "events": {
-      "calculate_results": {
+      "search_change": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.student1_percentage",
-            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5)"
+            "target": "state.search",
+            "expr": "event.target.value"
           },
           {
-            "target": "state.student1_gpa",
-            "expr": "(((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) / 25)"
+            "target": "state.page",
+            "expr": "1"
+          }
+        ],
+        "description": ""
+      },
+      "page_change": {
+        "type": "mutation",
+        "updates": [
+          {
+            "target": "state.page",
+            "expr": "event.page"
           },
           {
-            "target": "state.student1_grade",
-            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 90 ? 'A+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 80 ? 'A' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 70 ? 'B+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 60 ? 'B' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 50 ? 'C+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 40 ? 'C' : 'F'"
-          },
+            "target": "state.pageSize",
+            "expr": "event.pageSize"
+          }
+        ],
+        "description": ""
+      },
+      "calculate_manual_bmi": {
+        "type": "mutation",
+        "updates": [
           {
-            "target": "state.student2_percentage",
-            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5)"
-          },
-          {
-            "target": "state.student2_gpa",
-            "expr": "(((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) / 25)"
-          },
-          {
-            "target": "state.student2_grade",
-            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 90 ? 'A+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 80 ? 'A' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 70 ? 'B+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 60 ? 'B' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 50 ? 'C+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 40 ? 'C' : 'F'"
-          },
-          {
-            "target": "state.student3_percentage",
-            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5)"
-          },
-          {
-            "target": "state.student3_gpa",
-            "expr": "(((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) / 25)"
-          },
-          {
-            "target": "state.student3_grade",
-            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 90 ? 'A+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 80 ? 'A' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 70 ? 'B+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 60 ? 'B' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 50 ? 'C+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 40 ? 'C' : 'F'"
-          },
-          {
-            "target": "state.calculated",
-            "expr": "true"
+            "target": "state.calculatedBMI",
+            "expr": "state.manualHeight > 0 && state.manualWeight > 0 ? state.manualWeight / Math.pow(state.manualHeight / 100, 2) : 0"
           }
         ],
         "description": ""
       }
     },
     "actions": {
-      "calculate_action": {
-        "action_id": "calculate_action",
+      "load_students": {
+        "action_id": "load_students",
         "trigger": "button_click",
-        "target_component_id": "calculate_button",
-        "operation": "custom",
+        "target_component_id": "refresh_button",
+        "operation": "read",
         "description": "",
-        "payload": {},
+        "payload": {
+          "query": "sql_query_ir",
+          "params": {
+            "limit": "state.pageSize",
+            "offset": "(state.page - 1) * state.pageSize",
+            "search": "state.search"
+          }
+        },
         "guard": null,
         "requires_confirmation": false,
         "confirmation_message": null,
@@ -355,43 +224,7 @@
         "validation_messages": {},
         "updates": [
           {
-            "target": "state.student1_percentage",
-            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5)"
-          },
-          {
-            "target": "state.student1_gpa",
-            "expr": "(((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) / 25)"
-          },
-          {
-            "target": "state.student1_grade",
-            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 90 ? 'A+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 80 ? 'A' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 70 ? 'B+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 60 ? 'B' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 50 ? 'C+' : ((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social) / 5) >= 40 ? 'C' : 'F'"
-          },
-          {
-            "target": "state.student2_percentage",
-            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5)"
-          },
-          {
-            "target": "state.student2_gpa",
-            "expr": "(((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) / 25)"
-          },
-          {
-            "target": "state.student2_grade",
-            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 90 ? 'A+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 80 ? 'A' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 70 ? 'B+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 60 ? 'B' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 50 ? 'C+' : ((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social) / 5) >= 40 ? 'C' : 'F'"
-          },
-          {
-            "target": "state.student3_percentage",
-            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5)"
-          },
-          {
-            "target": "state.student3_gpa",
-            "expr": "(((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) / 25)"
-          },
-          {
-            "target": "state.student3_grade",
-            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 90 ? 'A+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 80 ? 'A' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 70 ? 'B+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 60 ? 'B' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 50 ? 'C+' : ((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social) / 5) >= 40 ? 'C' : 'F'"
-          },
-          {
-            "target": "state.calculated",
+            "target": "state.loading",
             "expr": "true"
           }
         ],
@@ -403,25 +236,27 @@
       }
     },
     "feedback": {
-      "calculate_action": {
-        "action_id": "calculate_action",
+      "load_students": {
+        "action_id": "load_students",
         "loading_indicator": "spinner",
         "loading_text": null,
-        "success_message": "Grades calculated successfully!",
-        "error_message": "Failed to calculate grades",
-        "ui_updates": []
+        "success_message": "Student data loaded successfully",
+        "error_message": "Failed to load student data",
+        "ui_updates": [
+          "state.loading = false"
+        ]
       }
     }
   },
   "component_ir": {
     "library": "antd",
     "theme": {
-      "primaryColor": "#1890ff",
-      "secondaryColor": "#52c41a",
+      "primaryColor": "#1677ff",
+      "secondaryColor": "#000000",
       "successColor": null,
       "warningColor": null,
       "errorColor": null,
-      "fontFamily": "Arial, sans-serif",
+      "fontFamily": "Inter, system-ui, sans-serif",
       "fontSize": null,
       "borderRadius": 8
     },
@@ -439,9 +274,16 @@
         "props": {},
         "dynamic_props": {},
         "styles": {
+          "padding": "24px",
+          "maxWidth": "1400px",
+          "margin": "0 auto",
+          "backgroundColor": "#1a1a1a",
           "minHeight": "100vh",
-          "backgroundColor": "#f0f2f5",
-          "padding": "24px"
+          "fontFamily": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          "height": "100vh",
+          "width": "100vw",
+          "overflow": "auto",
+          "boxSizing": "border-box"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -454,7 +296,42 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "header_card": {
+      "page_title": {
+        "type": "Typography.Title",
+        "label": "Student BMI Calculator",
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "level": 1
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "32px",
+          "color": "#f5f5f5",
+          "fontSize": "42px",
+          "fontWeight": "900",
+          "textTransform": "uppercase",
+          "letterSpacing": "2px",
+          "textShadow": "3px 3px 0px #ff6b6b, 6px 6px 0px rgba(0,0,0,0.3)",
+          "position": "relative"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "info_card": {
         "type": "Card",
         "label": null,
         "description": null,
@@ -465,13 +342,16 @@
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "bordered": true
+          "size": "small",
+          "bordered": false
         },
         "dynamic_props": {},
         "styles": {
-          "marginBottom": "24px",
-          "textAlign": "center",
-          "backgroundColor": "#ffffff"
+          "marginBottom": "32px",
+          "backgroundColor": "#2d2d2d",
+          "border": "3px solid #ff6b6b",
+          "borderRadius": "0px",
+          "boxShadow": "8px 8px 0px rgba(255, 107, 107, 0.3)"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -484,38 +364,9 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "school_name": {
-        "type": "Title",
-        "label": "Himalayan Secondary School",
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "level": 2
-        },
-        "dynamic_props": {},
-        "styles": {
-          "color": "#1890ff",
-          "marginBottom": "8px"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "school_address": {
-        "type": "Text",
-        "label": "Kathmandu, Nepal | Est. 1985",
+      "info_text": {
+        "type": "Typography.Text",
+        "label": "BMI is calculated as: weight (kg) / (height (m))\u00b2. Height is stored in cm and converted automatically.",
         "description": null,
         "bind": null,
         "onClick": null,
@@ -526,8 +377,10 @@
         "props": {},
         "dynamic_props": {},
         "styles": {
-          "fontSize": "16px",
-          "color": "#595959"
+          "color": "#e0e0e0",
+          "fontSize": "15px",
+          "lineHeight": "1.6",
+          "fontWeight": "500"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -540,7 +393,194 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "marks_card": {
+      "controls_container": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "display": "flex",
+          "gap": "16px",
+          "marginBottom": "32px",
+          "alignItems": "center",
+          "flexWrap": "wrap"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "search_input": {
+        "type": "Input.Search",
+        "label": null,
+        "description": null,
+        "bind": "state.search",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Search students...",
+          "allowClear": true,
+          "onChange": "search_change",
+          "size": "large",
+          "variant": "outlined"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "320px",
+          "backgroundColor": "#2d2d2d",
+          "border": "2px solid #4a4a4a",
+          "borderRadius": "0px",
+          "color": "#f5f5f5"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "refresh_button": {
+        "type": "Button",
+        "label": "Refresh",
+        "description": null,
+        "bind": null,
+        "onClick": "load_students",
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "type": "primary",
+          "icon": "ReloadOutlined",
+          "loading": "state.loading",
+          "size": "large"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "backgroundColor": "#ff6b6b",
+          "border": "none",
+          "borderRadius": "0px",
+          "fontWeight": "700",
+          "textTransform": "uppercase",
+          "letterSpacing": "1px",
+          "boxShadow": "4px 4px 0px rgba(0, 0, 0, 0.4)",
+          "height": "44px",
+          "padding": "0 32px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student_table": {
+        "type": "Table",
+        "label": null,
+        "description": null,
+        "bind": "derived.tableData",
+        "onClick": null,
+        "onChange": "page_change",
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "columns": [
+            {
+              "title": "ID",
+              "dataIndex": "id",
+              "key": "id",
+              "width": 80
+            },
+            {
+              "title": "Name",
+              "dataIndex": "name",
+              "key": "name",
+              "width": 200
+            },
+            {
+              "title": "Height (cm)",
+              "dataIndex": "height",
+              "key": "height",
+              "width": 120
+            },
+            {
+              "title": "Weight (kg)",
+              "dataIndex": "weight",
+              "key": "weight",
+              "width": 120
+            },
+            {
+              "title": "BMI",
+              "dataIndex": "bmi",
+              "key": "bmi",
+              "width": 100
+            },
+            {
+              "title": "Category",
+              "dataIndex": "category",
+              "key": "category",
+              "width": 150
+            }
+          ],
+          "loading": "{{state.loading}}",
+          "pagination": {
+            "current": "{{state.page}}",
+            "pageSize": "{{state.pageSize}}",
+            "total": "{{state.total}}",
+            "showSizeChanger": true,
+            "showTotal": true,
+            "onChange": "page_change"
+          },
+          "rowKey": "id",
+          "bordered": true,
+          "dataSource": "{{derived.tableData}}",
+          "size": "middle",
+          "variant": "outlined"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "backgroundColor": "#2d2d2d",
+          "border": "3px solid #4a4a4a",
+          "borderRadius": "0px",
+          "boxShadow": "10px 10px 0px rgba(0, 0, 0, 0.3)"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "manual_calculator_card": {
         "type": "Card",
         "label": null,
         "description": null,
@@ -551,131 +591,10 @@
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "title": "Student Marks Entry",
-          "bordered": true
-        },
-        "dynamic_props": {},
-        "styles": {
-          "marginBottom": "24px"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "marks_table": {
-        "type": "Table",
-        "label": null,
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "bordered": true,
-          "pagination": false,
-          "columns": [
-            {
-              "title": "Student Name",
-              "dataIndex": "name",
-              "key": "name",
-              "width": 200
-            },
-            {
-              "title": "Nepali",
-              "dataIndex": "nepali",
-              "key": "nepali",
-              "width": 120
-            },
-            {
-              "title": "English",
-              "dataIndex": "english",
-              "key": "english",
-              "width": 120
-            },
-            {
-              "title": "Mathematics",
-              "dataIndex": "mathematics",
-              "key": "mathematics",
-              "width": 120
-            },
-            {
-              "title": "Science",
-              "dataIndex": "science",
-              "key": "science",
-              "width": 120
-            },
-            {
-              "title": "Social Studies",
-              "dataIndex": "social",
-              "key": "social",
-              "width": 120
-            },
-            {
-              "title": "Percentage",
-              "dataIndex": "percentage",
-              "key": "percentage",
-              "width": 120
-            },
-            {
-              "title": "GPA",
-              "dataIndex": "gpa",
-              "key": "gpa",
-              "width": 100
-            },
-            {
-              "title": "Grade",
-              "dataIndex": "grade",
-              "key": "grade",
-              "width": 100
-            }
-          ],
-          "dataSource": [
-            {
-              "key": "1",
-              "name": "state.student1_name",
-              "nepali": "input:student1_nepali",
-              "english": "input:student1_english",
-              "mathematics": "input:student1_mathematics",
-              "science": "input:student1_science",
-              "social": "input:student1_social",
-              "percentage": "state.student1_percentage",
-              "gpa": "state.student1_gpa",
-              "grade": "state.student1_grade"
-            },
-            {
-              "key": "2",
-              "name": "state.student2_name",
-              "nepali": "input:student2_nepali",
-              "english": "input:student2_english",
-              "mathematics": "input:student2_mathematics",
-              "science": "input:student2_science",
-              "social": "input:student2_social",
-              "percentage": "state.student2_percentage",
-              "gpa": "state.student2_gpa",
-              "grade": "state.student2_grade"
-            },
-            {
-              "key": "3",
-              "name": "state.student3_name",
-              "nepali": "input:student3_nepali",
-              "english": "input:student3_english",
-              "mathematics": "input:student3_mathematics",
-              "science": "input:student3_science",
-              "social": "input:student3_social",
-              "percentage": "state.student3_percentage",
-              "gpa": "state.student3_gpa",
-              "grade": "state.student3_grade"
-            }
-          ]
+          "title": "Manual BMI Calculator",
+          "style": {
+            "marginBottom": "24px"
+          }
         },
         "dynamic_props": {},
         "styles": {},
@@ -690,7 +609,7 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "button_container": {
+      "manual_form_container": {
         "type": "div",
         "label": null,
         "description": null,
@@ -700,13 +619,15 @@
         "onSubmit": null,
         "onHover": null,
         "onKeyPress": null,
-        "props": {},
-        "dynamic_props": {},
-        "styles": {
-          "display": "flex",
-          "justifyContent": "flex-end",
-          "marginTop": "24px"
+        "props": {
+          "style": {
+            "display": "flex",
+            "gap": "16px",
+            "alignItems": "flex-end"
+          }
         },
+        "dynamic_props": {},
+        "styles": {},
         "dynamic_styles": {},
         "class_name": null,
         "dynamic_class": null,
@@ -718,20 +639,164 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "calculate_button": {
-        "type": "Button",
-        "label": "Calculate Results",
+      "height_input": {
+        "type": "InputNumber",
+        "label": null,
         "description": null,
-        "bind": null,
-        "onClick": "calculate_action",
+        "bind": "state.manualHeight",
+        "onClick": null,
         "onChange": null,
         "onSubmit": null,
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "type": "primary",
-          "size": "large",
-          "icon": "CalculatorOutlined"
+          "placeholder": "Height (cm)",
+          "min": 0,
+          "max": 300,
+          "style": {
+            "width": "150px"
+          },
+          "variant": "outlined"
+        },
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "weight_input": {
+        "type": "InputNumber",
+        "label": null,
+        "description": null,
+        "bind": "state.manualWeight",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Weight (kg)",
+          "min": 0,
+          "max": 500,
+          "style": {
+            "width": "150px"
+          },
+          "variant": "outlined"
+        },
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "calculate_bmi_button": {
+        "type": "Button",
+        "label": "Calculate BMI",
+        "description": null,
+        "bind": null,
+        "onClick": "calculate_manual_bmi",
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "type": "primary"
+        },
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "bmi_result_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true,
+          "style": {
+            "fontSize": "16px",
+            "marginLeft": "16px"
+          }
+        },
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "height_label": {
+        "type": "Typography.Text",
+        "label": "Height (cm):",
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {},
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "weight_label": {
+        "type": "Typography.Text",
+        "label": "Weight (kg):",
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
         },
         "dynamic_props": {},
         "styles": {},
@@ -752,49 +817,33 @@
     "root": "root_container",
     "children": {
       "root_container": [
-        "header_card",
-        "marks_card",
-        "button_container"
+        "page_title",
+        "info_card",
+        "manual_calculator_card",
+        "controls_container",
+        "student_table"
       ],
-      "header_card": [
-        "school_name",
-        "school_address"
+      "info_card": [
+        "info_text"
       ],
-      "marks_card": [
-        "marks_table"
+      "controls_container": [
+        "search_input",
+        "refresh_button"
       ],
-      "button_container": [
-        "calculate_button"
+      "manual_calculator_card": [
+        "manual_form_container"
+      ],
+      "manual_form_container": [
+        "height_label",
+        "height_input",
+        "weight_label",
+        "weight_input",
+        "calculate_bmi_button",
+        "bmi_result_text"
       ]
     },
     "layout": {
       "root_container": {
-        "type": "vertical",
-        "gap": 24,
-        "padding": null,
-        "columns": null,
-        "column_template": null,
-        "row_template": null,
-        "align_items": null,
-        "justify_content": null,
-        "wrap": false,
-        "min_height": null,
-        "overflow": null
-      },
-      "header_card": {
-        "type": "vertical",
-        "gap": 8,
-        "padding": null,
-        "columns": null,
-        "column_template": null,
-        "row_template": null,
-        "align_items": null,
-        "justify_content": null,
-        "wrap": false,
-        "min_height": null,
-        "overflow": null
-      },
-      "marks_card": {
         "type": "vertical",
         "gap": 16,
         "padding": null,
@@ -807,9 +856,9 @@
         "min_height": null,
         "overflow": null
       },
-      "button_container": {
+      "controls_container": {
         "type": "horizontal",
-        "gap": 0,
+        "gap": 12,
         "padding": null,
         "columns": null,
         "column_template": null,
@@ -823,28 +872,12 @@
     },
     "layout_zones": [
       {
-        "zone_id": "header_zone",
-        "component": "header_card",
-        "anchor": "top-left",
-        "size_hint": "full-width",
-        "z_layer": "base",
-        "notes": "School header with name and address"
-      },
-      {
-        "zone_id": "marks_zone",
-        "component": "marks_card",
+        "zone_id": "main_content",
+        "component": "root_container",
         "anchor": "center",
         "size_hint": "full-width",
         "z_layer": "base",
-        "notes": "Main marks entry table"
-      },
-      {
-        "zone_id": "button_zone",
-        "component": "button_container",
-        "anchor": "bottom-right",
-        "size_hint": "auto",
-        "z_layer": "base",
-        "notes": "Calculate button positioned at bottom right"
+        "notes": "Main page container with student BMI calculator"
       }
     ],
     "responsive_overrides": []

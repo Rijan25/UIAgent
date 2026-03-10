@@ -1,336 +1,338 @@
-import { useState } from 'react';
-import { Card, Typography, Button, InputNumber, message } from 'antd';
-import { CalculatorOutlined } from '@ant-design/icons';
-import type { CSSProperties } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { Table, Input, Button, Card, Typography, InputNumber, message } from 'antd';
+import { ReloadOutlined } from '@ant-design/icons';
+import type { TablePaginationConfig } from 'antd';
+import initSqlJs from 'sql.js';
+import type { Database } from 'sql.js';
 
-const { Title, Text } = Typography;
+interface StudentRow {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  bmi: number;
+  category: string;
+}
 
 export default function GeneratedApp() {
   const [messageApi, contextHolder] = message.useMessage();
+  const [rows, setRows] = useState<StudentRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState('');
+  const [manualHeight, setManualHeight] = useState(0);
+  const [manualWeight, setManualWeight] = useState(0);
+  const [calculatedBMI, setCalculatedBMI] = useState(0);
+  const [db, setDb] = useState<Database | null>(null);
 
-  const [student1_name] = useState<string>("Aarav Sharma");
-  const [student1_nepali, setStudent1_nepali] = useState<number>(0);
-  const [student1_english, setStudent1_english] = useState<number>(0);
-  const [student1_mathematics, setStudent1_mathematics] = useState<number>(0);
-  const [student1_science, setStudent1_science] = useState<number>(0);
-  const [student1_social, setStudent1_social] = useState<number>(0);
+  useEffect(() => {
+    const initDb = async () => {
+      try {
+        const SQL = await initSqlJs({ locateFile: () => '/db/sql-wasm.wasm' });
+        const response = await fetch('/db/student_data.db');
+        const buffer = await response.arrayBuffer();
+        const database = new SQL.Database(new Uint8Array(buffer));
+        setDb(database);
+      } catch (err) {
+        const errMsg = err instanceof Error ? err.message : 'Failed to initialize database';
+        setError(errMsg);
+        messageApi.error(errMsg);
+      }
+    };
+    initDb();
+  }, [messageApi]);
 
-  const [student2_name] = useState<string>("Sita Thapa");
-  const [student2_nepali, setStudent2_nepali] = useState<number>(0);
-  const [student2_english, setStudent2_english] = useState<number>(0);
-  const [student2_mathematics, setStudent2_mathematics] = useState<number>(0);
-  const [student2_science, setStudent2_science] = useState<number>(0);
-  const [student2_social, setStudent2_social] = useState<number>(0);
+  const loadStudents = async () => {
+    if (!db) {
+      const errMsg = 'Database not initialized';
+      setError(errMsg);
+      messageApi.error(errMsg);
+      return;
+    }
 
-  const [student3_name] = useState<string>("Rajesh Gurung");
-  const [student3_nepali, setStudent3_nepali] = useState<number>(0);
-  const [student3_english, setStudent3_english] = useState<number>(0);
-  const [student3_mathematics, setStudent3_mathematics] = useState<number>(0);
-  const [student3_science, setStudent3_science] = useState<number>(0);
-  const [student3_social, setStudent3_social] = useState<number>(0);
+    setLoading(true);
+    setError('');
 
-  const [student1_percentage, setStudent1_percentage] = useState<number>(0);
-  const [student1_gpa, setStudent1_gpa] = useState<number>(0);
-  const [student1_grade, setStudent1_grade] = useState<string>("");
+    try {
+      const currentPage = Number(page);
+      const currentPageSize = Number(pageSize);
+      const safePageNum = Number.isInteger(currentPage) && currentPage > 0 ? currentPage : 1;
+      const safePageSizeNum = Number.isInteger(currentPageSize) && currentPageSize > 0 ? currentPageSize : 50;
+      const offsetValue = (safePageNum - 1) * safePageSizeNum;
 
-  const [student2_percentage, setStudent2_percentage] = useState<number>(0);
-  const [student2_gpa, setStudent2_gpa] = useState<number>(0);
-  const [student2_grade, setStudent2_grade] = useState<string>("");
+      const countSql = `SELECT COUNT(*) as count FROM student_data WHERE (:search = '' OR name LIKE '%' || :search || '%')`;
+      const countResult = db.exec(countSql, { ':search': search });
+      const totalCount = countResult.length > 0 && countResult[0].values.length > 0 
+        ? Number(countResult[0].values[0][0]) 
+        : 0;
 
-  const [student3_percentage, setStudent3_percentage] = useState<number>(0);
-  const [student3_gpa, setStudent3_gpa] = useState<number>(0);
-  const [student3_grade, setStudent3_grade] = useState<string>("");
+      const dataSql = `SELECT id, name, height, weight FROM student_data WHERE (:search = '' OR name LIKE '%' || :search || '%') ORDER BY name LIMIT ${safePageSizeNum} OFFSET ${offsetValue}`;
+      const result = db.exec(dataSql, { ':search': search });
 
-  const handleCalculate = () => {
-    const s1_avg = (student1_nepali + student1_english + student1_mathematics + student1_science + student1_social) / 5;
-    setStudent1_percentage(s1_avg);
-    setStudent1_gpa(s1_avg / 25);
-    setStudent1_grade(
-      s1_avg >= 90 ? 'A+' :
-      s1_avg >= 80 ? 'A' :
-      s1_avg >= 70 ? 'B+' :
-      s1_avg >= 60 ? 'B' :
-      s1_avg >= 50 ? 'C+' :
-      s1_avg >= 40 ? 'C' : 'F'
-    );
+      if (result.length > 0) {
+        const data: StudentRow[] = result[0].values.map((row) => {
+          const id = Number(row[0]);
+          const name = String(row[1]);
+          const height = Number(row[2]);
+          const weight = Number(row[3]);
+          const bmi = height > 0 ? weight / Math.pow(height / 100, 2) : 0;
+          let category = '';
+          if (bmi > 0) {
+            if (bmi < 18.5) category = 'Underweight';
+            else if (bmi < 25) category = 'Normal';
+            else if (bmi < 30) category = 'Overweight';
+            else category = 'Obese';
+          }
+          return { id, name, height, weight, bmi: Math.round(bmi * 10) / 10, category };
+        });
+        setRows(data);
+      } else {
+        setRows([]);
+      }
 
-    const s2_avg = (student2_nepali + student2_english + student2_mathematics + student2_science + student2_social) / 5;
-    setStudent2_percentage(s2_avg);
-    setStudent2_gpa(s2_avg / 25);
-    setStudent2_grade(
-      s2_avg >= 90 ? 'A+' :
-      s2_avg >= 80 ? 'A' :
-      s2_avg >= 70 ? 'B+' :
-      s2_avg >= 60 ? 'B' :
-      s2_avg >= 50 ? 'C+' :
-      s2_avg >= 40 ? 'C' : 'F'
-    );
-
-    const s3_avg = (student3_nepali + student3_english + student3_mathematics + student3_science + student3_social) / 5;
-    setStudent3_percentage(s3_avg);
-    setStudent3_gpa(s3_avg / 25);
-    setStudent3_grade(
-      s3_avg >= 90 ? 'A+' :
-      s3_avg >= 80 ? 'A' :
-      s3_avg >= 70 ? 'B+' :
-      s3_avg >= 60 ? 'B' :
-      s3_avg >= 50 ? 'C+' :
-      s3_avg >= 40 ? 'C' : 'F'
-    );
-
-    messageApi.success("Grades calculated successfully!");
+      setTotal(totalCount);
+      messageApi.success('Student data loaded successfully');
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : 'Failed to load student data';
+      setError(errMsg);
+      messageApi.error(errMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const rootContainerStyle: CSSProperties = {
-    minHeight: "100vh",
-    backgroundColor: "#f0f2f5",
-    padding: "24px"
+  useEffect(() => {
+    if (db) {
+      loadStudents();
+    }
+  }, [db, page, pageSize, search]);
+
+  const tableData = useMemo(() => rows, [rows]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1);
   };
 
-  const headerCardStyle: CSSProperties = {
-    marginBottom: "24px",
-    textAlign: "center",
-    backgroundColor: "#ffffff"
+  const handlePageChange = (pagination: TablePaginationConfig) => {
+    setPage(pagination.current || 1);
+    setPageSize(pagination.pageSize || 50);
   };
 
-  const schoolNameStyle: CSSProperties = {
-    color: "#1890ff",
-    marginBottom: "8px"
+  const handleCalculateManualBMI = () => {
+    const height = manualHeight;
+    const weight = manualWeight;
+    if (height > 0 && weight > 0) {
+      const bmi = weight / Math.pow(height / 100, 2);
+      setCalculatedBMI(Math.round(bmi * 10) / 10);
+    } else {
+      setCalculatedBMI(0);
+    }
   };
 
-  const schoolAddressStyle: CSSProperties = {
-    fontSize: "16px",
-    color: "#595959"
-  };
-
-  const marksCardStyle: CSSProperties = {
-    marginBottom: "24px"
-  };
-
-  const buttonContainerStyle: CSSProperties = {
-    display: "flex",
-    justifyContent: "flex-end",
-    marginTop: "24px"
-  };
-
-  const tableContainerStyle: CSSProperties = {
-    overflowX: "auto"
-  };
-
-  const tableStyle: CSSProperties = {
-    width: "100%",
-    borderCollapse: "collapse",
-    border: "1px solid #f0f0f0"
-  };
-
-  const thStyle: CSSProperties = {
-    backgroundColor: "#fafafa",
-    padding: "12px 16px",
-    textAlign: "left",
-    fontWeight: 600,
-    borderBottom: "1px solid #f0f0f0",
-    borderRight: "1px solid #f0f0f0"
-  };
-
-  const tdStyle: CSSProperties = {
-    padding: "12px 16px",
-    borderBottom: "1px solid #f0f0f0",
-    borderRight: "1px solid #f0f0f0"
-  };
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: 80,
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: 200,
+    },
+    {
+      title: 'Height (cm)',
+      dataIndex: 'height',
+      key: 'height',
+      width: 120,
+    },
+    {
+      title: 'Weight (kg)',
+      dataIndex: 'weight',
+      key: 'weight',
+      width: 120,
+    },
+    {
+      title: 'BMI',
+      dataIndex: 'bmi',
+      key: 'bmi',
+      width: 100,
+    },
+    {
+      title: 'Category',
+      dataIndex: 'category',
+      key: 'category',
+      width: 150,
+    },
+  ];
 
   return (
-    <div style={rootContainerStyle}>
+    <>
       {contextHolder}
-      <Card bordered={true} style={headerCardStyle}>
-        <Title level={2} style={schoolNameStyle}>Himalayan Secondary School</Title>
-        <Text style={schoolAddressStyle}>Kathmandu, Nepal | Est. 1985</Text>
-      </Card>
-
-      <Card title="Student Marks Entry" bordered={true} style={marksCardStyle}>
-        <div style={tableContainerStyle}>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Student Name</th>
-                <th style={thStyle}>Nepali</th>
-                <th style={thStyle}>English</th>
-                <th style={thStyle}>Mathematics</th>
-                <th style={thStyle}>Science</th>
-                <th style={thStyle}>Social Studies</th>
-                <th style={thStyle}>Percentage</th>
-                <th style={thStyle}>GPA</th>
-                <th style={thStyle}>Grade</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={tdStyle}>{student1_name}</td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student1_nepali}
-                    onChange={(val) => setStudent1_nepali(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student1_english}
-                    onChange={(val) => setStudent1_english(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student1_mathematics}
-                    onChange={(val) => setStudent1_mathematics(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student1_science}
-                    onChange={(val) => setStudent1_science(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student1_social}
-                    onChange={(val) => setStudent1_social(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>{student1_percentage.toFixed(2)}</td>
-                <td style={tdStyle}>{student1_gpa.toFixed(2)}</td>
-                <td style={tdStyle}>{student1_grade}</td>
-              </tr>
-              <tr>
-                <td style={tdStyle}>{student2_name}</td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student2_nepali}
-                    onChange={(val) => setStudent2_nepali(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student2_english}
-                    onChange={(val) => setStudent2_english(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student2_mathematics}
-                    onChange={(val) => setStudent2_mathematics(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student2_science}
-                    onChange={(val) => setStudent2_science(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student2_social}
-                    onChange={(val) => setStudent2_social(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>{student2_percentage.toFixed(2)}</td>
-                <td style={tdStyle}>{student2_gpa.toFixed(2)}</td>
-                <td style={tdStyle}>{student2_grade}</td>
-              </tr>
-              <tr>
-                <td style={tdStyle}>{student3_name}</td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student3_nepali}
-                    onChange={(val) => setStudent3_nepali(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student3_english}
-                    onChange={(val) => setStudent3_english(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student3_mathematics}
-                    onChange={(val) => setStudent3_mathematics(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student3_science}
-                    onChange={(val) => setStudent3_science(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={student3_social}
-                    onChange={(val) => setStudent3_social(val ?? 0)}
-                    style={{ width: '100%' }}
-                  />
-                </td>
-                <td style={tdStyle}>{student3_percentage.toFixed(2)}</td>
-                <td style={tdStyle}>{student3_gpa.toFixed(2)}</td>
-                <td style={tdStyle}>{student3_grade}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Card>
-
-      <div style={buttonContainerStyle}>
-        <Button
-          type="primary"
-          size="large"
-          icon={<CalculatorOutlined />}
-          onClick={handleCalculate}
+      <div
+        style={{
+          padding: '24px',
+          maxWidth: '1400px',
+          margin: '0 auto',
+          backgroundColor: '#1a1a1a',
+          minHeight: '100vh',
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          height: '100vh',
+          width: '100vw',
+          overflow: 'auto',
+          boxSizing: 'border-box',
+        }}
+      >
+        <Typography.Title
+          level={1}
+          style={{
+            marginBottom: '32px',
+            color: '#f5f5f5',
+            fontSize: '42px',
+            fontWeight: '900',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '3px 3px 0px #ff6b6b, 6px 6px 0px rgba(0,0,0,0.3)',
+            position: 'relative',
+          }}
         >
-          Calculate Results
-        </Button>
+          Student BMI Calculator
+        </Typography.Title>
+
+        <Card
+          size="small"
+          bordered={false}
+          style={{
+            marginBottom: '32px',
+            backgroundColor: '#2d2d2d',
+            border: '3px solid #ff6b6b',
+            borderRadius: '0px',
+            boxShadow: '8px 8px 0px rgba(255, 107, 107, 0.3)',
+          }}
+        >
+          <Typography.Text
+            style={{
+              color: '#e0e0e0',
+              fontSize: '15px',
+              lineHeight: '1.6',
+              fontWeight: '500',
+            }}
+          >
+            BMI is calculated as: weight (kg) / (height (m))². Height is stored in cm and converted automatically.
+          </Typography.Text>
+        </Card>
+
+        <Card title="Manual BMI Calculator" style={{ marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-end' }}>
+            <Typography.Text strong>Height (cm):</Typography.Text>
+            <InputNumber
+              placeholder="Height (cm)"
+              min={0}
+              max={300}
+              style={{ width: '150px' }}
+              variant="outlined"
+              value={manualHeight}
+              onChange={(value) => setManualHeight(value || 0)}
+            />
+            <Typography.Text strong>Weight (kg):</Typography.Text>
+            <InputNumber
+              placeholder="Weight (kg)"
+              min={0}
+              max={500}
+              style={{ width: '150px' }}
+              variant="outlined"
+              value={manualWeight}
+              onChange={(value) => setManualWeight(value || 0)}
+            />
+            <Button type="primary" onClick={handleCalculateManualBMI}>
+              Calculate BMI
+            </Button>
+            <Typography.Text strong style={{ fontSize: '16px', marginLeft: '16px' }}>
+              {calculatedBMI > 0 ? `BMI: ${calculatedBMI}` : ''}
+            </Typography.Text>
+          </div>
+        </Card>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '16px',
+            marginBottom: '32px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Input.Search
+            placeholder="Search students..."
+            allowClear
+            size="large"
+            value={search}
+            onChange={handleSearchChange}
+            style={{
+              width: '320px',
+              backgroundColor: '#2d2d2d',
+              border: '2px solid #4a4a4a',
+              borderRadius: '0px',
+              color: '#f5f5f5',
+            }}
+          />
+          <Button
+            type="primary"
+            icon={<ReloadOutlined />}
+            loading={loading}
+            size="large"
+            onClick={loadStudents}
+            style={{
+              backgroundColor: '#ff6b6b',
+              border: 'none',
+              borderRadius: '0px',
+              fontWeight: '700',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              boxShadow: '4px 4px 0px rgba(0, 0, 0, 0.4)',
+              height: '44px',
+              padding: '0 32px',
+            }}
+          >
+            Refresh
+          </Button>
+        </div>
+
+        {error && (
+          <Typography.Text type="danger" style={{ display: 'block', marginBottom: '16px' }}>
+            Error: {error}
+          </Typography.Text>
+        )}
+
+        <Table
+          columns={columns}
+          dataSource={tableData}
+          loading={loading}
+          rowKey="id"
+          bordered
+          size="middle"
+          onChange={handlePageChange}
+          pagination={{
+            current: page,
+            pageSize: pageSize,
+            total: total,
+            showSizeChanger: true,
+            showTotal: (total) => `Total ${total} items`,
+          }}
+          style={{
+            backgroundColor: '#2d2d2d',
+            border: '3px solid #4a4a4a',
+            borderRadius: '0px',
+            boxShadow: '10px 10px 0px rgba(0, 0, 0, 0.3)',
+          }}
+        />
       </div>
-    </div>
+    </>
   );
 }
