@@ -100,6 +100,7 @@ def generate_ir_bundle(
         last_raw_text = raw_text
 
         try:
+            
             with log_timed_step(logger, "Parse and validate IR", attempt=attempt):
                 parsed = json.loads(extract_json_object(raw_text))
                 normalized = normalize_common_mismatches(parsed)
