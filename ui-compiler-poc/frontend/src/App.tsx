@@ -1,727 +1,269 @@
-import { useState, useMemo } from 'react';
-import { Tabs, Row, Col, Input, Select, Button, ConfigProvider, message as antdMessage } from 'antd';
-import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import { ConfigProvider, theme, Card, Typography, InputNumber, Button, Badge, message } from 'antd';
+import { CalculatorOutlined } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
 
 export default function GeneratedApp() {
-  const [messageApi, contextHolder] = antdMessage.useMessage();
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const [activeTab, setActiveTab] = useState<string>('vendor_configuration');
-  const [orderSpecialist, setOrderSpecialist] = useState<string | null>(null);
-  const [uodType, setUodType] = useState<'CASE' | 'PALLET' | 'CONTAINER' | null>(null);
-  const [poScheduleDays, setPoScheduleDays] = useState<string | null>(null);
-  const [containerLoading, setContainerLoading] = useState<'FCL' | 'MIX' | 'CL' | null>(null);
-  const [containerSize, setContainerSize] = useState<'10 wheeler' | '20 wheeler' | '40 wheeler' | null>(null);
-  const [containerStacking, setContainerStacking] = useState<'Floor Stack' | 'Palletized' | null>(null);
-  const [combinedStoreSafetyStock, setCombinedStoreSafetyStock] = useState<number | null>(null);
-  const [dcSafetyStocks, setDcSafetyStocks] = useState<number | null>(null);
-  const [leadTimeDays, setLeadTimeDays] = useState<number | null>(null);
-  const [multiplierDays, setMultiplierDays] = useState<number | null>(null);
-  const [unitsPerCase, setUnitsPerCase] = useState<number | null>(null);
-  const [casePerContainer, setCasePerContainer] = useState<number | null>(null);
-  const [unitsPerContainer, setUnitsPerContainer] = useState<number | null>(null);
-  const [cbmPerCase, setCbmPerCase] = useState<number | null>(null);
-  const [cbmPerContainer, setCbmPerContainer] = useState<number | null>(null);
-  const [unitsPerPallet, setUnitsPerPallet] = useState<number | null>(null);
-  const [casePerPallet, setCasePerPallet] = useState<number | null>(null);
-  const [palletsPerContainer, setPalletsPerContainer] = useState<number | null>(null);
-  const [weightPerContainer, setWeightPerContainer] = useState<number | null>(null);
-  const [weightPerCase, setWeightPerCase] = useState<number | null>(null);
-  const [moqInUnits, setMoqInUnits] = useState<number | null>(null);
-  const [maxPerContainer, setMaxPerContainer] = useState<number | null>(null);
-  const [shelfLife, setShelfLife] = useState<number | null>(null);
-  const [caseUPC, setCaseUPC] = useState<string | null>(null);
-  const [casesWide, setCasesWide] = useState<number | null>(null);
-  const [casesDeep, setCasesDeep] = useState<number | null>(null);
-  const [heightLayersHeight, setHeightLayersHeight] = useState<number | null>(null);
-  const [casesPerLayer, setCasesPerLayer] = useState<number | null>(null);
-  const [casesPerPalletDC, setCasesPerPalletDC] = useState<number | null>(null);
-  const [palletWeightKg, setPalletWeightKg] = useState<number | null>(null);
-  const [unitsPerPalletCalc, setUnitsPerPalletCalc] = useState<number | null>(null);
-  const [totalSafetyStock, setTotalSafetyStock] = useState<number | null>(null);
+  const [student1Name] = useState<string>('Aarav Sharma');
+  const [student1Math, setStudent1Math] = useState<number | null>(null);
+  const [student1Science, setStudent1Science] = useState<number | null>(null);
+  const [student1English, setStudent1English] = useState<number | null>(null);
+  const [student1Nepali, setStudent1Nepali] = useState<number | null>(null);
+  const [student1Social, setStudent1Social] = useState<number | null>(null);
+  const [student1Percentage, setStudent1Percentage] = useState<number | null>(null);
+  const [student1Gpa, setStudent1Gpa] = useState<number | null>(null);
+  const [student1Grade, setStudent1Grade] = useState<string | null>(null);
 
-  const unitsPerContainerCalc = useMemo(() => {
-    const upc = unitsPerCase;
-    const cpc = casePerContainer;
-    if (upc !== null && cpc !== null && !isNaN(upc) && !isNaN(cpc)) {
-      return upc * cpc;
+  const [student2Name] = useState<string>('Sita Thapa');
+  const [student2Math, setStudent2Math] = useState<number | null>(null);
+  const [student2Science, setStudent2Science] = useState<number | null>(null);
+  const [student2English, setStudent2English] = useState<number | null>(null);
+  const [student2Nepali, setStudent2Nepali] = useState<number | null>(null);
+  const [student2Social, setStudent2Social] = useState<number | null>(null);
+  const [student2Percentage, setStudent2Percentage] = useState<number | null>(null);
+  const [student2Gpa, setStudent2Gpa] = useState<number | null>(null);
+  const [student2Grade, setStudent2Grade] = useState<string | null>(null);
+
+  const [student3Name] = useState<string>('Rajesh Gurung');
+  const [student3Math, setStudent3Math] = useState<number | null>(null);
+  const [student3Science, setStudent3Science] = useState<number | null>(null);
+  const [student3English, setStudent3English] = useState<number | null>(null);
+  const [student3Nepali, setStudent3Nepali] = useState<number | null>(null);
+  const [student3Social, setStudent3Social] = useState<number | null>(null);
+  const [student3Percentage, setStudent3Percentage] = useState<number | null>(null);
+  const [student3Gpa, setStudent3Gpa] = useState<number | null>(null);
+  const [student3Grade, setStudent3Grade] = useState<string | null>(null);
+
+  const [student4Name] = useState<string>('Rijan Pokhrel');
+  const [student4Math, setStudent4Math] = useState<number | null>(null);
+  const [student4Science, setStudent4Science] = useState<number | null>(null);
+  const [student4English, setStudent4English] = useState<number | null>(null);
+  const [student4Nepali, setStudent4Nepali] = useState<number | null>(null);
+  const [student4Social, setStudent4Social] = useState<number | null>(null);
+  const [student4Percentage, setStudent4Percentage] = useState<number | null>(null);
+  const [student4Gpa, setStudent4Gpa] = useState<number | null>(null);
+  const [student4Grade, setStudent4Grade] = useState<string | null>(null);
+
+  const calculateGrades = () => {
+    if (
+      student1Math === null || student1Science === null || student1English === null || student1Nepali === null || student1Social === null ||
+      student2Math === null || student2Science === null || student2English === null || student2Nepali === null || student2Social === null ||
+      student3Math === null || student3Science === null || student3English === null || student3Nepali === null || student3Social === null ||
+      student4Math === null || student4Science === null || student4English === null || student4Nepali === null || student4Social === null
+    ) {
+      messageApi.error('Failed to calculate grades. Please check all marks are entered.');
+      return;
     }
-    return null;
-  }, [unitsPerCase, casePerContainer]);
 
-  const cbmPerContainerCalc = useMemo(() => {
-    const cbmCase = cbmPerCase;
-    const cpc = casePerContainer;
-    if (cbmCase !== null && cpc !== null && !isNaN(cbmCase) && !isNaN(cpc)) {
-      return cbmCase * cpc;
-    }
-    return null;
-  }, [cbmPerCase, casePerContainer]);
+    const s1Avg = (student1Math + student1Science + student1English + student1Nepali + student1Social) / 5;
+    setStudent1Percentage(s1Avg);
+    setStudent1Gpa(s1Avg / 25);
+    setStudent1Grade(
+      s1Avg >= 90 ? 'A+' :
+      s1Avg >= 80 ? 'A' :
+      s1Avg >= 70 ? 'B+' :
+      s1Avg >= 60 ? 'B' :
+      s1Avg >= 50 ? 'C+' :
+      s1Avg >= 40 ? 'C' : 'F'
+    );
 
-  const casesPerLayerCalc = useMemo(() => {
-    const wide = casesWide;
-    const deep = casesDeep;
-    if (wide !== null && deep !== null && !isNaN(wide) && !isNaN(deep)) {
-      return wide * deep;
-    }
-    return null;
-  }, [casesWide, casesDeep]);
+    const s2Avg = (student2Math + student2Science + student2English + student2Nepali + student2Social) / 5;
+    setStudent2Percentage(s2Avg);
+    setStudent2Gpa(s2Avg / 25);
+    setStudent2Grade(
+      s2Avg >= 90 ? 'A+' :
+      s2Avg >= 80 ? 'A' :
+      s2Avg >= 70 ? 'B+' :
+      s2Avg >= 60 ? 'B' :
+      s2Avg >= 50 ? 'C+' :
+      s2Avg >= 40 ? 'C' : 'F'
+    );
 
-  const casesPerPalletDCCalc = useMemo(() => {
-    const cpl = casesPerLayer;
-    const height = heightLayersHeight;
-    if (cpl !== null && height !== null && !isNaN(cpl) && !isNaN(height)) {
-      return cpl * height;
-    }
-    return null;
-  }, [casesPerLayer, heightLayersHeight]);
+    const s3Avg = (student3Math + student3Science + student3English + student3Nepali + student3Social) / 5;
+    setStudent3Percentage(s3Avg);
+    setStudent3Gpa(s3Avg / 25);
+    setStudent3Grade(
+      s3Avg >= 90 ? 'A+' :
+      s3Avg >= 80 ? 'A' :
+      s3Avg >= 70 ? 'B+' :
+      s3Avg >= 60 ? 'B' :
+      s3Avg >= 50 ? 'C+' :
+      s3Avg >= 40 ? 'C' : 'F'
+    );
 
-  const unitsPerPalletCalc2 = useMemo(() => {
-    const upc = unitsPerCase;
-    const cppdc = casesPerPalletDC;
-    if (upc !== null && cppdc !== null && !isNaN(upc) && !isNaN(cppdc)) {
-      return upc * cppdc;
-    }
-    return null;
-  }, [unitsPerCase, casesPerPalletDC]);
+    const s4Avg = (student4Math + student4Science + student4English + student4Nepali + student4Social) / 5;
+    setStudent4Percentage(s4Avg);
+    setStudent4Gpa(s4Avg / 25);
+    setStudent4Grade(
+      s4Avg >= 90 ? 'A+' :
+      s4Avg >= 80 ? 'A' :
+      s4Avg >= 70 ? 'B+' :
+      s4Avg >= 60 ? 'B' :
+      s4Avg >= 50 ? 'C+' :
+      s4Avg >= 40 ? 'C' : 'F'
+    );
 
-  const totalSafetyStockCalc = useMemo(() => {
-    const combined = combinedStoreSafetyStock;
-    const dc = dcSafetyStocks;
-    const combinedVal = combined !== null && !isNaN(combined) ? combined : 0;
-    const dcVal = dc !== null && !isNaN(dc) ? dc : 0;
-    return combinedVal + dcVal;
-  }, [combinedStoreSafetyStock, dcSafetyStocks]);
-
-  const handleTabChange = (activeKey: string) => {
-    setActiveTab(activeKey);
-  };
-
-  const handleOrderSpecialistChange = (value: string) => {
-    setOrderSpecialist(value);
-  };
-
-  const handleUodTypeChange = (value: 'CASE' | 'PALLET' | 'CONTAINER') => {
-    setUodType(value);
-  };
-
-  const handlePoScheduleDaysChange = (value: string) => {
-    setPoScheduleDays(value);
-  };
-
-  const handleContainerLoadingChange = (value: 'FCL' | 'MIX' | 'CL') => {
-    setContainerLoading(value);
-  };
-
-  const handleContainerSizeChange = (value: '10 wheeler' | '20 wheeler' | '40 wheeler') => {
-    setContainerSize(value);
-  };
-
-  const handleContainerStackingChange = (value: 'Floor Stack' | 'Palletized') => {
-    setContainerStacking(value);
-  };
-
-  const handleUnitsPerCaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setUnitsPerCase(isNaN(val) ? null : val);
-    const localUpc = isNaN(val) ? null : val;
-    const localCpc = casePerContainer;
-    if (localUpc !== null && localCpc !== null && !isNaN(localUpc) && !isNaN(localCpc)) {
-      setUnitsPerContainer(localUpc * localCpc);
-    }
-  };
-
-  const handleCasePerContainerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setCasePerContainer(isNaN(val) ? null : val);
-    const localCpc = isNaN(val) ? null : val;
-    const localUpc = unitsPerCase;
-    const localCbm = cbmPerCase;
-    if (localUpc !== null && localCpc !== null && !isNaN(localUpc) && !isNaN(localCpc)) {
-      setUnitsPerContainer(localUpc * localCpc);
-    }
-    if (localCbm !== null && localCpc !== null && !isNaN(localCbm) && !isNaN(localCpc)) {
-      setCbmPerContainer(localCbm * localCpc);
-    }
-  };
-
-  const handleCbmPerCaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setCbmPerCase(isNaN(val) ? null : val);
-    const localCbm = isNaN(val) ? null : val;
-    const localCpc = casePerContainer;
-    if (localCbm !== null && localCpc !== null && !isNaN(localCbm) && !isNaN(localCpc)) {
-      setCbmPerContainer(localCbm * localCpc);
-    }
-  };
-
-  const handleCasesWideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setCasesWide(isNaN(val) ? null : val);
-    const localWide = isNaN(val) ? null : val;
-    const localDeep = casesDeep;
-    if (localWide !== null && localDeep !== null && !isNaN(localWide) && !isNaN(localDeep)) {
-      const newCpl = localWide * localDeep;
-      setCasesPerLayer(newCpl);
-      const localHeight = heightLayersHeight;
-      if (localHeight !== null && !isNaN(localHeight)) {
-        setCasesPerPalletDC(newCpl * localHeight);
-      }
-    }
-  };
-
-  const handleCasesDeepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setCasesDeep(isNaN(val) ? null : val);
-    const localDeep = isNaN(val) ? null : val;
-    const localWide = casesWide;
-    if (localWide !== null && localDeep !== null && !isNaN(localWide) && !isNaN(localDeep)) {
-      const newCpl = localWide * localDeep;
-      setCasesPerLayer(newCpl);
-      const localHeight = heightLayersHeight;
-      if (localHeight !== null && !isNaN(localHeight)) {
-        setCasesPerPalletDC(newCpl * localHeight);
-      }
-    }
-  };
-
-  const handleHeightLayersHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setHeightLayersHeight(isNaN(val) ? null : val);
-    const localHeight = isNaN(val) ? null : val;
-    const localCpl = casesPerLayer;
-    if (localCpl !== null && localHeight !== null && !isNaN(localCpl) && !isNaN(localHeight)) {
-      const newCppdc = localCpl * localHeight;
-      setCasesPerPalletDC(newCppdc);
-      const localUpc = unitsPerCase;
-      if (localUpc !== null && !isNaN(localUpc)) {
-        setUnitsPerPalletCalc(localUpc * newCppdc);
-      }
-    }
-  };
-
-  const handleDcSafetyStocksChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setDcSafetyStocks(isNaN(val) ? null : val);
-    const localDc = isNaN(val) ? null : val;
-    const localCombined = combinedStoreSafetyStock;
-    const combinedVal = localCombined !== null && !isNaN(localCombined) ? localCombined : 0;
-    const dcVal = localDc !== null && !isNaN(localDc) ? localDc : 0;
-    setTotalSafetyStock(combinedVal + dcVal);
-  };
-
-  const handleCombinedStoreSafetyStockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setCombinedStoreSafetyStock(isNaN(val) ? null : val);
-    const localCombined = isNaN(val) ? null : val;
-    const localDc = dcSafetyStocks;
-    const combinedVal = localCombined !== null && !isNaN(localCombined) ? localCombined : 0;
-    const dcVal = localDc !== null && !isNaN(localDc) ? localDc : 0;
-    setTotalSafetyStock(combinedVal + dcVal);
-  };
-
-  const handleSaveVendorConfiguration = () => {
-    messageApi.success('Vendor configuration saved successfully');
-  };
-
-  const handleSaveSRConfiguration = () => {
-    messageApi.success('S&R configuration saved successfully');
-  };
-
-  const handleSaveFulfillment = () => {
-    messageApi.success('Fulfillment configuration saved successfully');
-  };
-
-  const rootContainerStyle: CSSProperties = {
-    height: '100vh',
-    width: '100vw',
-    overflow: 'auto',
-    backgroundColor: '#f0f2f5',
-  };
-
-  const tabsStyle: CSSProperties = {
-    padding: '24px',
-    height: '100%',
-  };
-
-  const formContainerStyle: CSSProperties = {
-    padding: '24px',
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-  };
-
-  const disabledInputStyle: CSSProperties = {
-    backgroundColor: '#f5f5f5',
-  };
-
-  const saveButtonStyle: CSSProperties = {
-    marginTop: '24px',
+    messageApi.success('Grades calculated successfully!');
   };
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#52c41a',
-          borderRadius: 8,
-        },
-      }}
-    >
+    <ConfigProvider theme={{ token: { colorPrimary: '#1890ff', borderRadius: 8, fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif' }, algorithm: theme.defaultAlgorithm }}>
       {contextHolder}
-      <div style={rootContainerStyle}>
-        <Tabs
-          activeKey={activeTab}
-          onChange={handleTabChange}
-          type="line"
-          size="large"
-          style={tabsStyle}
-        >
-          <Tabs.TabPane tab="Vendor Configuration" key="vendor_configuration">
-            <div style={formContainerStyle}>
-              <Row gutter={[24, 24]}>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Units Per Case*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={unitsPerCase ?? ''}
-                      onChange={handleUnitsPerCaseChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Case Per Container*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={casePerContainer ?? ''}
-                      onChange={handleCasePerContainerChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Units Per Container</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={unitsPerContainerCalc ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>CBM Per Case*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={cbmPerCase ?? ''}
-                      onChange={handleCbmPerCaseChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>CBM Per Container</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={cbmPerContainerCalc ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Units Per Pallet*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={unitsPerPallet ?? ''}
-                      onChange={(e) => setUnitsPerPallet(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Case Per Pallet*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={casePerPallet ?? ''}
-                      onChange={(e) => setCasePerPallet(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Pallets Per Container*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={palletsPerContainer ?? ''}
-                      onChange={(e) => setPalletsPerContainer(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Weight Per Container</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={weightPerContainer ?? ''}
-                      onChange={(e) => setWeightPerContainer(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Weight Per Case*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={weightPerCase ?? ''}
-                      onChange={(e) => setWeightPerCase(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>MOQ in Units*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={moqInUnits ?? ''}
-                      onChange={(e) => setMoqInUnits(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Max Per Container*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={maxPerContainer ?? ''}
-                      onChange={(e) => setMaxPerContainer(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Shelf Life (agreed upon arrival)*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={shelfLife ?? ''}
-                      onChange={(e) => setShelfLife(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Case UPC*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="text"
-                      value={caseUPC ?? ''}
-                      onChange={(e) => setCaseUPC(e.target.value)}
-                    />
-                  </div>
-                </Col>
-              </Row>
-              <Button
-                type="primary"
-                size="large"
-                style={saveButtonStyle}
-                onClick={handleSaveVendorConfiguration}
-              >
-                Save
-              </Button>
-            </div>
-          </Tabs.TabPane>
+      <div style={{ minHeight: '100vh', height: '100%', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#f0f2f5' }}>
+        <Card bordered={false} style={{ margin: '24px', textAlign: 'center', backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <Title level={1} style={{ marginBottom: '8px', color: '#1890ff' }}>Himalayan Secondary School</Title>
+          <Text type="secondary" style={{ fontSize: '16px' }}>Kathmandu, Nepal</Text>
+        </Card>
 
-          <Tabs.TabPane tab="S&R Configuration" key="sr_configuration">
-            <div style={formContainerStyle}>
-              <Row gutter={[24, 24]}>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Cases Wide*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={casesWide ?? ''}
-                      onChange={handleCasesWideChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Cases Deep*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={casesDeep ?? ''}
-                      onChange={handleCasesDeepChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Height (layers height)*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={heightLayersHeight ?? ''}
-                      onChange={handleHeightLayersHeightChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Cases Per Layer</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={casesPerLayerCalc ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Cases Per Pallet (DC)</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={casesPerPalletDCCalc ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Pallet Weight (in kg)</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={palletWeightKg ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Units Per Pallet</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={unitsPerPalletCalc2 ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-              </Row>
-              <Button
-                type="primary"
-                size="large"
-                style={saveButtonStyle}
-                onClick={handleSaveSRConfiguration}
-              >
-                Save
-              </Button>
-            </div>
-          </Tabs.TabPane>
+        <Card title="Student Marks Entry & Grade Calculation" bordered={false} style={{ margin: '0 24px 24px 24px', flex: 1, backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead style={{ backgroundColor: '#fafafa' }}>
+                <tr>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Student Name</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Mathematics</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Science</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>English</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Nepali</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Social Studies</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Percentage</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>GPA</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 600, borderBottom: '2px solid #f0f0f0' }}>Grade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text strong>{student1Name}</Text>
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student1Math} onChange={setStudent1Math} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student1Science} onChange={setStudent1Science} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student1English} onChange={setStudent1English} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student1Nepali} onChange={setStudent1Nepali} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student1Social} onChange={setStudent1Social} />
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student1Percentage !== null ? student1Percentage.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student1Gpa !== null ? student1Gpa.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Badge status="success" text={student1Grade || ''} />
+                  </td>
+                </tr>
 
-          <Tabs.TabPane tab="Fulfillment" key="fulfillment">
-            <div style={formContainerStyle}>
-              <Row gutter={[24, 24]}>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Order Specialist*</label>
-                    <Select
-                      placeholder="Select..."
-                      value={orderSpecialist}
-                      onChange={handleOrderSpecialistChange}
-                      style={{ width: '100%' }}
-                      options={[
-                        { label: 'Diamond Rijan Pokhrel', value: 'Diamond Rijan Pokhrel' },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>UOD Type*</label>
-                    <Select
-                      placeholder="Select..."
-                      value={uodType}
-                      onChange={handleUodTypeChange}
-                      style={{ width: '100%' }}
-                      options={[
-                        { label: 'CASE', value: 'CASE' },
-                        { label: 'PALLET', value: 'PALLET' },
-                        { label: 'CONTAINER', value: 'CONTAINER' },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>PO Schedule Days*</label>
-                    <Select
-                      placeholder="Select..."
-                      value={poScheduleDays}
-                      onChange={handlePoScheduleDaysChange}
-                      style={{ width: '100%' }}
-                      options={[
-                        { label: 'Sunday', value: 'Sunday' },
-                        { label: 'Monday', value: 'Monday' },
-                        { label: 'Tuesday', value: 'Tuesday' },
-                        { label: 'Wednesday', value: 'Wednesday' },
-                        { label: 'Thursday', value: 'Thursday' },
-                        { label: 'Friday', value: 'Friday' },
-                        { label: 'Saturday', value: 'Saturday' },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Container Loading *</label>
-                    <Select
-                      placeholder="Select..."
-                      value={containerLoading}
-                      onChange={handleContainerLoadingChange}
-                      style={{ width: '100%' }}
-                      options={[
-                        { label: 'FCL', value: 'FCL' },
-                        { label: 'MIX', value: 'MIX' },
-                        { label: 'CL', value: 'CL' },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Container Size*</label>
-                    <Select
-                      placeholder="Select..."
-                      value={containerSize}
-                      onChange={handleContainerSizeChange}
-                      style={{ width: '100%' }}
-                      options={[
-                        { label: '10 wheeler', value: '10 wheeler' },
-                        { label: '20 wheeler', value: '20 wheeler' },
-                        { label: '40 wheeler', value: '40 wheeler' },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Container Stacking *</label>
-                    <Select
-                      placeholder="Select..."
-                      value={containerStacking}
-                      onChange={handleContainerStackingChange}
-                      style={{ width: '100%' }}
-                      options={[
-                        { label: 'Floor Stack', value: 'Floor Stack' },
-                        { label: 'Palletized', value: 'Palletized' },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Combined Store Safety Stock (Units)</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={combinedStoreSafetyStock ?? ''}
-                      onChange={handleCombinedStoreSafetyStockChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>DC Safety Stocks (Units)*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={dcSafetyStocks ?? ''}
-                      onChange={handleDcSafetyStocksChange}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Lead Time Days*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={leadTimeDays ?? ''}
-                      onChange={(e) => setLeadTimeDays(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Total Safety Stock</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={totalSafetyStockCalc ?? ''}
-                      disabled
-                      style={disabledInputStyle}
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <div>
-                    <label>Multiplier (Days)*</label>
-                    <Input
-                      placeholder="Enter..."
-                      type="number"
-                      value={multiplierDays ?? ''}
-                      onChange={(e) => setMultiplierDays(parseFloat(e.target.value) || null)}
-                    />
-                  </div>
-                </Col>
-              </Row>
-              <Button
-                type="primary"
-                size="large"
-                style={saveButtonStyle}
-                onClick={handleSaveFulfillment}
-              >
-                Save
-              </Button>
-            </div>
-          </Tabs.TabPane>
+                <tr>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text strong>{student2Name}</Text>
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student2Math} onChange={setStudent2Math} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student2Science} onChange={setStudent2Science} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student2English} onChange={setStudent2English} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student2Nepali} onChange={setStudent2Nepali} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student2Social} onChange={setStudent2Social} />
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student2Percentage !== null ? student2Percentage.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student2Gpa !== null ? student2Gpa.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Badge status="success" text={student2Grade || ''} />
+                  </td>
+                </tr>
 
-          <Tabs.TabPane tab="Allocation" key="allocation">
-            <div style={formContainerStyle}>
-              <p>Allocation configuration coming soon...</p>
-            </div>
-          </Tabs.TabPane>
+                <tr>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text strong>{student3Name}</Text>
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student3Math} onChange={setStudent3Math} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student3Science} onChange={setStudent3Science} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student3English} onChange={setStudent3English} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student3Nepali} onChange={setStudent3Nepali} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student3Social} onChange={setStudent3Social} />
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student3Percentage !== null ? student3Percentage.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student3Gpa !== null ? student3Gpa.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Badge status="success" text={student3Grade || ''} />
+                  </td>
+                </tr>
 
-          <Tabs.TabPane tab="Seasonal Safety Stock" key="seasonal_safety_stock">
-            <div style={formContainerStyle}>
-              <p>Seasonal Safety Stock configuration coming soon...</p>
-            </div>
-          </Tabs.TabPane>
-        </Tabs>
+                <tr>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text strong>{student4Name}</Text>
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student4Math} onChange={setStudent4Math} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student4Science} onChange={setStudent4Science} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student4English} onChange={setStudent4English} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student4Nepali} onChange={setStudent4Nepali} />
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #f0f0f0' }}>
+                    <InputNumber min={0} max={100} placeholder="0-100" style={{ width: '100%' }} value={student4Social} onChange={setStudent4Social} />
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student4Percentage !== null ? student4Percentage.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Text style={{ fontWeight: 500 }}>{student4Gpa !== null ? student4Gpa.toFixed(2) : ''}</Text>
+                  </td>
+                  <td style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                    <Badge status="success" text={student4Grade || ''} />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
+            <Button type="primary" size="large" icon={<CalculatorOutlined />} onClick={calculateGrades}>
+              Calculate Grades
+            </Button>
+          </div>
+        </Card>
       </div>
     </ConfigProvider>
   );

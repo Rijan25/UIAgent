@@ -43,36 +43,39 @@ _MAX_OUTPUT_TOKENS = 32_000
 
 _SYSTEM_PROMPT = """You are an expert UI engineer editing an IRBundle JSON document.
 
-You will receive the COMPLETE current IR and a description of the change the user wants.
-Return the COMPLETE updated IR as valid JSON — every section, every key, every field.
+You will receive the COMPLETE current IR and a user's change request.
+Return the COMPLETE updated IR as valid JSON — all 10 root sections required.
 
-Rules:
-- Return the entire IRBundle JSON, not a partial diff.
-- Preserve every existing component, state var, event, action, and layout entry
-  unless the request explicitly removes it.
-- When adding a new repeating entity (e.g. a new student card):
-    * Add ALL required components matching the existing pattern exactly.
-    * Add ALL required state vars matching the existing pattern exactly.
-    * Extend EVERY event and action that covers similar entities to also cover
-      the new one, using the exact same expression pattern.
-    * Wire the new entity into layout_ir.children at the correct position,
-      preserving the existing order of all other children.
-- When reordering layout include ALL existing children in the new order.
-  Never silently drop a child.
-- When extending a behaviour_ir event or action updates array, copy all existing
-  update objects and append the new ones. Do not omit existing updates.
-- Output ONLY valid JSON. No markdown fences. No explanation. No preamble."""
+EDITING RULES:
+- Return the entire IRBundle, not a diff.
+- Preserve all existing components, state vars, events, actions, and layout entries 
+  UNLESS the request explicitly asks to remove or replace them.
+- Exception: if the request asks to simplify, restructure, or merge, you MAY remove
+  components — but you MUST ensure all remaining IDs are consistent.
+- When adding a new repeating entity (student card, row, item):
+  * Mirror the naming pattern of existing equivalent entities exactly.
+  * Extend ALL events/actions that cover similar entities to also cover the new one.
+  * Wire into layout_ir.children at the correct position.
+- When reordering: include ALL existing children in the new order; never silently drop one.
+- After every edit, verify: every ID in layout_ir references a real component_ir key.
+- Output ONLY valid JSON. No markdown. No explanation.
 
+After the JSON, add exactly one line starting with SUMMARY: describing what you changed."""
 
-def _build_prompt(current_ir: dict[str, Any], user_request: str) -> str:
-    """Single string prompt: system instructions + full IR + request."""
+def _build_prompt(current_ir: dict, user_request: str, edit_history: list[str] | None = None) -> str:
+    history_block = ""
+    if edit_history:
+        recent = edit_history[-3:]  # last 3 edits for context
+        history_block = "=== RECENT EDIT HISTORY ===\n" + "\n".join(f"- {h}" for h in recent) + "\n\n"
+    
     return (
         f"{_SYSTEM_PROMPT}\n\n"
+        f"{history_block}"
         f"=== CURRENT IR ===\n"
         f"{json.dumps(current_ir, indent=2)}\n\n"
         f"=== USER REQUEST ===\n"
         f"{user_request}\n\n"
-        f"Return the complete updated IR as JSON now."
+        f"Return the complete updated IR as JSON, followed by SUMMARY: <description>."
     )
 
 
