@@ -1,222 +1,521 @@
 {
   "page_ir": {
     "page_id": "",
-    "page_goal": "Calculate and display BMI for students using their height and weight data",
+    "page_goal": "A full-screen UI for entering marks of 3 Nepali students in 5 subjects, calculating percentage, GPA, rank, and grade with color-coded display",
     "style": {
-      "tone": "professional",
-      "theme": "light",
-      "density": "comfortable",
-      "color_intent": "informative"
+      "tone": "edgy",
+      "theme": "dark",
+      "density": "spacious",
+      "color_intent": "monochrome"
     },
     "accessibility": {
       "required_labels": [
-        "student_table",
-        "search_input"
+        "student_name",
+        "nepali_marks",
+        "english_marks",
+        "mathematics_marks",
+        "science_marks",
+        "social_studies_marks",
+        "economics_marks"
       ],
       "skip_navigation": true,
       "focus_management": true,
       "announce_changes": []
     },
     "responsive": {
-      "breakpoints": {
-        "mobile": 768,
-        "tablet": 1024
-      },
+      "breakpoints": {},
       "collapse_rules": [],
       "hidden_on_small": [],
       "stack_on_small": []
     },
-    "constraints": [],
+    "constraints": [
+      "fullscreen_display"
+    ],
     "seo_title": null,
     "seo_description": null
   },
   "data_ir": {
     "types": {},
     "state": {
-      "rows": {
-        "type": "array",
-        "initial": [],
+      "student1_name": {
+        "type": "string",
+        "initial": "Student 1",
+        "required": true,
+        "constraints": {},
+        "item_type": null
+      },
+      "student1_nepali": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_english": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_social_studies": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_economics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student1_percentage": {
+        "type": "number",
+        "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "loading": {
-        "type": "boolean",
-        "initial": false,
+      "student1_gpa": {
+        "type": "number",
+        "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "error": {
+      "student1_rank": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student1_grade": {
         "type": "string",
         "initial": "",
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "page": {
-        "type": "number",
-        "initial": 1,
-        "required": false,
+      "student2_name": {
+        "type": "string",
+        "initial": "Student 2",
+        "required": true,
         "constraints": {},
         "item_type": null
       },
-      "pageSize": {
+      "student2_nepali": {
         "type": "number",
-        "initial": 50,
-        "required": false,
-        "constraints": {},
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
         "item_type": null
       },
-      "total": {
+      "student2_english": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_social_studies": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_economics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student2_percentage": {
         "type": "number",
         "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "search": {
+      "student2_gpa": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student2_rank": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student2_grade": {
         "type": "string",
         "initial": "",
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "manualHeight": {
+      "student3_name": {
+        "type": "string",
+        "initial": "Student 3",
+        "required": true,
+        "constraints": {},
+        "item_type": null
+      },
+      "student3_nepali": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_english": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_social_studies": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_economics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student3_percentage": {
         "type": "number",
         "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "manualWeight": {
+      "student3_gpa": {
         "type": "number",
         "initial": 0,
         "required": false,
         "constraints": {},
         "item_type": null
       },
-      "calculatedBMI": {
+      "student3_rank": {
         "type": "number",
         "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student3_grade": {
+        "type": "string",
+        "initial": "",
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student4_name": {
+        "type": "string",
+        "initial": "Student 4",
+        "required": true,
+        "constraints": {},
+        "item_type": null
+      },
+      "student4_nepali": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student4_english": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student4_mathematics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student4_science": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student4_social_studies": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student4_economics": {
+        "type": "number",
+        "initial": 0,
+        "required": true,
+        "constraints": {
+          "min": 0,
+          "max": 100
+        },
+        "item_type": null
+      },
+      "student4_percentage": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student4_gpa": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student4_rank": {
+        "type": "number",
+        "initial": 0,
+        "required": false,
+        "constraints": {},
+        "item_type": null
+      },
+      "student4_grade": {
+        "type": "string",
+        "initial": "",
         "required": false,
         "constraints": {},
         "item_type": null
       }
     },
-    "derived": {
-      "tableData": {
-        "type": "array",
-        "expr": "state.rows",
-        "deps": []
-      }
-    }
+    "derived": {}
   },
   "data_fetch_ir": {
     "endpoints": {}
   },
   "data_model_ir": {
-    "entities": {
-      "student": {
-        "name": "Student",
-        "fields": [
-          "id",
-          "name",
-          "height",
-          "weight"
-        ],
-        "computed": [
-          "bmi",
-          "bmi_category"
-        ],
-        "display_fields": [
-          "name",
-          "height",
-          "weight",
-          "bmi",
-          "bmi_category"
-        ],
-        "search_fields": [],
-        "filters": [
-          "name"
-        ],
-        "default_sort": null,
-        "default_sort_dir": "asc"
-      }
-    },
+    "entities": {},
     "relationships": [],
-    "external_source_ref": {
-      "source_id": "student_external",
-      "snapshot_path": "db/external_db_snapshot.json",
-      "db_path": "/db/student_data.db"
-    },
-    "sql_query_ir": {
-      "sql_template": "SELECT id, name, height, weight FROM student_data WHERE (:search = '' OR name LIKE '%' || :search || '%') ORDER BY name LIMIT :limit OFFSET :offset",
-      "params": [
-        ":limit",
-        ":offset",
-        ":search"
-      ],
-      "default_page_size": 50,
-      "max_page_size": 200
-    }
+    "external_source_ref": null,
+    "sql_query_ir": null
   },
   "behaviour_ir": {
     "events": {
-      "search_change": {
+      "calculate_percentage_gpa": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.search",
-            "expr": "event.target.value"
+            "target": "state.student1_percentage",
+            "expr": "(state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social_studies + state.student1_economics) / 6"
           },
           {
-            "target": "state.page",
-            "expr": "1"
+            "target": "state.student1_gpa",
+            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social_studies + state.student1_economics) / 6) / 25"
+          },
+          {
+            "target": "state.student2_percentage",
+            "expr": "(state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social_studies + state.student2_economics) / 6"
+          },
+          {
+            "target": "state.student2_gpa",
+            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social_studies + state.student2_economics) / 6) / 25"
+          },
+          {
+            "target": "state.student3_percentage",
+            "expr": "(state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social_studies + state.student3_economics) / 6"
+          },
+          {
+            "target": "state.student3_gpa",
+            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social_studies + state.student3_economics) / 6) / 25"
+          },
+          {
+            "target": "state.student4_percentage",
+            "expr": "(state.student4_nepali + state.student4_english + state.student4_mathematics + state.student4_science + state.student4_social_studies + state.student4_economics) / 6"
+          },
+          {
+            "target": "state.student4_gpa",
+            "expr": "((state.student4_nepali + state.student4_english + state.student4_mathematics + state.student4_science + state.student4_social_studies + state.student4_economics) / 6) / 25"
           }
         ],
         "description": ""
       },
-      "page_change": {
+      "calculate_rank_grade": {
         "type": "mutation",
         "updates": [
           {
-            "target": "state.page",
-            "expr": "event.page"
+            "target": "state.student1_rank",
+            "expr": "1 + (state.student1_percentage < state.student2_percentage ? 1 : 0) + (state.student1_percentage < state.student3_percentage ? 1 : 0) + (state.student1_percentage < state.student4_percentage ? 1 : 0)"
           },
           {
-            "target": "state.pageSize",
-            "expr": "event.pageSize"
-          }
-        ],
-        "description": ""
-      },
-      "calculate_manual_bmi": {
-        "type": "mutation",
-        "updates": [
+            "target": "state.student1_grade",
+            "expr": "state.student1_percentage >= 90 ? 'A+' : state.student1_percentage >= 80 ? 'A' : state.student1_percentage >= 70 ? 'B+' : state.student1_percentage >= 60 ? 'B' : state.student1_percentage >= 50 ? 'C+' : state.student1_percentage >= 40 ? 'C' : 'F'"
+          },
           {
-            "target": "state.calculatedBMI",
-            "expr": "state.manualHeight > 0 && state.manualWeight > 0 ? state.manualWeight / Math.pow(state.manualHeight / 100, 2) : 0"
+            "target": "state.student2_rank",
+            "expr": "1 + (state.student2_percentage < state.student1_percentage ? 1 : 0) + (state.student2_percentage < state.student3_percentage ? 1 : 0) + (state.student2_percentage < state.student4_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student2_grade",
+            "expr": "state.student2_percentage >= 90 ? 'A+' : state.student2_percentage >= 80 ? 'A' : state.student2_percentage >= 70 ? 'B+' : state.student2_percentage >= 60 ? 'B' : state.student2_percentage >= 50 ? 'C+' : state.student2_percentage >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student3_rank",
+            "expr": "1 + (state.student3_percentage < state.student1_percentage ? 1 : 0) + (state.student3_percentage < state.student2_percentage ? 1 : 0) + (state.student3_percentage < state.student4_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student3_grade",
+            "expr": "state.student3_percentage >= 90 ? 'A+' : state.student3_percentage >= 80 ? 'A' : state.student3_percentage >= 70 ? 'B+' : state.student3_percentage >= 60 ? 'B' : state.student3_percentage >= 50 ? 'C+' : state.student3_percentage >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student4_rank",
+            "expr": "1 + (state.student4_percentage < state.student1_percentage ? 1 : 0) + (state.student4_percentage < state.student2_percentage ? 1 : 0) + (state.student4_percentage < state.student3_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student4_grade",
+            "expr": "state.student4_percentage >= 90 ? 'A+' : state.student4_percentage >= 80 ? 'A' : state.student4_percentage >= 70 ? 'B+' : state.student4_percentage >= 60 ? 'B' : state.student4_percentage >= 50 ? 'C+' : state.student4_percentage >= 40 ? 'C' : 'F'"
           }
         ],
         "description": ""
       }
     },
     "actions": {
-      "load_students": {
-        "action_id": "load_students",
+      "action_calculate_percentage_gpa": {
+        "action_id": "action_calculate_percentage_gpa",
         "trigger": "button_click",
-        "target_component_id": "refresh_button",
-        "operation": "read",
+        "target_component_id": "btn_calculate",
+        "operation": "custom",
         "description": "",
-        "payload": {
-          "query": "sql_query_ir",
-          "params": {
-            "limit": "state.pageSize",
-            "offset": "(state.page - 1) * state.pageSize",
-            "search": "state.search"
-          }
-        },
+        "payload": {},
         "guard": null,
         "requires_confirmation": false,
         "confirmation_message": null,
@@ -224,8 +523,88 @@
         "validation_messages": {},
         "updates": [
           {
-            "target": "state.loading",
-            "expr": "true"
+            "target": "state.student1_percentage",
+            "expr": "(state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social_studies + state.student1_economics) / 6"
+          },
+          {
+            "target": "state.student1_gpa",
+            "expr": "((state.student1_nepali + state.student1_english + state.student1_mathematics + state.student1_science + state.student1_social_studies + state.student1_economics) / 6) / 25"
+          },
+          {
+            "target": "state.student2_percentage",
+            "expr": "(state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social_studies + state.student2_economics) / 6"
+          },
+          {
+            "target": "state.student2_gpa",
+            "expr": "((state.student2_nepali + state.student2_english + state.student2_mathematics + state.student2_science + state.student2_social_studies + state.student2_economics) / 6) / 25"
+          },
+          {
+            "target": "state.student3_percentage",
+            "expr": "(state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social_studies + state.student3_economics) / 6"
+          },
+          {
+            "target": "state.student3_gpa",
+            "expr": "((state.student3_nepali + state.student3_english + state.student3_mathematics + state.student3_science + state.student3_social_studies + state.student3_economics) / 6) / 25"
+          },
+          {
+            "target": "state.student4_percentage",
+            "expr": "(state.student4_nepali + state.student4_english + state.student4_mathematics + state.student4_science + state.student4_social_studies + state.student4_economics) / 6"
+          },
+          {
+            "target": "state.student4_gpa",
+            "expr": "((state.student4_nepali + state.student4_english + state.student4_mathematics + state.student4_science + state.student4_social_studies + state.student4_economics) / 6) / 25"
+          }
+        ],
+        "api_endpoint": null,
+        "api_body": null,
+        "side_effects": [],
+        "then": null,
+        "catch": null
+      },
+      "action_calculate_rank_grade": {
+        "action_id": "action_calculate_rank_grade",
+        "trigger": "button_click",
+        "target_component_id": "btn_calculate_rank",
+        "operation": "custom",
+        "description": "",
+        "payload": {},
+        "guard": null,
+        "requires_confirmation": false,
+        "confirmation_message": null,
+        "validation_rules": [],
+        "validation_messages": {},
+        "updates": [
+          {
+            "target": "state.student1_rank",
+            "expr": "1 + (state.student1_percentage < state.student2_percentage ? 1 : 0) + (state.student1_percentage < state.student3_percentage ? 1 : 0) + (state.student1_percentage < state.student4_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student1_grade",
+            "expr": "state.student1_percentage >= 90 ? 'A+' : state.student1_percentage >= 80 ? 'A' : state.student1_percentage >= 70 ? 'B+' : state.student1_percentage >= 60 ? 'B' : state.student1_percentage >= 50 ? 'C+' : state.student1_percentage >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student2_rank",
+            "expr": "1 + (state.student2_percentage < state.student1_percentage ? 1 : 0) + (state.student2_percentage < state.student3_percentage ? 1 : 0) + (state.student2_percentage < state.student4_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student2_grade",
+            "expr": "state.student2_percentage >= 90 ? 'A+' : state.student2_percentage >= 80 ? 'A' : state.student2_percentage >= 70 ? 'B+' : state.student2_percentage >= 60 ? 'B' : state.student2_percentage >= 50 ? 'C+' : state.student2_percentage >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student3_rank",
+            "expr": "1 + (state.student3_percentage < state.student1_percentage ? 1 : 0) + (state.student3_percentage < state.student2_percentage ? 1 : 0) + (state.student3_percentage < state.student4_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student3_grade",
+            "expr": "state.student3_percentage >= 90 ? 'A+' : state.student3_percentage >= 80 ? 'A' : state.student3_percentage >= 70 ? 'B+' : state.student3_percentage >= 60 ? 'B' : state.student3_percentage >= 50 ? 'C+' : state.student3_percentage >= 40 ? 'C' : 'F'"
+          },
+          {
+            "target": "state.student4_rank",
+            "expr": "1 + (state.student4_percentage < state.student1_percentage ? 1 : 0) + (state.student4_percentage < state.student2_percentage ? 1 : 0) + (state.student4_percentage < state.student3_percentage ? 1 : 0)"
+          },
+          {
+            "target": "state.student4_grade",
+            "expr": "state.student4_percentage >= 90 ? 'A+' : state.student4_percentage >= 80 ? 'A' : state.student4_percentage >= 70 ? 'B+' : state.student4_percentage >= 60 ? 'B' : state.student4_percentage >= 50 ? 'C+' : state.student4_percentage >= 40 ? 'C' : 'F'"
           }
         ],
         "api_endpoint": null,
@@ -236,29 +615,35 @@
       }
     },
     "feedback": {
-      "load_students": {
-        "action_id": "load_students",
-        "loading_indicator": "spinner",
+      "action_calculate_percentage_gpa": {
+        "action_id": "action_calculate_percentage_gpa",
+        "loading_indicator": null,
         "loading_text": null,
-        "success_message": "Student data loaded successfully",
-        "error_message": "Failed to load student data",
-        "ui_updates": [
-          "state.loading = false"
-        ]
+        "success_message": "Percentage and GPA calculated successfully",
+        "error_message": null,
+        "ui_updates": []
+      },
+      "action_calculate_rank_grade": {
+        "action_id": "action_calculate_rank_grade",
+        "loading_indicator": null,
+        "loading_text": null,
+        "success_message": "Rank and Grade calculated successfully",
+        "error_message": null,
+        "ui_updates": []
       }
     }
   },
   "component_ir": {
     "library": "antd",
     "theme": {
-      "primaryColor": "#1677ff",
-      "secondaryColor": "#000000",
+      "primaryColor": "#1a1a1a",
+      "secondaryColor": "#666666",
       "successColor": null,
       "warningColor": null,
       "errorColor": null,
-      "fontFamily": "Inter, system-ui, sans-serif",
+      "fontFamily": "Courier New, monospace",
       "fontSize": null,
-      "borderRadius": 8
+      "borderRadius": 0
     },
     "components": {
       "root_container": {
@@ -274,16 +659,11 @@
         "props": {},
         "dynamic_props": {},
         "styles": {
-          "padding": "24px",
-          "maxWidth": "1400px",
-          "margin": "0 auto",
-          "backgroundColor": "#1a1a1a",
-          "minHeight": "100vh",
-          "fontFamily": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           "height": "100vh",
           "width": "100vw",
-          "overflow": "auto",
-          "boxSizing": "border-box"
+          "padding": "32px",
+          "backgroundColor": "#0a0a0a",
+          "overflow": "auto"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -296,9 +676,9 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "page_title": {
+      "title": {
         "type": "Typography.Title",
-        "label": "Student BMI Calculator",
+        "label": "Student Marks Management System",
         "description": null,
         "bind": null,
         "onClick": null,
@@ -307,18 +687,17 @@
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "level": 1
+          "level": 2
         },
         "dynamic_props": {},
         "styles": {
+          "textAlign": "center",
           "marginBottom": "32px",
-          "color": "#f5f5f5",
-          "fontSize": "42px",
-          "fontWeight": "900",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace",
           "textTransform": "uppercase",
           "letterSpacing": "2px",
-          "textShadow": "3px 3px 0px #ff6b6b, 6px 6px 0px rgba(0,0,0,0.3)",
-          "position": "relative"
+          "fontWeight": "300"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -331,7 +710,7 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "info_card": {
+      "student1_card": {
         "type": "Card",
         "label": null,
         "description": null,
@@ -342,16 +721,14 @@
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "size": "small",
-          "bordered": false
+          "title": "Student 1"
         },
         "dynamic_props": {},
         "styles": {
-          "marginBottom": "32px",
-          "backgroundColor": "#2d2d2d",
-          "border": "3px solid #ff6b6b",
-          "borderRadius": "0px",
-          "boxShadow": "8px 8px 0px rgba(255, 107, 107, 0.3)"
+          "marginBottom": "24px",
+          "backgroundColor": "#1a1a1a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -364,9 +741,41 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "info_text": {
-        "type": "Typography.Text",
-        "label": "BMI is calculated as: weight (kg) / (height (m))\u00b2. Height is stored in cm and converted automatically.",
+      "student1_name_input": {
+        "type": "Input",
+        "label": "Name",
+        "description": null,
+        "bind": "state.student1_name",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Enter student name"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_subjects_grid": {
+        "type": "div",
+        "label": null,
         "description": null,
         "bind": null,
         "onClick": null,
@@ -377,10 +786,10 @@
         "props": {},
         "dynamic_props": {},
         "styles": {
-          "color": "#e0e0e0",
-          "fontSize": "15px",
-          "lineHeight": "1.6",
-          "fontWeight": "500"
+          "display": "grid",
+          "gridTemplateColumns": "1fr 1fr",
+          "gap": "16px",
+          "marginBottom": "16px"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -393,7 +802,1715 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "controls_container": {
+      "student1_nepali_input": {
+        "type": "InputNumber",
+        "label": "Nepali",
+        "description": null,
+        "bind": "state.student1_nepali",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Nepali marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_english_input": {
+        "type": "InputNumber",
+        "label": "English",
+        "description": null,
+        "bind": "state.student1_english",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "English marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_mathematics_input": {
+        "type": "InputNumber",
+        "label": "Mathematics",
+        "description": null,
+        "bind": "state.student1_mathematics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Mathematics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_science_input": {
+        "type": "InputNumber",
+        "label": "Science",
+        "description": null,
+        "bind": "state.student1_science",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Science marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_social_studies_input": {
+        "type": "InputNumber",
+        "label": "Social Studies",
+        "description": null,
+        "bind": "state.student1_social_studies",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Social Studies marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_economics_input": {
+        "type": "InputNumber",
+        "label": "Economics",
+        "description": null,
+        "bind": "state.student1_economics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Economics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_results": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "marginTop": "20px",
+          "padding": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_percentage_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student1_percentage",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_gpa_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student1_gpa",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_rank_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student1_rank",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student1_grade_badge": {
+        "type": "Badge",
+        "label": null,
+        "description": null,
+        "bind": "state.student1_grade",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "count": "state.student1_grade",
+          "showZero": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "backgroundColor": "#333",
+          "color": "#e0e0e0",
+          "border": "1px solid #666"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_card": {
+        "type": "Card",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "title": "Student 2"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "24px",
+          "backgroundColor": "#1a1a1a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_name_input": {
+        "type": "Input",
+        "label": "Name",
+        "description": null,
+        "bind": "state.student2_name",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Enter student name"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_subjects_grid": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "display": "grid",
+          "gridTemplateColumns": "1fr 1fr",
+          "gap": "16px",
+          "marginBottom": "16px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_nepali_input": {
+        "type": "InputNumber",
+        "label": "Nepali",
+        "description": null,
+        "bind": "state.student2_nepali",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Nepali marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_english_input": {
+        "type": "InputNumber",
+        "label": "English",
+        "description": null,
+        "bind": "state.student2_english",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "English marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_mathematics_input": {
+        "type": "InputNumber",
+        "label": "Mathematics",
+        "description": null,
+        "bind": "state.student2_mathematics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Mathematics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_science_input": {
+        "type": "InputNumber",
+        "label": "Science",
+        "description": null,
+        "bind": "state.student2_science",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Science marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_social_studies_input": {
+        "type": "InputNumber",
+        "label": "Social Studies",
+        "description": null,
+        "bind": "state.student2_social_studies",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Social Studies marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_economics_input": {
+        "type": "InputNumber",
+        "label": "Economics",
+        "description": null,
+        "bind": "state.student2_economics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Economics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_results": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "marginTop": "20px",
+          "padding": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_percentage_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student2_percentage",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_gpa_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student2_gpa",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_rank_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student2_rank",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student2_grade_badge": {
+        "type": "Badge",
+        "label": null,
+        "description": null,
+        "bind": "state.student2_grade",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "count": "state.student2_grade",
+          "showZero": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "backgroundColor": "#333",
+          "color": "#e0e0e0",
+          "border": "1px solid #666"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_card": {
+        "type": "Card",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "title": "Student 3"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "24px",
+          "backgroundColor": "#1a1a1a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_name_input": {
+        "type": "Input",
+        "label": "Name",
+        "description": null,
+        "bind": "state.student3_name",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Enter student name"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_subjects_grid": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "display": "grid",
+          "gridTemplateColumns": "1fr 1fr",
+          "gap": "16px",
+          "marginBottom": "16px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_nepali_input": {
+        "type": "InputNumber",
+        "label": "Nepali",
+        "description": null,
+        "bind": "state.student3_nepali",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Nepali marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_english_input": {
+        "type": "InputNumber",
+        "label": "English",
+        "description": null,
+        "bind": "state.student3_english",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "English marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_mathematics_input": {
+        "type": "InputNumber",
+        "label": "Mathematics",
+        "description": null,
+        "bind": "state.student3_mathematics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Mathematics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_science_input": {
+        "type": "InputNumber",
+        "label": "Science",
+        "description": null,
+        "bind": "state.student3_science",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Science marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_social_studies_input": {
+        "type": "InputNumber",
+        "label": "Social Studies",
+        "description": null,
+        "bind": "state.student3_social_studies",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Social Studies marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_economics_input": {
+        "type": "InputNumber",
+        "label": "Economics",
+        "description": null,
+        "bind": "state.student3_economics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Economics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_results": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "marginTop": "20px",
+          "padding": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_percentage_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student3_percentage",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_gpa_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student3_gpa",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_rank_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student3_rank",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student3_grade_badge": {
+        "type": "Badge",
+        "label": null,
+        "description": null,
+        "bind": "state.student3_grade",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "count": "state.student3_grade",
+          "showZero": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "backgroundColor": "#333",
+          "color": "#e0e0e0",
+          "border": "1px solid #666"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_card": {
+        "type": "Card",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "title": "Student 4"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "24px",
+          "backgroundColor": "#1a1a1a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_name_input": {
+        "type": "Input",
+        "label": "Name",
+        "description": null,
+        "bind": "state.student4_name",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "placeholder": "Enter student name"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "marginBottom": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_subjects_grid": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "display": "grid",
+          "gridTemplateColumns": "1fr 1fr",
+          "gap": "16px",
+          "marginBottom": "16px"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_nepali_input": {
+        "type": "InputNumber",
+        "label": "Nepali",
+        "description": null,
+        "bind": "state.student4_nepali",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Nepali marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_english_input": {
+        "type": "InputNumber",
+        "label": "English",
+        "description": null,
+        "bind": "state.student4_english",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "English marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_mathematics_input": {
+        "type": "InputNumber",
+        "label": "Mathematics",
+        "description": null,
+        "bind": "state.student4_mathematics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Mathematics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_science_input": {
+        "type": "InputNumber",
+        "label": "Science",
+        "description": null,
+        "bind": "state.student4_science",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Science marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_social_studies_input": {
+        "type": "InputNumber",
+        "label": "Social Studies",
+        "description": null,
+        "bind": "state.student4_social_studies",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Social Studies marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_economics_input": {
+        "type": "InputNumber",
+        "label": "Economics",
+        "description": null,
+        "bind": "state.student4_economics",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "min": 0,
+          "max": 100,
+          "placeholder": "Economics marks"
+        },
+        "dynamic_props": {},
+        "styles": {
+          "width": "100%",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0",
+          "color": "#e0e0e0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_results": {
+        "type": "div",
+        "label": null,
+        "description": null,
+        "bind": null,
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {},
+        "dynamic_props": {},
+        "styles": {
+          "marginTop": "20px",
+          "padding": "16px",
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #333",
+          "borderRadius": "0"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_percentage_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student4_percentage",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_gpa_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student4_gpa",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_rank_text": {
+        "type": "Typography.Text",
+        "label": null,
+        "description": null,
+        "bind": "state.student4_rank",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "strong": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "display": "block",
+          "marginBottom": "10px",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "student4_grade_badge": {
+        "type": "Badge",
+        "label": null,
+        "description": null,
+        "bind": "state.student4_grade",
+        "onClick": null,
+        "onChange": null,
+        "onSubmit": null,
+        "onHover": null,
+        "onKeyPress": null,
+        "props": {
+          "count": "state.student4_grade",
+          "showZero": true
+        },
+        "dynamic_props": {},
+        "styles": {
+          "backgroundColor": "#333",
+          "color": "#e0e0e0",
+          "border": "1px solid #666"
+        },
+        "dynamic_styles": {},
+        "class_name": null,
+        "dynamic_class": null,
+        "transitions": [],
+        "visible_when": null,
+        "disabled_when": null,
+        "repeat": null,
+        "slots": {},
+        "a11y_role": null,
+        "a11y_label": null
+      },
+      "button_container": {
         "type": "div",
         "label": null,
         "description": null,
@@ -407,10 +2524,9 @@
         "dynamic_props": {},
         "styles": {
           "display": "flex",
-          "gap": "16px",
-          "marginBottom": "32px",
-          "alignItems": "center",
-          "flexWrap": "wrap"
+          "gap": "20px",
+          "justifyContent": "center",
+          "marginTop": "32px"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -423,69 +2539,29 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "search_input": {
-        "type": "Input.Search",
-        "label": null,
-        "description": null,
-        "bind": "state.search",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Search students...",
-          "allowClear": true,
-          "onChange": "search_change",
-          "size": "large",
-          "variant": "outlined"
-        },
-        "dynamic_props": {},
-        "styles": {
-          "width": "320px",
-          "backgroundColor": "#2d2d2d",
-          "border": "2px solid #4a4a4a",
-          "borderRadius": "0px",
-          "color": "#f5f5f5"
-        },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "refresh_button": {
+      "btn_calculate": {
         "type": "Button",
-        "label": "Refresh",
+        "label": "Calculate Percentage & GPA",
         "description": null,
         "bind": null,
-        "onClick": "load_students",
+        "onClick": "action_calculate_percentage_gpa",
         "onChange": null,
         "onSubmit": null,
         "onHover": null,
         "onKeyPress": null,
         "props": {
           "type": "primary",
-          "icon": "ReloadOutlined",
-          "loading": "state.loading",
           "size": "large"
         },
         "dynamic_props": {},
         "styles": {
-          "backgroundColor": "#ff6b6b",
-          "border": "none",
-          "borderRadius": "0px",
-          "fontWeight": "700",
+          "backgroundColor": "#1a1a1a",
+          "border": "1px solid #666",
+          "borderRadius": "0",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace",
           "textTransform": "uppercase",
-          "letterSpacing": "1px",
-          "boxShadow": "4px 4px 0px rgba(0, 0, 0, 0.4)",
-          "height": "44px",
-          "padding": "0 32px"
+          "letterSpacing": "1px"
         },
         "dynamic_styles": {},
         "class_name": null,
@@ -498,308 +2574,30 @@
         "a11y_role": null,
         "a11y_label": null
       },
-      "student_table": {
-        "type": "Table",
-        "label": null,
+      "btn_calculate_rank": {
+        "type": "Button",
+        "label": "Calculate Rank & Grade",
         "description": null,
-        "bind": "derived.tableData",
-        "onClick": null,
-        "onChange": "page_change",
+        "bind": null,
+        "onClick": "action_calculate_rank_grade",
+        "onChange": null,
         "onSubmit": null,
         "onHover": null,
         "onKeyPress": null,
         "props": {
-          "columns": [
-            {
-              "title": "ID",
-              "dataIndex": "id",
-              "key": "id",
-              "width": 80
-            },
-            {
-              "title": "Name",
-              "dataIndex": "name",
-              "key": "name",
-              "width": 200
-            },
-            {
-              "title": "Height (cm)",
-              "dataIndex": "height",
-              "key": "height",
-              "width": 120
-            },
-            {
-              "title": "Weight (kg)",
-              "dataIndex": "weight",
-              "key": "weight",
-              "width": 120
-            },
-            {
-              "title": "BMI",
-              "dataIndex": "bmi",
-              "key": "bmi",
-              "width": 100
-            },
-            {
-              "title": "Category",
-              "dataIndex": "category",
-              "key": "category",
-              "width": 150
-            }
-          ],
-          "loading": "{{state.loading}}",
-          "pagination": {
-            "current": "{{state.page}}",
-            "pageSize": "{{state.pageSize}}",
-            "total": "{{state.total}}",
-            "showSizeChanger": true,
-            "showTotal": true,
-            "onChange": "page_change"
-          },
-          "rowKey": "id",
-          "bordered": true,
-          "dataSource": "{{derived.tableData}}",
-          "size": "middle",
-          "variant": "outlined"
+          "type": "default",
+          "size": "large"
         },
         "dynamic_props": {},
         "styles": {
-          "backgroundColor": "#2d2d2d",
-          "border": "3px solid #4a4a4a",
-          "borderRadius": "0px",
-          "boxShadow": "10px 10px 0px rgba(0, 0, 0, 0.3)"
+          "backgroundColor": "#0a0a0a",
+          "border": "1px solid #666",
+          "borderRadius": "0",
+          "color": "#e0e0e0",
+          "fontFamily": "Courier New, monospace",
+          "textTransform": "uppercase",
+          "letterSpacing": "1px"
         },
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "manual_calculator_card": {
-        "type": "Card",
-        "label": null,
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "title": "Manual BMI Calculator",
-          "style": {
-            "marginBottom": "24px"
-          }
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "manual_form_container": {
-        "type": "div",
-        "label": null,
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "style": {
-            "display": "flex",
-            "gap": "16px",
-            "alignItems": "flex-end"
-          }
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "height_input": {
-        "type": "InputNumber",
-        "label": null,
-        "description": null,
-        "bind": "state.manualHeight",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Height (cm)",
-          "min": 0,
-          "max": 300,
-          "style": {
-            "width": "150px"
-          },
-          "variant": "outlined"
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "weight_input": {
-        "type": "InputNumber",
-        "label": null,
-        "description": null,
-        "bind": "state.manualWeight",
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "placeholder": "Weight (kg)",
-          "min": 0,
-          "max": 500,
-          "style": {
-            "width": "150px"
-          },
-          "variant": "outlined"
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "calculate_bmi_button": {
-        "type": "Button",
-        "label": "Calculate BMI",
-        "description": null,
-        "bind": null,
-        "onClick": "calculate_manual_bmi",
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "type": "primary"
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "bmi_result_text": {
-        "type": "Typography.Text",
-        "label": null,
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "strong": true,
-          "style": {
-            "fontSize": "16px",
-            "marginLeft": "16px"
-          }
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "height_label": {
-        "type": "Typography.Text",
-        "label": "Height (cm):",
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "strong": true
-        },
-        "dynamic_props": {},
-        "styles": {},
-        "dynamic_styles": {},
-        "class_name": null,
-        "dynamic_class": null,
-        "transitions": [],
-        "visible_when": null,
-        "disabled_when": null,
-        "repeat": null,
-        "slots": {},
-        "a11y_role": null,
-        "a11y_label": null
-      },
-      "weight_label": {
-        "type": "Typography.Text",
-        "label": "Weight (kg):",
-        "description": null,
-        "bind": null,
-        "onClick": null,
-        "onChange": null,
-        "onSubmit": null,
-        "onHover": null,
-        "onKeyPress": null,
-        "props": {
-          "strong": true
-        },
-        "dynamic_props": {},
-        "styles": {},
         "dynamic_styles": {},
         "class_name": null,
         "dynamic_class": null,
@@ -817,29 +2615,92 @@
     "root": "root_container",
     "children": {
       "root_container": [
-        "page_title",
-        "info_card",
-        "manual_calculator_card",
-        "controls_container",
-        "student_table"
+        "title",
+        "student1_card",
+        "student2_card",
+        "student3_card",
+        "student4_card",
+        "button_container"
       ],
-      "info_card": [
-        "info_text"
+      "student1_card": [
+        "student1_name_input",
+        "student1_subjects_grid",
+        "student1_results"
       ],
-      "controls_container": [
-        "search_input",
-        "refresh_button"
+      "student1_subjects_grid": [
+        "student1_nepali_input",
+        "student1_english_input",
+        "student1_mathematics_input",
+        "student1_science_input",
+        "student1_social_studies_input",
+        "student1_economics_input"
       ],
-      "manual_calculator_card": [
-        "manual_form_container"
+      "student1_results": [
+        "student1_percentage_text",
+        "student1_gpa_text",
+        "student1_rank_text",
+        "student1_grade_badge"
       ],
-      "manual_form_container": [
-        "height_label",
-        "height_input",
-        "weight_label",
-        "weight_input",
-        "calculate_bmi_button",
-        "bmi_result_text"
+      "student2_card": [
+        "student2_name_input",
+        "student2_subjects_grid",
+        "student2_results"
+      ],
+      "student2_subjects_grid": [
+        "student2_nepali_input",
+        "student2_english_input",
+        "student2_mathematics_input",
+        "student2_science_input",
+        "student2_social_studies_input",
+        "student2_economics_input"
+      ],
+      "student2_results": [
+        "student2_percentage_text",
+        "student2_gpa_text",
+        "student2_rank_text",
+        "student2_grade_badge"
+      ],
+      "student3_card": [
+        "student3_name_input",
+        "student3_subjects_grid",
+        "student3_results"
+      ],
+      "student3_subjects_grid": [
+        "student3_nepali_input",
+        "student3_english_input",
+        "student3_mathematics_input",
+        "student3_science_input",
+        "student3_social_studies_input",
+        "student3_economics_input"
+      ],
+      "student3_results": [
+        "student3_percentage_text",
+        "student3_gpa_text",
+        "student3_rank_text",
+        "student3_grade_badge"
+      ],
+      "student4_card": [
+        "student4_name_input",
+        "student4_subjects_grid",
+        "student4_results"
+      ],
+      "student4_subjects_grid": [
+        "student4_nepali_input",
+        "student4_english_input",
+        "student4_mathematics_input",
+        "student4_science_input",
+        "student4_social_studies_input",
+        "student4_economics_input"
+      ],
+      "student4_results": [
+        "student4_percentage_text",
+        "student4_gpa_text",
+        "student4_rank_text",
+        "student4_grade_badge"
+      ],
+      "button_container": [
+        "btn_calculate",
+        "btn_calculate_rank"
       ]
     },
     "layout": {
@@ -856,9 +2717,165 @@
         "min_height": null,
         "overflow": null
       },
-      "controls_container": {
-        "type": "horizontal",
+      "student1_card": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student1_subjects_grid": {
+        "type": "grid",
         "gap": 12,
+        "padding": null,
+        "columns": 2,
+        "column_template": "1fr 1fr",
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student1_results": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student2_card": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student2_subjects_grid": {
+        "type": "grid",
+        "gap": 12,
+        "padding": null,
+        "columns": 2,
+        "column_template": "1fr 1fr",
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student2_results": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student3_card": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student3_subjects_grid": {
+        "type": "grid",
+        "gap": 12,
+        "padding": null,
+        "columns": 2,
+        "column_template": "1fr 1fr",
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student3_results": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student4_card": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student4_subjects_grid": {
+        "type": "grid",
+        "gap": 12,
+        "padding": null,
+        "columns": 2,
+        "column_template": "1fr 1fr",
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "student4_results": {
+        "type": "vertical",
+        "gap": 8,
+        "padding": null,
+        "columns": null,
+        "column_template": null,
+        "row_template": null,
+        "align_items": null,
+        "justify_content": null,
+        "wrap": false,
+        "min_height": null,
+        "overflow": null
+      },
+      "button_container": {
+        "type": "horizontal",
+        "gap": 16,
         "padding": null,
         "columns": null,
         "column_template": null,
@@ -872,12 +2889,12 @@
     },
     "layout_zones": [
       {
-        "zone_id": "main_content",
+        "zone_id": "main_zone",
         "component": "root_container",
         "anchor": "center",
         "size_hint": "full-width",
         "z_layer": "base",
-        "notes": "Main page container with student BMI calculator"
+        "notes": "Main container for student marks entry system"
       }
     ],
     "responsive_overrides": []

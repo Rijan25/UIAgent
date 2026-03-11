@@ -1,338 +1,544 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Table, Input, Button, Card, Typography, InputNumber, message } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
-import type { TablePaginationConfig } from 'antd';
-import initSqlJs from 'sql.js';
-import type { Database } from 'sql.js';
-
-interface StudentRow {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-  bmi: number;
-  category: string;
-}
+import { useState } from 'react';
+import { Button, Card, Input, InputNumber, Typography, Badge, message, ConfigProvider } from 'antd';
+import type { CSSProperties } from 'react';
 
 export default function GeneratedApp() {
   const [messageApi, contextHolder] = message.useMessage();
-  const [rows, setRows] = useState<StudentRow[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
-  const [total, setTotal] = useState(0);
-  const [search, setSearch] = useState('');
-  const [manualHeight, setManualHeight] = useState(0);
-  const [manualWeight, setManualWeight] = useState(0);
-  const [calculatedBMI, setCalculatedBMI] = useState(0);
-  const [db, setDb] = useState<Database | null>(null);
 
-  useEffect(() => {
-    const initDb = async () => {
-      try {
-        const SQL = await initSqlJs({ locateFile: () => '/db/sql-wasm.wasm' });
-        const response = await fetch('/db/student_data.db');
-        const buffer = await response.arrayBuffer();
-        const database = new SQL.Database(new Uint8Array(buffer));
-        setDb(database);
-      } catch (err) {
-        const errMsg = err instanceof Error ? err.message : 'Failed to initialize database';
-        setError(errMsg);
-        messageApi.error(errMsg);
-      }
-    };
-    initDb();
-  }, [messageApi]);
+  const [student1_name, setStudent1_name] = useState<string>('Student 1');
+  const [student1_nepali, setStudent1_nepali] = useState<number>(0);
+  const [student1_english, setStudent1_english] = useState<number>(0);
+  const [student1_mathematics, setStudent1_mathematics] = useState<number>(0);
+  const [student1_science, setStudent1_science] = useState<number>(0);
+  const [student1_social_studies, setStudent1_social_studies] = useState<number>(0);
+  const [student1_economics, setStudent1_economics] = useState<number>(0);
+  const [student1_percentage, setStudent1_percentage] = useState<number>(0);
+  const [student1_gpa, setStudent1_gpa] = useState<number>(0);
+  const [student1_rank, setStudent1_rank] = useState<number>(0);
+  const [student1_grade, setStudent1_grade] = useState<string>('');
 
-  const loadStudents = async () => {
-    if (!db) {
-      const errMsg = 'Database not initialized';
-      setError(errMsg);
-      messageApi.error(errMsg);
-      return;
-    }
+  const [student2_name, setStudent2_name] = useState<string>('Student 2');
+  const [student2_nepali, setStudent2_nepali] = useState<number>(0);
+  const [student2_english, setStudent2_english] = useState<number>(0);
+  const [student2_mathematics, setStudent2_mathematics] = useState<number>(0);
+  const [student2_science, setStudent2_science] = useState<number>(0);
+  const [student2_social_studies, setStudent2_social_studies] = useState<number>(0);
+  const [student2_economics, setStudent2_economics] = useState<number>(0);
+  const [student2_percentage, setStudent2_percentage] = useState<number>(0);
+  const [student2_gpa, setStudent2_gpa] = useState<number>(0);
+  const [student2_rank, setStudent2_rank] = useState<number>(0);
+  const [student2_grade, setStudent2_grade] = useState<string>('');
 
-    setLoading(true);
-    setError('');
+  const [student3_name, setStudent3_name] = useState<string>('Student 3');
+  const [student3_nepali, setStudent3_nepali] = useState<number>(0);
+  const [student3_english, setStudent3_english] = useState<number>(0);
+  const [student3_mathematics, setStudent3_mathematics] = useState<number>(0);
+  const [student3_science, setStudent3_science] = useState<number>(0);
+  const [student3_social_studies, setStudent3_social_studies] = useState<number>(0);
+  const [student3_economics, setStudent3_economics] = useState<number>(0);
+  const [student3_percentage, setStudent3_percentage] = useState<number>(0);
+  const [student3_gpa, setStudent3_gpa] = useState<number>(0);
+  const [student3_rank, setStudent3_rank] = useState<number>(0);
+  const [student3_grade, setStudent3_grade] = useState<string>('');
 
-    try {
-      const currentPage = Number(page);
-      const currentPageSize = Number(pageSize);
-      const safePageNum = Number.isInteger(currentPage) && currentPage > 0 ? currentPage : 1;
-      const safePageSizeNum = Number.isInteger(currentPageSize) && currentPageSize > 0 ? currentPageSize : 50;
-      const offsetValue = (safePageNum - 1) * safePageSizeNum;
+  const [student4_name, setStudent4_name] = useState<string>('Student 4');
+  const [student4_nepali, setStudent4_nepali] = useState<number>(0);
+  const [student4_english, setStudent4_english] = useState<number>(0);
+  const [student4_mathematics, setStudent4_mathematics] = useState<number>(0);
+  const [student4_science, setStudent4_science] = useState<number>(0);
+  const [student4_social_studies, setStudent4_social_studies] = useState<number>(0);
+  const [student4_economics, setStudent4_economics] = useState<number>(0);
+  const [student4_percentage, setStudent4_percentage] = useState<number>(0);
+  const [student4_gpa, setStudent4_gpa] = useState<number>(0);
+  const [student4_rank, setStudent4_rank] = useState<number>(0);
+  const [student4_grade, setStudent4_grade] = useState<string>('');
 
-      const countSql = `SELECT COUNT(*) as count FROM student_data WHERE (:search = '' OR name LIKE '%' || :search || '%')`;
-      const countResult = db.exec(countSql, { ':search': search });
-      const totalCount = countResult.length > 0 && countResult[0].values.length > 0 
-        ? Number(countResult[0].values[0][0]) 
-        : 0;
+  const handleCalculatePercentageGpa = () => {
+    const s1_nepali = student1_nepali;
+    const s1_english = student1_english;
+    const s1_mathematics = student1_mathematics;
+    const s1_science = student1_science;
+    const s1_social_studies = student1_social_studies;
+    const s1_economics = student1_economics;
+    const s1_perc = (s1_nepali + s1_english + s1_mathematics + s1_science + s1_social_studies + s1_economics) / 6;
+    const s1_gpa_val = s1_perc / 25;
+    setStudent1_percentage(s1_perc);
+    setStudent1_gpa(s1_gpa_val);
 
-      const dataSql = `SELECT id, name, height, weight FROM student_data WHERE (:search = '' OR name LIKE '%' || :search || '%') ORDER BY name LIMIT ${safePageSizeNum} OFFSET ${offsetValue}`;
-      const result = db.exec(dataSql, { ':search': search });
+    const s2_nepali = student2_nepali;
+    const s2_english = student2_english;
+    const s2_mathematics = student2_mathematics;
+    const s2_science = student2_science;
+    const s2_social_studies = student2_social_studies;
+    const s2_economics = student2_economics;
+    const s2_perc = (s2_nepali + s2_english + s2_mathematics + s2_science + s2_social_studies + s2_economics) / 6;
+    const s2_gpa_val = s2_perc / 25;
+    setStudent2_percentage(s2_perc);
+    setStudent2_gpa(s2_gpa_val);
 
-      if (result.length > 0) {
-        const data: StudentRow[] = result[0].values.map((row) => {
-          const id = Number(row[0]);
-          const name = String(row[1]);
-          const height = Number(row[2]);
-          const weight = Number(row[3]);
-          const bmi = height > 0 ? weight / Math.pow(height / 100, 2) : 0;
-          let category = '';
-          if (bmi > 0) {
-            if (bmi < 18.5) category = 'Underweight';
-            else if (bmi < 25) category = 'Normal';
-            else if (bmi < 30) category = 'Overweight';
-            else category = 'Obese';
-          }
-          return { id, name, height, weight, bmi: Math.round(bmi * 10) / 10, category };
-        });
-        setRows(data);
-      } else {
-        setRows([]);
-      }
+    const s3_nepali = student3_nepali;
+    const s3_english = student3_english;
+    const s3_mathematics = student3_mathematics;
+    const s3_science = student3_science;
+    const s3_social_studies = student3_social_studies;
+    const s3_economics = student3_economics;
+    const s3_perc = (s3_nepali + s3_english + s3_mathematics + s3_science + s3_social_studies + s3_economics) / 6;
+    const s3_gpa_val = s3_perc / 25;
+    setStudent3_percentage(s3_perc);
+    setStudent3_gpa(s3_gpa_val);
 
-      setTotal(totalCount);
-      messageApi.success('Student data loaded successfully');
-    } catch (err) {
-      const errMsg = err instanceof Error ? err.message : 'Failed to load student data';
-      setError(errMsg);
-      messageApi.error(errMsg);
-    } finally {
-      setLoading(false);
-    }
+    const s4_nepali = student4_nepali;
+    const s4_english = student4_english;
+    const s4_mathematics = student4_mathematics;
+    const s4_science = student4_science;
+    const s4_social_studies = student4_social_studies;
+    const s4_economics = student4_economics;
+    const s4_perc = (s4_nepali + s4_english + s4_mathematics + s4_science + s4_social_studies + s4_economics) / 6;
+    const s4_gpa_val = s4_perc / 25;
+    setStudent4_percentage(s4_perc);
+    setStudent4_gpa(s4_gpa_val);
+
+    messageApi.success('Percentage and GPA calculated successfully');
   };
 
-  useEffect(() => {
-    if (db) {
-      loadStudents();
-    }
-  }, [db, page, pageSize, search]);
+  const handleCalculateRankGrade = () => {
+    const s1_perc = student1_percentage;
+    const s2_perc = student2_percentage;
+    const s3_perc = student3_percentage;
+    const s4_perc = student4_percentage;
 
-  const tableData = useMemo(() => rows, [rows]);
+    const s1_rank_val = 1 + (s1_perc < s2_perc ? 1 : 0) + (s1_perc < s3_perc ? 1 : 0) + (s1_perc < s4_perc ? 1 : 0);
+    const s1_grade_val = s1_perc >= 90 ? 'A+' : s1_perc >= 80 ? 'A' : s1_perc >= 70 ? 'B+' : s1_perc >= 60 ? 'B' : s1_perc >= 50 ? 'C+' : s1_perc >= 40 ? 'C' : 'F';
+    setStudent1_rank(s1_rank_val);
+    setStudent1_grade(s1_grade_val);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setPage(1);
+    const s2_rank_val = 1 + (s2_perc < s1_perc ? 1 : 0) + (s2_perc < s3_perc ? 1 : 0) + (s2_perc < s4_perc ? 1 : 0);
+    const s2_grade_val = s2_perc >= 90 ? 'A+' : s2_perc >= 80 ? 'A' : s2_perc >= 70 ? 'B+' : s2_perc >= 60 ? 'B' : s2_perc >= 50 ? 'C+' : s2_perc >= 40 ? 'C' : 'F';
+    setStudent2_rank(s2_rank_val);
+    setStudent2_grade(s2_grade_val);
+
+    const s3_rank_val = 1 + (s3_perc < s1_perc ? 1 : 0) + (s3_perc < s2_perc ? 1 : 0) + (s3_perc < s4_perc ? 1 : 0);
+    const s3_grade_val = s3_perc >= 90 ? 'A+' : s3_perc >= 80 ? 'A' : s3_perc >= 70 ? 'B+' : s3_perc >= 60 ? 'B' : s3_perc >= 50 ? 'C+' : s3_perc >= 40 ? 'C' : 'F';
+    setStudent3_rank(s3_rank_val);
+    setStudent3_grade(s3_grade_val);
+
+    const s4_rank_val = 1 + (s4_perc < s1_perc ? 1 : 0) + (s4_perc < s2_perc ? 1 : 0) + (s4_perc < s3_perc ? 1 : 0);
+    const s4_grade_val = s4_perc >= 90 ? 'A+' : s4_perc >= 80 ? 'A' : s4_perc >= 70 ? 'B+' : s4_perc >= 60 ? 'B' : s4_perc >= 50 ? 'C+' : s4_perc >= 40 ? 'C' : 'F';
+    setStudent4_rank(s4_rank_val);
+    setStudent4_grade(s4_grade_val);
+
+    messageApi.success('Rank and Grade calculated successfully');
   };
 
-  const handlePageChange = (pagination: TablePaginationConfig) => {
-    setPage(pagination.current || 1);
-    setPageSize(pagination.pageSize || 50);
+  const rootContainerStyle: CSSProperties = {
+    height: '100vh',
+    width: '100vw',
+    padding: '32px',
+    backgroundColor: '#0a0a0a',
+    overflow: 'auto'
   };
 
-  const handleCalculateManualBMI = () => {
-    const height = manualHeight;
-    const weight = manualWeight;
-    if (height > 0 && weight > 0) {
-      const bmi = weight / Math.pow(height / 100, 2);
-      setCalculatedBMI(Math.round(bmi * 10) / 10);
-    } else {
-      setCalculatedBMI(0);
-    }
+  const titleStyle: CSSProperties = {
+    textAlign: 'center',
+    marginBottom: '32px',
+    color: '#e0e0e0',
+    fontFamily: 'Courier New, monospace',
+    textTransform: 'uppercase',
+    letterSpacing: '2px',
+    fontWeight: 300
   };
 
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 80,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: 200,
-    },
-    {
-      title: 'Height (cm)',
-      dataIndex: 'height',
-      key: 'height',
-      width: 120,
-    },
-    {
-      title: 'Weight (kg)',
-      dataIndex: 'weight',
-      key: 'weight',
-      width: 120,
-    },
-    {
-      title: 'BMI',
-      dataIndex: 'bmi',
-      key: 'bmi',
-      width: 100,
-    },
-    {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-      width: 150,
-    },
-  ];
+  const cardStyle: CSSProperties = {
+    marginBottom: '24px',
+    backgroundColor: '#1a1a1a',
+    border: '1px solid #333',
+    borderRadius: '0'
+  };
+
+  const inputStyle: CSSProperties = {
+    marginBottom: '16px',
+    backgroundColor: '#0a0a0a',
+    border: '1px solid #333',
+    borderRadius: '0',
+    color: '#e0e0e0'
+  };
+
+  const subjectsGridStyle: CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '16px',
+    marginBottom: '16px'
+  };
+
+  const inputNumberStyle: CSSProperties = {
+    width: '100%',
+    backgroundColor: '#0a0a0a',
+    border: '1px solid #333',
+    borderRadius: '0',
+    color: '#e0e0e0'
+  };
+
+  const resultsStyle: CSSProperties = {
+    marginTop: '20px',
+    padding: '16px',
+    backgroundColor: '#0a0a0a',
+    border: '1px solid #333',
+    borderRadius: '0'
+  };
+
+  const textStyle: CSSProperties = {
+    display: 'block',
+    marginBottom: '10px',
+    color: '#e0e0e0',
+    fontFamily: 'Courier New, monospace'
+  };
+
+  const buttonContainerStyle: CSSProperties = {
+    display: 'flex',
+    gap: '20px',
+    justifyContent: 'center',
+    marginTop: '32px'
+  };
+
+  const primaryButtonStyle: CSSProperties = {
+    backgroundColor: '#1a1a1a',
+    border: '1px solid #666',
+    borderRadius: '0',
+    color: '#e0e0e0',
+    fontFamily: 'Courier New, monospace',
+    textTransform: 'uppercase',
+    letterSpacing: '1px'
+  };
+
+  const defaultButtonStyle: CSSProperties = {
+    backgroundColor: '#0a0a0a',
+    border: '1px solid #666',
+    borderRadius: '0',
+    color: '#e0e0e0',
+    fontFamily: 'Courier New, monospace',
+    textTransform: 'uppercase',
+    letterSpacing: '1px'
+  };
 
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#1a1a1a',
+          fontFamily: 'Courier New, monospace',
+          borderRadius: 0
+        }
+      }}
+    >
       {contextHolder}
-      <div
-        style={{
-          padding: '24px',
-          maxWidth: '1400px',
-          margin: '0 auto',
-          backgroundColor: '#1a1a1a',
-          minHeight: '100vh',
-          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-          height: '100vh',
-          width: '100vw',
-          overflow: 'auto',
-          boxSizing: 'border-box',
-        }}
-      >
-        <Typography.Title
-          level={1}
-          style={{
-            marginBottom: '32px',
-            color: '#f5f5f5',
-            fontSize: '42px',
-            fontWeight: '900',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            textShadow: '3px 3px 0px #ff6b6b, 6px 6px 0px rgba(0,0,0,0.3)',
-            position: 'relative',
-          }}
-        >
-          Student BMI Calculator
+      <div style={rootContainerStyle}>
+        <Typography.Title level={2} style={titleStyle}>
+          Student Marks Management System
         </Typography.Title>
 
-        <Card
-          size="small"
-          bordered={false}
-          style={{
-            marginBottom: '32px',
-            backgroundColor: '#2d2d2d',
-            border: '3px solid #ff6b6b',
-            borderRadius: '0px',
-            boxShadow: '8px 8px 0px rgba(255, 107, 107, 0.3)',
-          }}
-        >
-          <Typography.Text
-            style={{
-              color: '#e0e0e0',
-              fontSize: '15px',
-              lineHeight: '1.6',
-              fontWeight: '500',
-            }}
-          >
-            BMI is calculated as: weight (kg) / (height (m))². Height is stored in cm and converted automatically.
-          </Typography.Text>
-        </Card>
-
-        <Card title="Manual BMI Calculator" style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-end' }}>
-            <Typography.Text strong>Height (cm):</Typography.Text>
+        <Card title="Student 1" style={cardStyle}>
+          <Input
+            placeholder="Enter student name"
+            value={student1_name}
+            onChange={(e) => setStudent1_name(e.target.value)}
+            style={inputStyle}
+          />
+          <div style={subjectsGridStyle}>
             <InputNumber
-              placeholder="Height (cm)"
               min={0}
-              max={300}
-              style={{ width: '150px' }}
-              variant="outlined"
-              value={manualHeight}
-              onChange={(value) => setManualHeight(value || 0)}
+              max={100}
+              placeholder="Nepali marks"
+              value={student1_nepali}
+              onChange={(val) => setStudent1_nepali(val ?? 0)}
+              style={inputNumberStyle}
             />
-            <Typography.Text strong>Weight (kg):</Typography.Text>
             <InputNumber
-              placeholder="Weight (kg)"
               min={0}
-              max={500}
-              style={{ width: '150px' }}
-              variant="outlined"
-              value={manualWeight}
-              onChange={(value) => setManualWeight(value || 0)}
+              max={100}
+              placeholder="English marks"
+              value={student1_english}
+              onChange={(val) => setStudent1_english(val ?? 0)}
+              style={inputNumberStyle}
             />
-            <Button type="primary" onClick={handleCalculateManualBMI}>
-              Calculate BMI
-            </Button>
-            <Typography.Text strong style={{ fontSize: '16px', marginLeft: '16px' }}>
-              {calculatedBMI > 0 ? `BMI: ${calculatedBMI}` : ''}
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Mathematics marks"
+              value={student1_mathematics}
+              onChange={(val) => setStudent1_mathematics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Science marks"
+              value={student1_science}
+              onChange={(val) => setStudent1_science(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Social Studies marks"
+              value={student1_social_studies}
+              onChange={(val) => setStudent1_social_studies(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Economics marks"
+              value={student1_economics}
+              onChange={(val) => setStudent1_economics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+          </div>
+          <div style={resultsStyle}>
+            <Typography.Text strong style={textStyle}>
+              Percentage: {student1_percentage.toFixed(2)}%
             </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              GPA: {student1_gpa.toFixed(2)}
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              Rank: {student1_rank}
+            </Typography.Text>
+            <Badge count={student1_grade} showZero style={{ backgroundColor: '#333', color: '#e0e0e0', border: '1px solid #666' }} />
           </div>
         </Card>
 
-        <div
-          style={{
-            display: 'flex',
-            gap: '16px',
-            marginBottom: '32px',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          <Input.Search
-            placeholder="Search students..."
-            allowClear
-            size="large"
-            value={search}
-            onChange={handleSearchChange}
-            style={{
-              width: '320px',
-              backgroundColor: '#2d2d2d',
-              border: '2px solid #4a4a4a',
-              borderRadius: '0px',
-              color: '#f5f5f5',
-            }}
+        <Card title="Student 2" style={cardStyle}>
+          <Input
+            placeholder="Enter student name"
+            value={student2_name}
+            onChange={(e) => setStudent2_name(e.target.value)}
+            style={inputStyle}
           />
+          <div style={subjectsGridStyle}>
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Nepali marks"
+              value={student2_nepali}
+              onChange={(val) => setStudent2_nepali(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="English marks"
+              value={student2_english}
+              onChange={(val) => setStudent2_english(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Mathematics marks"
+              value={student2_mathematics}
+              onChange={(val) => setStudent2_mathematics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Science marks"
+              value={student2_science}
+              onChange={(val) => setStudent2_science(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Social Studies marks"
+              value={student2_social_studies}
+              onChange={(val) => setStudent2_social_studies(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Economics marks"
+              value={student2_economics}
+              onChange={(val) => setStudent2_economics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+          </div>
+          <div style={resultsStyle}>
+            <Typography.Text strong style={textStyle}>
+              Percentage: {student2_percentage.toFixed(2)}%
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              GPA: {student2_gpa.toFixed(2)}
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              Rank: {student2_rank}
+            </Typography.Text>
+            <Badge count={student2_grade} showZero style={{ backgroundColor: '#333', color: '#e0e0e0', border: '1px solid #666' }} />
+          </div>
+        </Card>
+
+        <Card title="Student 3" style={cardStyle}>
+          <Input
+            placeholder="Enter student name"
+            value={student3_name}
+            onChange={(e) => setStudent3_name(e.target.value)}
+            style={inputStyle}
+          />
+          <div style={subjectsGridStyle}>
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Nepali marks"
+              value={student3_nepali}
+              onChange={(val) => setStudent3_nepali(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="English marks"
+              value={student3_english}
+              onChange={(val) => setStudent3_english(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Mathematics marks"
+              value={student3_mathematics}
+              onChange={(val) => setStudent3_mathematics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Science marks"
+              value={student3_science}
+              onChange={(val) => setStudent3_science(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Social Studies marks"
+              value={student3_social_studies}
+              onChange={(val) => setStudent3_social_studies(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Economics marks"
+              value={student3_economics}
+              onChange={(val) => setStudent3_economics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+          </div>
+          <div style={resultsStyle}>
+            <Typography.Text strong style={textStyle}>
+              Percentage: {student3_percentage.toFixed(2)}%
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              GPA: {student3_gpa.toFixed(2)}
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              Rank: {student3_rank}
+            </Typography.Text>
+            <Badge count={student3_grade} showZero style={{ backgroundColor: '#333', color: '#e0e0e0', border: '1px solid #666' }} />
+          </div>
+        </Card>
+
+        <Card title="Student 4" style={cardStyle}>
+          <Input
+            placeholder="Enter student name"
+            value={student4_name}
+            onChange={(e) => setStudent4_name(e.target.value)}
+            style={inputStyle}
+          />
+          <div style={subjectsGridStyle}>
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Nepali marks"
+              value={student4_nepali}
+              onChange={(val) => setStudent4_nepali(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="English marks"
+              value={student4_english}
+              onChange={(val) => setStudent4_english(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Mathematics marks"
+              value={student4_mathematics}
+              onChange={(val) => setStudent4_mathematics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Science marks"
+              value={student4_science}
+              onChange={(val) => setStudent4_science(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Social Studies marks"
+              value={student4_social_studies}
+              onChange={(val) => setStudent4_social_studies(val ?? 0)}
+              style={inputNumberStyle}
+            />
+            <InputNumber
+              min={0}
+              max={100}
+              placeholder="Economics marks"
+              value={student4_economics}
+              onChange={(val) => setStudent4_economics(val ?? 0)}
+              style={inputNumberStyle}
+            />
+          </div>
+          <div style={resultsStyle}>
+            <Typography.Text strong style={textStyle}>
+              Percentage: {student4_percentage.toFixed(2)}%
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              GPA: {student4_gpa.toFixed(2)}
+            </Typography.Text>
+            <Typography.Text strong style={textStyle}>
+              Rank: {student4_rank}
+            </Typography.Text>
+            <Badge count={student4_grade} showZero style={{ backgroundColor: '#333', color: '#e0e0e0', border: '1px solid #666' }} />
+          </div>
+        </Card>
+
+        <div style={buttonContainerStyle}>
           <Button
             type="primary"
-            icon={<ReloadOutlined />}
-            loading={loading}
             size="large"
-            onClick={loadStudents}
-            style={{
-              backgroundColor: '#ff6b6b',
-              border: 'none',
-              borderRadius: '0px',
-              fontWeight: '700',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              boxShadow: '4px 4px 0px rgba(0, 0, 0, 0.4)',
-              height: '44px',
-              padding: '0 32px',
-            }}
+            onClick={handleCalculatePercentageGpa}
+            style={primaryButtonStyle}
           >
-            Refresh
+            Calculate Percentage & GPA
+          </Button>
+          <Button
+            type="default"
+            size="large"
+            onClick={handleCalculateRankGrade}
+            style={defaultButtonStyle}
+          >
+            Calculate Rank & Grade
           </Button>
         </div>
-
-        {error && (
-          <Typography.Text type="danger" style={{ display: 'block', marginBottom: '16px' }}>
-            Error: {error}
-          </Typography.Text>
-        )}
-
-        <Table
-          columns={columns}
-          dataSource={tableData}
-          loading={loading}
-          rowKey="id"
-          bordered
-          size="middle"
-          onChange={handlePageChange}
-          pagination={{
-            current: page,
-            pageSize: pageSize,
-            total: total,
-            showSizeChanger: true,
-            showTotal: (total) => `Total ${total} items`,
-          }}
-          style={{
-            backgroundColor: '#2d2d2d',
-            border: '3px solid #4a4a4a',
-            borderRadius: '0px',
-            boxShadow: '10px 10px 0px rgba(0, 0, 0, 0.3)',
-          }}
-        />
       </div>
-    </>
+    </ConfigProvider>
   );
 }

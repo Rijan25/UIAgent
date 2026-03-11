@@ -50,6 +50,7 @@ def _resolve_model_name(model_name: str | None) -> str:
 def build_chat_model(
     model_name: str = DEFAULT_CLAUDE_MODEL,
     temperature: float = 0,
+    max_tokens: int | None = None,
 ) -> ChatBedrockConverse:
     load_dotenv()
     profile = _first_non_empty("AWS_PROFILE", "aws_profile")
@@ -97,6 +98,8 @@ def build_chat_model(
         "temperature": temperature,
         "client": bedrock_client,  # use our pre-configured client
     }
+    if max_tokens is not None:
+        kwargs["max_tokens"] = max_tokens
     # Credentials are already baked into bedrock_client via the session,
     # so we only pass the profile name for LangChain's own reference if needed.
     if profile and not (access_key and secret_key):
