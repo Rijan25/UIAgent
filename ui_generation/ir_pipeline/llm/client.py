@@ -71,6 +71,7 @@ def _resolve_model_name(model_name: str | None) -> str:
 def build_chat_model(
     model_name: str = DEFAULT_CLAUDE_MODEL,
     temperature: float = 0,
+    max_tokens : int | None = None
 ) -> ChatBedrockConverse:
     load_dotenv()
     profile = _first_non_empty("AWS_PROFILE", "aws_profile")
@@ -109,6 +110,9 @@ def build_chat_model(
         "region_name": region,
         "temperature": temperature,
     }
+    
+    if max_tokens is not None:
+        kwargs["max_tokens"] = max_tokens
 
     # Image-based prompts can take minutes. Botocore defaults are often too short.
     if Config is not None:

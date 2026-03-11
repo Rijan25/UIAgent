@@ -5,6 +5,7 @@ __all__ = [
     "generate_ir_bundle",
     "run_interactive_ir_generation",
     "write_ir_bundle",
+    "generate_ir_edit",
     "convert_ir_file_to_react",
     "generate_react_code",
     "load_ir_bundle",

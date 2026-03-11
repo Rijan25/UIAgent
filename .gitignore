@@ -25,3 +25,9 @@ Tools/generated_app.tsx
 # Local image inputs (keep the folder, ignore files)
 ui_generation/uploads/*
 !ui_generation/uploads/.gitkeep
+
+# Frontend build caches and large artifacts (also respected by OContext)
+node_modules/
+.vite/
+*.map
+.ocontext/
