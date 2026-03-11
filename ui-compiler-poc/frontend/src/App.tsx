@@ -1,536 +1,468 @@
 import { useState, useMemo } from 'react';
-import { ConfigProvider, Tabs, Row, Col, Form, Input, Radio, Select } from 'antd';
+import { Button, Tabs, Typography, Space, Badge, Empty, Table, Modal, Form, Input, Select, message } from 'antd';
+import { ReloadOutlined, PlusOutlined, FilterOutlined, CalendarOutlined } from '@ant-design/icons';
 import type { CSSProperties } from 'react';
 
+interface TruckFormData {
+  truckNumber: string;
+  driverName: string;
+  buildingId: string;
+  status: string;
+}
+
+interface TruckLog extends TruckFormData {
+  timestamp: number;
+  totalTime: string;
+}
+
 export default function GeneratedApp() {
-  const [activeTab, setActiveTab] = useState<string>('vendor');
-  const [stackType, setStackType] = useState<'floor_stack' | 'palletize'>('floor_stack');
-  const [unitsPerCase, setUnitsPerCase] = useState<number | null>(null);
-  const [casePerContainer, setCasePerContainer] = useState<number | null>(null);
-  const [cbmPerCase, setCbmPerCase] = useState<number | null>(null);
-  const [unitsPerPallet, setUnitsPerPallet] = useState<number | null>(null);
-  const [casePerPallet, setCasePerPallet] = useState<number | null>(null);
-  const [palletsPerContainer, setPalletsPerContainer] = useState<number | null>(null);
-  const [weightPerContainer, setWeightPerContainer] = useState<number | null>(null);
-  const [weightPerCase, setWeightPerCase] = useState<number | null>(null);
-  const [moqInUnits, setMoqInUnits] = useState<number | null>(null);
-  const [maxPerContainer, setMaxPerContainer] = useState<number | null>(null);
-  const [shelfLife, setShelfLife] = useState<number | null>(null);
-  const [caseUPC, setCaseUPC] = useState<string | null>(null);
-  const [casesWide, setCasesWide] = useState<number | null>(null);
-  const [casesDeep, setCasesDeep] = useState<number | null>(null);
-  const [height, setHeight] = useState<number>(8);
-  const [casesPerPalletDC, setCasesPerPalletDC] = useState<number | null>(null);
-  const [palletWeightKg, setPalletWeightKg] = useState<number>(45);
-  const [unitsPerPalletCalc, setUnitsPerPalletCalc] = useState<number>(0);
-  const [orderSpecialist, setOrderSpecialist] = useState<string | null>(null);
-  const [uodType, setUodType] = useState<string | null>(null);
-  const [poScheduleDays, setPoScheduleDays] = useState<string | null>(null);
-  const [containerLoading, setContainerLoading] = useState<string | null>(null);
-  const [containerSize, setContainerSize] = useState<string | null>(null);
-  const [containerStacking, setContainerStacking] = useState<string | null>(null);
-  const [combinedStoreSafetyStock, setCombinedStoreSafetyStock] = useState<number | null>(null);
-  const [dcSafetyStocks, setDcSafetyStocks] = useState<number | null>(null);
-  const [leadTimeDays, setLeadTimeDays] = useState<number | null>(null);
-  const [multiplierDays, setMultiplierDays] = useState<number | null>(null);
-  const [totalSafetyStock, setTotalSafetyStock] = useState<number | null>(null);
+  const [messageApi, contextHolder] = message.useMessage();
+  
+  const [activeTab, setActiveTab] = useState<string>('traffic_control');
+  const [addTruckModalVisible, setAddTruckModalVisible] = useState<boolean>(false);
+  const [truckFormData, setTruckFormData] = useState<TruckFormData>({
+    truckNumber: '',
+    driverName: '',
+    buildingId: '',
+    status: 'Yard'
+  });
+  const [truckLogs, setTruckLogs] = useState<TruckLog[]>([]);
+  const [yardVehicles, setYardVehicles] = useState<TruckFormData[]>([]);
+  const [inboundVehicles, setInboundVehicles] = useState<TruckFormData[]>([]);
+  const [outboundVehicles, setOutboundVehicles] = useState<TruckFormData[]>([]);
+  const [fuelVehicles, setFuelVehicles] = useState<TruckFormData[]>([]);
+  const [scrapVehicles, setScrapVehicles] = useState<TruckFormData[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('Yard');
+  const [searchText, setSearchText] = useState<string>('');
 
-  const unitsPerContainer = useMemo(() => {
-    const upc = unitsPerCase;
-    const cpc = casePerContainer;
-    if (upc !== null && cpc !== null && !isNaN(upc) && !isNaN(cpc)) {
-      return upc * cpc;
-    }
-    return null;
-  }, [unitsPerCase, casePerContainer]);
+  const [form] = Form.useForm();
 
-  const cbmPerContainer = useMemo(() => {
-    const cbmCase = cbmPerCase;
-    const cpc = casePerContainer;
-    if (cbmCase !== null && cpc !== null && !isNaN(cbmCase) && !isNaN(cpc)) {
-      return cbmCase * cpc;
-    }
-    return null;
-  }, [cbmPerCase, casePerContainer]);
+  const yardCount = useMemo(() => yardVehicles.length, [yardVehicles]);
+  const inboundCount = useMemo(() => inboundVehicles.length, [inboundVehicles]);
+  const outboundCount = useMemo(() => outboundVehicles.length, [outboundVehicles]);
+  const fuelCount = useMemo(() => fuelVehicles.length, [fuelVehicles]);
+  const scrapCount = useMemo(() => scrapVehicles.length, [scrapVehicles]);
+  
+  const filteredTruckLogs = useMemo(() => {
+    if (!searchText) return truckLogs;
+    return truckLogs.filter(log => 
+      log.truckNumber.includes(searchText) || log.driverName.includes(searchText)
+    );
+  }, [truckLogs, searchText]);
 
-  const casesPerLayer = useMemo(() => {
-    const cw = casesWide;
-    const h = height;
-    if (cw !== null && h !== null && !isNaN(cw) && !isNaN(h)) {
-      return cw * h;
+  const handleTabChange = (key: string) => {
+    setActiveTab(key);
+  };
+
+  const actionSwitchToTrafficControl = () => {
+    setActiveTab('traffic_control');
+  };
+
+  const actionSwitchToLogs = () => {
+    setActiveTab('logs');
+  };
+
+  const actionOpenAddTruckModal = () => {
+    setAddTruckModalVisible(true);
+  };
+
+  const actionCloseAddTruckModal = () => {
+    setAddTruckModalVisible(false);
+    setTruckFormData({ truckNumber: '', driverName: '', buildingId: '', status: 'Yard' });
+    form.resetFields();
+  };
+
+  const actionSubmitTruckForm = () => {
+    if (!truckFormData.truckNumber || !truckFormData.driverName || !truckFormData.buildingId) {
+      messageApi.error('Failed to add truck. Please fill all required fields.');
+      return;
     }
-    return null;
-  }, [casesWide, height]);
+
+    const newLog: TruckLog = {
+      ...truckFormData,
+      timestamp: Date.now(),
+      totalTime: '0h 0m'
+    };
+
+    setTruckLogs([...truckLogs, newLog]);
+
+    if (truckFormData.status === 'Yard') {
+      setYardVehicles([...yardVehicles, truckFormData]);
+    } else if (truckFormData.status === 'Inbound') {
+      setInboundVehicles([...inboundVehicles, truckFormData]);
+    } else if (truckFormData.status === 'Outbound') {
+      setOutboundVehicles([...outboundVehicles, truckFormData]);
+    } else if (truckFormData.status === 'Fuel') {
+      setFuelVehicles([...fuelVehicles, truckFormData]);
+    } else if (truckFormData.status === 'Scrap') {
+      setScrapVehicles([...scrapVehicles, truckFormData]);
+    }
+
+    setAddTruckModalVisible(false);
+    setTruckFormData({ truckNumber: '', driverName: '', buildingId: '', status: 'Yard' });
+    form.resetFields();
+    messageApi.success('Truck added successfully');
+  };
+
+  const actionSelectYard = () => {
+    setSelectedCategory('Yard');
+  };
+
+  const actionSelectInbound = () => {
+    setSelectedCategory('Inbound');
+  };
+
+  const actionSelectOutbound = () => {
+    setSelectedCategory('Outbound');
+  };
+
+  const actionSelectFuel = () => {
+    setSelectedCategory('Fuel');
+  };
+
+  const actionSelectScrap = () => {
+    setSelectedCategory('Scrap');
+  };
 
   const rootContainerStyle: CSSProperties = {
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#f0f5f0',
-    padding: '0',
-    margin: '0',
-    overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden'
   };
 
-  const tabsStyle: CSSProperties = {
-    width: '100%',
+  const tabsContainerStyle: CSSProperties = {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  };
+
+  const trafficControlContentStyle: CSSProperties = {
+    display: 'flex',
     height: '100%',
     padding: '24px',
+    gap: '24px',
+    overflow: 'hidden'
   };
 
-  const tabContentStyle: CSSProperties = {
+  const trafficPanelHeaderStyle: CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '24px'
+  };
+
+  const leftPanelStyle: CSSProperties = {
+    width: '400px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  };
+
+  const rightPanelStyle: CSSProperties = {
+    flex: 1,
+    border: '1px solid #e8e8e8',
+    borderRadius: '8px',
     padding: '24px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fafafa'
   };
 
-  const disabledInputStyle: CSSProperties = {
-    backgroundColor: '#f5f5f5',
+  const inYardHeaderStyle: CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    marginBottom: '24px'
   };
 
-  const vendorConfigTab = (
-    <div style={tabContentStyle}>
-      <Radio.Group
-        value={stackType}
-        onChange={(e) => setStackType(e.target.value)}
-        style={{ marginBottom: '24px' }}
-      >
-        <Radio value="floor_stack">Floor Stack</Radio>
-        <Radio value="palletize">Palletize</Radio>
-      </Radio.Group>
+  const logsContentStyle: CSSProperties = {
+    padding: '24px',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  };
 
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Units Per Case*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={unitsPerCase ?? ''}
-              onChange={(e) => setUnitsPerCase(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Case Per Container*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={casePerContainer ?? ''}
-              onChange={(e) => setCasePerContainer(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+  const logsHeaderStyle: CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '24px'
+  };
 
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Units Per Container" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={unitsPerContainer ?? ''}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="CBM Per Case*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={cbmPerCase ?? ''}
-              onChange={(e) => setCbmPerCase(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+  const formActionsStyle: CSSProperties = {
+    width: '100%',
+    justifyContent: 'flex-end',
+    marginTop: '24px'
+  };
 
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="CBM Per Container" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={cbmPerContainer ?? ''}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Units Per Pallet*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={unitsPerPallet ?? ''}
-              onChange={(e) => setUnitsPerPallet(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+  const columns = [
+    {
+      title: 'Truck Number',
+      dataIndex: 'truckNumber',
+      key: 'truckNumber',
+      sorter: (a: TruckLog, b: TruckLog) => a.truckNumber.localeCompare(b.truckNumber)
+    },
+    {
+      title: 'Driver Name',
+      dataIndex: 'driverName',
+      key: 'driverName',
+      sorter: (a: TruckLog, b: TruckLog) => a.driverName.localeCompare(b.driverName)
+    },
+    {
+      title: 'Building ID',
+      dataIndex: 'buildingId',
+      key: 'buildingId',
+      sorter: (a: TruckLog, b: TruckLog) => a.buildingId.localeCompare(b.buildingId)
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorter: (a: TruckLog, b: TruckLog) => a.status.localeCompare(b.status)
+    },
+    {
+      title: 'Total Time',
+      dataIndex: 'totalTime',
+      key: 'totalTime',
+      sorter: (a: TruckLog, b: TruckLog) => a.totalTime.localeCompare(b.totalTime)
+    }
+  ];
 
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Case Per Pallet*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={casePerPallet ?? ''}
-              onChange={(e) => setCasePerPallet(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Pallets Per Container*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={palletsPerContainer ?? ''}
-              onChange={(e) => setPalletsPerContainer(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Weight Per Container">
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={weightPerContainer ?? ''}
-              onChange={(e) => setWeightPerContainer(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Weight Per Case*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={weightPerCase ?? ''}
-              onChange={(e) => setWeightPerCase(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="MOQ in Units*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={moqInUnits ?? ''}
-              onChange={(e) => setMoqInUnits(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Max Per Container*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={maxPerContainer ?? ''}
-              onChange={(e) => setMaxPerContainer(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Shelf Life (agreed upon arrival)*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={shelfLife ?? ''}
-              onChange={(e) => setShelfLife(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Case UPC*" required>
-            <Input
-              placeholder="Enter..."
-              value={caseUPC ?? ''}
-              onChange={(e) => setCaseUPC(e.target.value)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+  const trafficControlContent = (
+    <div style={trafficControlContentStyle}>
+      <div style={leftPanelStyle}>
+        <Button
+          block
+          size="large"
+          type={selectedCategory === 'Yard' ? 'primary' : 'default'}
+          style={{
+            textAlign: 'left',
+            height: '56px',
+            fontSize: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+          onClick={actionSelectYard}
+        >
+          <span>Yard</span>
+          <Badge count={yardCount} showZero style={{ backgroundColor: '#faad14' }} />
+        </Button>
+        <Button
+          block
+          size="large"
+          type={selectedCategory === 'Inbound' ? 'primary' : 'default'}
+          style={{
+            textAlign: 'left',
+            height: '56px',
+            fontSize: '16px'
+          }}
+          onClick={actionSelectInbound}
+        >
+          <span>Inbound</span>
+          <Badge count={inboundCount} showZero style={{ backgroundColor: '#faad14' }} />
+        </Button>
+        <Button
+          block
+          size="large"
+          type={selectedCategory === 'Outbound' ? 'primary' : 'default'}
+          style={{
+            textAlign: 'left',
+            height: '56px',
+            fontSize: '16px'
+          }}
+          onClick={actionSelectOutbound}
+        >
+          <span>Outbound</span>
+          <Badge count={outboundCount} showZero style={{ backgroundColor: '#faad14' }} />
+        </Button>
+        <Button
+          block
+          size="large"
+          type={selectedCategory === 'Fuel' ? 'primary' : 'default'}
+          style={{
+            textAlign: 'left',
+            height: '56px',
+            fontSize: '16px'
+          }}
+          onClick={actionSelectFuel}
+        >
+          <span>Fuel</span>
+          <Badge count={fuelCount} showZero style={{ backgroundColor: '#faad14' }} />
+        </Button>
+        <Button
+          block
+          size="large"
+          type={selectedCategory === 'Scrap' ? 'primary' : 'default'}
+          style={{
+            textAlign: 'left',
+            height: '56px',
+            fontSize: '16px'
+          }}
+          onClick={actionSelectScrap}
+        >
+          <span>Scrap</span>
+          <Badge count={scrapCount} showZero style={{ backgroundColor: '#faad14' }} />
+        </Button>
+      </div>
+      <div style={rightPanelStyle}>
+        <div style={inYardHeaderStyle}>
+          <Typography.Title level={4} style={{ margin: 0 }}>
+            In Yard
+          </Typography.Title>
+          <Badge count={yardCount} showZero style={{ backgroundColor: '#faad14' }} />
+        </div>
+        <Empty description="There is no data to show you right now" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      </div>
     </div>
   );
 
-  const srConfigTab = (
-    <div style={tabContentStyle}>
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Cases Wide*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={casesWide ?? ''}
-              onChange={(e) => setCasesWide(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Cases Deep*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={casesDeep ?? ''}
-              onChange={(e) => setCasesDeep(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Height (layers height)*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={height}
-              onChange={(e) => setHeight(e.target.value ? Number(e.target.value) : 8)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Cases Per Layer" tooltip="Auto-calculated: Cases Wide × Height">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={casesPerLayer ?? ''}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Cases Per Pallet (DC)" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={casesPerPalletDC ?? ''}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Pallet Weight (in kg)" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={palletWeightKg}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Units Per Pallet" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={unitsPerPalletCalc}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-    </div>
-  );
-
-  const fulfillmentTab = (
-    <div style={tabContentStyle}>
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Order Specialist*" required>
-            <Select
-              placeholder="Select..."
-              value={orderSpecialist}
-              onChange={(value) => setOrderSpecialist(value)}
-              options={[]}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="UOD Type*" required>
-            <Select
-              placeholder="Select..."
-              value={uodType}
-              onChange={(value) => setUodType(value)}
-              options={[]}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="PO Schedule Days*" required>
-            <Select
-              placeholder="Select..."
-              value={poScheduleDays}
-              onChange={(value) => setPoScheduleDays(value)}
-              options={[]}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Container Loading *" required>
-            <Select
-              placeholder="Select..."
-              value={containerLoading}
-              onChange={(value) => setContainerLoading(value)}
-              options={[]}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Container Size*" required>
-            <Select
-              placeholder="Select..."
-              value={containerSize}
-              onChange={(value) => setContainerSize(value)}
-              options={[]}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Container Stacking *" required>
-            <Select
-              placeholder="Select..."
-              value={containerStacking}
-              onChange={(value) => setContainerStacking(value)}
-              options={[]}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Combined Store Safety Stock (Units)" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={combinedStoreSafetyStock ?? ''}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="DC Safety Stocks (Units)*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={dcSafetyStocks ?? ''}
-              onChange={(e) => setDcSafetyStocks(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Lead Time Days*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={leadTimeDays ?? ''}
-              onChange={(e) => setLeadTimeDays(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Total Safety Stock" tooltip="Auto-calculated">
-            <Input
-              placeholder="Enter..."
-              disabled
-              style={disabledInputStyle}
-              value={totalSafetyStock ?? ''}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Form.Item label="Multiplier (Days)*" required>
-            <Input
-              placeholder="Enter..."
-              type="number"
-              value={multiplierDays ?? ''}
-              onChange={(e) => setMultiplierDays(e.target.value ? Number(e.target.value) : null)}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-    </div>
-  );
-
-  const allocationTab = (
-    <div style={tabContentStyle}>
-      <div>Allocation content placeholder</div>
-    </div>
-  );
-
-  const seasonalTab = (
-    <div style={tabContentStyle}>
-      <div>Seasonal Safety Stock content placeholder</div>
+  const logsContent = (
+    <div style={logsContentStyle}>
+      <div style={logsHeaderStyle}>
+        <Typography.Title level={3} style={{ margin: 0 }}>
+          Truck Logs
+        </Typography.Title>
+        <Space size="middle">
+          <Input.Search
+            placeholder="Search..."
+            style={{ width: '250px' }}
+            allowClear
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <Button icon={<FilterOutlined />} type="default" />
+          <Button icon={<CalendarOutlined />} type="default" />
+        </Space>
+      </div>
+      <Table
+        dataSource={filteredTruckLogs}
+        columns={columns}
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+          showTotal: (total) => `Total ${total} items`
+        }}
+        locale={{ emptyText: 'No data' }}
+        style={{ flex: 1 }}
+        rowKey={(record) => `${record.truckNumber}-${record.timestamp}`}
+      />
     </div>
   );
 
   const tabItems = [
     {
-      key: 'vendor',
-      label: 'Vendor Configuration',
-      children: vendorConfigTab,
+      key: 'traffic_control',
+      label: 'Traffic Control',
+      children: trafficControlContent
     },
     {
-      key: 'sr',
-      label: 'S&R Configuration',
-      children: srConfigTab,
-    },
-    {
-      key: 'fulfillment',
-      label: 'Fulfillment',
-      children: fulfillmentTab,
-    },
-    {
-      key: 'allocation',
-      label: 'Allocation',
-      children: allocationTab,
-    },
-    {
-      key: 'seasonal',
-      label: 'Seasonal Safety Stock',
-      children: seasonalTab,
-    },
+      key: 'logs',
+      label: 'Logs',
+      children: logsContent
+    }
   ];
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#52c41a',
-          borderRadius: 8,
-          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        },
-      }}
-    >
-      <div style={rootContainerStyle}>
-        <Tabs
-          activeKey={activeTab}
-          onChange={(key) => setActiveTab(key)}
-          style={tabsStyle}
-          items={tabItems}
-        />
+    <div style={rootContainerStyle}>
+      {contextHolder}
+      <div style={trafficPanelHeaderStyle}>
+        <Typography.Title level={2} style={{ margin: 0, padding: '24px 24px 0 24px' }}>
+          Traffic Panel
+        </Typography.Title>
+        <Space size="middle" style={{ padding: '24px 24px 0 24px' }}>
+          <Button icon={<ReloadOutlined />} type="default">
+            Refresh
+          </Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={actionOpenAddTruckModal}>
+            Add Truck
+          </Button>
+        </Space>
       </div>
-    </ConfigProvider>
+      <Tabs
+        activeKey={activeTab}
+        onChange={handleTabChange}
+        style={tabsContainerStyle}
+        items={tabItems}
+      />
+      <Modal
+        title="Add Truck"
+        open={addTruckModalVisible}
+        onCancel={actionCloseAddTruckModal}
+        footer={null}
+        width={500}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={actionSubmitTruckForm}
+        >
+          <Form.Item
+            label="Truck Number"
+            name="truckNumber"
+            rules={[{ required: true, message: 'Please enter truck number' }]}
+          >
+            <Input
+              placeholder="Enter truck number"
+              value={truckFormData.truckNumber}
+              onChange={(e) => setTruckFormData({ ...truckFormData, truckNumber: e.target.value })}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Driver Name"
+            name="driverName"
+            rules={[{ required: true, message: 'Please enter driver name' }]}
+          >
+            <Input
+              placeholder="Enter driver name"
+              value={truckFormData.driverName}
+              onChange={(e) => setTruckFormData({ ...truckFormData, driverName: e.target.value })}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Building ID"
+            name="buildingId"
+            rules={[{ required: true, message: 'Please enter building ID' }]}
+          >
+            <Input
+              placeholder="Enter building ID"
+              value={truckFormData.buildingId}
+              onChange={(e) => setTruckFormData({ ...truckFormData, buildingId: e.target.value })}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Status"
+            name="status"
+            rules={[{ required: true, message: 'Please select status' }]}
+            initialValue="Yard"
+          >
+            <Select
+              placeholder="Select status"
+              value={truckFormData.status}
+              onChange={(value) => setTruckFormData({ ...truckFormData, status: value })}
+              options={[
+                { label: 'Yard', value: 'Yard' },
+                { label: 'Inbound', value: 'Inbound' },
+                { label: 'Outbound', value: 'Outbound' },
+                { label: 'Fuel', value: 'Fuel' },
+                { label: 'Scrap', value: 'Scrap' }
+              ]}
+            />
+          </Form.Item>
+          <Space style={formActionsStyle}>
+            <Button type="default" onClick={actionCloseAddTruckModal}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Add Truck
+            </Button>
+          </Space>
+        </Form>
+      </Modal>
+    </div>
   );
 }
